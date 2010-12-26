@@ -36,7 +36,13 @@
 			<artifactId>je</artifactId>
 			<version>3.3.75</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>2.3.0</version>
+		</dependency>
 	</dependencies>
+
 
 	<repositories>
 		<repository>
