@@ -3,7 +3,6 @@ package com.dds.storage;
 import java.io.File;
 
 import com.sleepycat.je.Database;
-import com.sleepycat.je.DatabaseException;
 
 public class AccessBDB {
 
@@ -12,13 +11,14 @@ public class AccessBDB {
 		BDB exampleDbEnv = new BDB();
 
 		try {
-		    exampleDbEnv.setup(new File("store/"), true);
+		    exampleDbEnv.setup(new File("store/part1/"), false);
 		    Database vendorDb = exampleDbEnv.getVendorDB();
 		    
 		    System.out.println(vendorDb.count());
-		} catch(DatabaseException dbe) {
-		    // Error code goes here
-		} finally {
+		} catch(Exception dbe) {
+			System.out.println(dbe.toString());
+		}
+		finally {
 		    exampleDbEnv.close();
 		} 
 	}
