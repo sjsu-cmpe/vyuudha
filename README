@@ -6,8 +6,9 @@ The primary objective of this project will be to develop a middleware which is s
     Eclispe Galileo, Apache Maven 2.2.1, Java version: 1.6.0_22, log4j, BDB Java Edition
 
 --> How to setup dev environment:
-    Install Maven plugin (M2Eclispe) for Eclipse
-    Import the project as a Maven project: http://stackoverflow.com/questions/2061094/importing-maven-project-into-eclipse
+    1. Install Maven plugin (M2Eclispe) for Eclipse
+    2. Import the project as a Maven project: http://stackoverflow.com/questions/2061094/importing-maven-project-into-eclipse
+    3. BDB is imported from pom.xml via Oracle Maven repo.
 
 --> Contact me!
     
