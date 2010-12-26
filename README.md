@@ -5,8 +5,8 @@ Implement a bare-metal Dynamo like Distributed storage middleware for educationa
 
 The primary objective of this project will be to develop a middleware which is simple not production quality and used for understaing a distributed storage system. To achieve this the design should be very much flexible and have a pluggable architecture for various algorithms which can be implemented and used with this system.
 
-Requirement (all listed in pom.xml) Java version: 1.6.0_22: 
------------------------------------------------------------
+Requirements: ((all listed in pom.xml) Java version: 1.6.0_22) 
+-------------
     1. Apache Maven 2.2.1, 
     2. Google Guava r07, 
     3. log4j 1.2.16, 
