@@ -3,7 +3,7 @@ Implement a bare-metal Dynamo like Distributed storage middleware for educationa
 The primary objective of this project will be to develop a middleware which is simple not production quality and used for understaing a distributed storage system. To achieve this the design should be very much flexible and have a pluggable architecture for various algorithms which can be implemented and used with this system.
 
 --> Requirement: 
-    Eclispe Galileo, Apache Maven 2.2.1, Java version: 1.6.0_22
+    Eclispe Galileo, Apache Maven 2.2.1, Java version: 1.6.0_22, log4j, BDB Java Edition
 
 --> How to setup dev environment:
     Install Maven plugin (M2Eclispe) for Eclipse
