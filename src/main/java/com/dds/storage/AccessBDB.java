@@ -8,18 +8,20 @@ public class AccessBDB {
 
 	public static void main(String[] args)
 	{
-		BDB exampleDbEnv = new BDB();
+		BDB dbdEnv = new BDB();
 
 		try {
-		    exampleDbEnv.setup(new File("store/part1/"), false);
-		    Database vendorDb = exampleDbEnv.getVendorDB();
+			dbdEnv.setup(new File("store/part1/"), false);
+		    Database database = dbdEnv.getVendorDB();
 		    
-		    System.out.println(vendorDb.count());
+		    database.put(null, null, null);
+		    database.get(null, null, null, null);
+		    
 		} catch(Exception dbe) {
 			System.out.println(dbe.toString());
 		}
 		finally {
-		    exampleDbEnv.close();
+			dbdEnv.close();
 		} 
 	}
 }

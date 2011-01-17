@@ -3,7 +3,7 @@ package com.dds.client;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
+//import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -139,8 +139,7 @@ public class DDSClient implements Runnable {
 		this.handleResponse(socketChannel, this.readBuffer.array(), numRead);
 	}
 
-	private void handleResponse(SocketChannel socketChannel, byte[] data,
-			int numRead) throws IOException {
+	private void handleResponse(SocketChannel socketChannel, byte[] data, int numRead) throws IOException {
 		// Make a correctly sized copy of the data before handing it
 		// to the client
 		byte[] rspData = new byte[numRead];
@@ -207,16 +206,14 @@ public class DDSClient implements Runnable {
 		socketChannel.configureBlocking(false);
 
 		// Kick off connection establishment
-		socketChannel
-				.connect(new InetSocketAddress(this.hostAddress, this.port));
-
+		socketChannel.connect(new InetSocketAddress(this.hostAddress, this.port));
+		
 		// Queue a channel registration since the caller is not the
 		// selecting thread. As part of the registration we'll register
 		// an interest in connection events. These are raised when a channel
 		// is ready to complete connection establishment.
 		synchronized (this.pendingChanges) {
-			this.pendingChanges.add(new ChangeRequest(socketChannel,
-					ChangeRequest.REGISTER, SelectionKey.OP_CONNECT));
+			this.pendingChanges.add(new ChangeRequest(socketChannel, ChangeRequest.REGISTER, SelectionKey.OP_CONNECT));
 		}
 
 		return socketChannel;
@@ -229,8 +226,7 @@ public class DDSClient implements Runnable {
 
 	public static void main(String[] args) {
 		try {
-			DDSClient client = new DDSClient(
-					InetAddress.getByName("localhost"), 9090);
+			DDSClient client = new DDSClient(InetAddress.getByName("localhost"), 9090);
 			Thread t = new Thread(client);
 			t.setDaemon(true);
 			t.start();

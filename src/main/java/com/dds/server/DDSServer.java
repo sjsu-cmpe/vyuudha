@@ -1,12 +1,12 @@
 package com.dds.server;
 
-//Old Source: http://download.oracle.com/javase/tutorial/networking/sockets/clientServer.html
-//NIO: http://www.javafaq.nu/java-example-code-926.html
+//Read more: www.cs.brown.edu/courses/cs161/papers/j-nio-ltr.pdf+java+nio+tutorial , pg 30
+//NIO: http://rox-xmlrpc.sourceforge.net/niotut/index.html
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.net.Socket;
+//import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -123,7 +123,7 @@ public class DDSServer implements Runnable {
 
 		// Accept the connection and make it non-blocking
 		SocketChannel socketChannel = serverSocketChannel.accept();
-		Socket socket = socketChannel.socket();
+		// Socket socket = socketChannel.socket();
 		socketChannel.configureBlocking(false);
 
 		// Register the new SocketChannel with our Selector, indicating
@@ -197,10 +197,9 @@ public class DDSServer implements Runnable {
 		serverChannel.configureBlocking(false);
 
 		// Bind the server socket to the specified address and port
-		InetSocketAddress isa = new InetSocketAddress(this.hostAddress,
-				this.port);
+		InetSocketAddress isa = new InetSocketAddress(this.hostAddress, this.port);
 		serverChannel.socket().bind(isa);
-
+		
 		// Register the server socket channel, indicating an interest in
 		// accepting new connections
 		serverChannel.register(socketSelector, SelectionKey.OP_ACCEPT);
