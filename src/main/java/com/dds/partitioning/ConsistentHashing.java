@@ -6,10 +6,10 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import com.dds.utils.Helper;
-import com.dds.utils.MurmurHashFunction;
+import com.dds.utils.MurmurHashFunction; //HashFuction class should be imported, from there, Murmurhash or other hash functions can be derived
 
 public class ConsistentHashing {
-	 private final MurmurHashFunction hashFunction;
+	 private final MurmurHashFunction hashFunction; //Fix this CH should be independent of Hashfunction
 	 private final int numberOfReplicas;
 	 private final SortedMap<Integer, T> circle = new TreeMap<Integer, T>();
 	 Helper helperObj = new Helper();
@@ -48,6 +48,6 @@ public class ConsistentHashing {
 	 }
 
 	 class T{
-		 //TO-DO: This will be the node
+		 //TO-DO: This will be the node, which is com.dds.cluster.Node.java
 	 }
 }

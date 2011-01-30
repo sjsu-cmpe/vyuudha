@@ -6,6 +6,7 @@ import java.util.Properties;
 
 public class ReadProperties {
 
+	@SuppressWarnings("unused")
 	private void readServerConfig() {
 		Properties properties = new Properties();
 		try {
