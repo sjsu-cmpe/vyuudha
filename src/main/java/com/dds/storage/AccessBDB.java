@@ -11,10 +11,11 @@ public class AccessBDB {
 		BDB dbdEnv = new BDB();
 
 		try {
+			//create folder in <project base>/store/part1
 			dbdEnv.setup(new File("store/part1/"), false);
 		    Database database = dbdEnv.getVendorDB();
 		    
-		    database.put(null, null, null);
+		    database.put(null, null, null); //put values here
 		    database.get(null, null, null, null);
 		    
 		} catch(Exception dbe) {
