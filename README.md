@@ -1,3 +1,7 @@
+It is a clean room implementation of the Distributed storage middleware for education and research.
+
+It is free software, licensed under the terms of the GNU General Public License.
+
 Dynamic Distributed Storage
 ===========================
 
