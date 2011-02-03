@@ -1,4 +1,8 @@
-It is a clean room implementation of the Distributed storage middleware for education and research.
+Vyuudha - A clean room implementation of a distributed storage middleware for education and research.
+
+Q: What does Vyuudha mean?
+A: Vyuudha in sanskrit means "Distributed".
+
 It is free software, licensed under the terms of the GNU General Public License.
 
 Dynamic Distributed Storage
