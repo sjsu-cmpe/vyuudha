@@ -5,7 +5,6 @@ Dynamic Distributed Storage
 ===========================
 
 Implement a bare-metal Dynamo like Distributed storage middleware for educational and learning purpose.
-
 The primary objective of this project will be to develop a middleware which is simple not production quality and used for understaing a distributed storage system. To achieve this the design should be very much flexible and have a pluggable architecture for various algorithms which can be implemented and used with this system.
 
 Requirements: ((all listed in pom.xml) Java version: 1.6.0_22) 
