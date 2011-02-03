@@ -55,8 +55,7 @@
 			<version>2.4.1</version>
 		</dependency>
 	</dependencies>
-
-
+	
 	<repositories>
 		<repository>
 			<id>oracleReleases</id>
