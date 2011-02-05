@@ -2,6 +2,7 @@ package com.dds.storage;
 
 import java.io.File;
 
+import com.dds.storage.bdb.BDB;
 import com.sleepycat.je.Database;
 
 public class AccessBDB {

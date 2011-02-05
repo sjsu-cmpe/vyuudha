@@ -3,6 +3,8 @@
  */
 package com.dds.storage;
 
+import com.dds.storage.mongodb.MongoDB;
+
 /**
  * To test the functionality of MongoDB.class
  * 

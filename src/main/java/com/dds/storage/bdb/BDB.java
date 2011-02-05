@@ -1,4 +1,4 @@
-package com.dds.storage;
+package com.dds.storage.bdb;
 
 import java.io.File;
 import org.apache.log4j.Logger;
