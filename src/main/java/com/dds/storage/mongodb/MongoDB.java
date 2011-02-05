@@ -36,14 +36,14 @@ public class MongoDB implements DBInterface {
 	/**
 	 * @param dbName the dbName to set
 	 */
-	public void setDbName(String dbName) {
+	private void setDbName(String dbName) {
 		this.dbName = dbName;
 	}
 
 	/**
 	 * @param collection the collection to set
 	 */
-	public void setCollection(String collection) {
+	private void setCollection(String collection) {
 		this.collection = collection;
 	}
 	
