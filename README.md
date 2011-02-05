@@ -2,7 +2,7 @@ Vyuudha - A clean room implementation of a distributed storage middleware for ed
 
 Q: What does Vyuudha mean?
 
-A: Vyuudha in sanskrit means "Distributed".
+A: Vyuudha in sanskrit means "Distributed". Prounounced "vy-uudh".
 
 It is free software, licensed under the terms of the GNU General Public License.
 
