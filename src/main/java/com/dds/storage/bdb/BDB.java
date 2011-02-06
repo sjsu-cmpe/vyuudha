@@ -1,23 +1,47 @@
-package com.dds.storage;
+package com.dds.storage.bdb;
 
 import java.io.File;
 import org.apache.log4j.Logger;
+
+import com.dds.storage.DBInterface;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 
-public class BDB {
+public class BDB implements DBInterface{
 
 	private Environment myEnv;
 	private Database vendorDb;
+	private Database database;
 	Logger logger = Logger.getLogger(BDB.class);
-
-	public BDB() {
+	
+	File envHome;
+	boolean readOnly;
+	
+	/**
+	 * @param readOnly the readOnly to set
+	 */
+	private void setReadOnly(boolean readOnly) {
+		this.readOnly = readOnly;
 	}
 
-	public void setup(File envHome, boolean readOnly) throws DatabaseException {
+	public BDB() {
+		//create folder in <project base>/store/part1
+		setEnvHome(new File("store/part1/"));
+		setReadOnly(false);
+		database = getVendorDB();
+	}
+	
+	/**
+	 * @param envHome the envHome to set
+	 */
+	private void setEnvHome(File envHome) {
+		this.envHome = envHome;
+	}
+
+	public void createConnection() {
 
 		logger.info("Getting into setup()");
 		EnvironmentConfig myEnvConfig = new EnvironmentConfig();
@@ -46,8 +70,22 @@ public class BDB {
 		return vendorDb;
 	}
 
-	// Close the environment
-	public void close() {
+	public String get(String key) {
+		//database.get(null, key, null, null);
+		return null;
+	}
+
+	public void put(String key, String value) {
+		//database.put(null, key, value);
+		
+	}
+
+	public void delete(String key) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void closeConnection() {
 		logger.info("Closing database");
 		if (myEnv != null) {
 			try {
@@ -57,6 +95,11 @@ public class BDB {
 				logger.info("Error in closing database: " + dbe.toString());
 				System.exit(-1);
 			}
-		}
+		}		
+	}
+
+	public boolean contains(String key) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

@@ -3,6 +3,8 @@
  */
 package com.dds.storage;
 
+import com.dds.storage.mongodb.MongoDB;
+
 /**
  * To test the functionality of MongoDB.class
  * 
@@ -17,13 +19,20 @@ public class AccessMongoDB {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		MongoDB mdb = new MongoDB();
-		mdb.setDbName("newDB");
-		mdb.setCollection("newCollection");
-
 		mdb.createConnection();
-		mdb.insert("key1", "value1");
-		mdb.get("key1");
-		mdb.remove("key1");
-	}
 
+		mdb.put("key1", "value1");
+		mdb.put("key2", "value2");
+		mdb.put("key1", "value3");
+		
+		if (mdb.contains("key1"))
+			System.out.println("Present!");
+		else
+			System.out.println("Not present!");
+		//System.out.println(mdb.get("key2"));
+		//mdb.showAll();
+		//mdb.delete("key1");
+		//mdb.deleteAll();
+		mdb.closeConnection();
+	}
 }
