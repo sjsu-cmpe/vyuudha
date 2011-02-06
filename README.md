@@ -20,7 +20,12 @@ Requirements: ((all listed in pom.xml) Java version: 1.6.0_22)
     4. BDB Java Edition 3.3.75, 
     5. Google Protocol Buffer 2.3.0,
     6. jUnit 3.8.1
-
+    
+    For dependecies which are not found in maven, then do this:
+    1. Download the jar file
+    2. mvn install:install-file -Dfile=location/jar_name.jar -DgroupId=group_id_here -DartifactId=artifact_id_here -Dversion=version_number_here -Dpackaging=jar
+    3. The jar file will be installed in your local maven repo.
+    
 How to setup dev environment:
 -----------------------------
     1. Install Maven plugin (M2Eclispe) for Eclipse
