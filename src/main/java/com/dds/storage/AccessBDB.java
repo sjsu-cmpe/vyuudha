@@ -25,7 +25,7 @@ public class AccessBDB {
 			//dbdEnv.put("key1", "value4");
 			//dbdEnv.put("key2", "value2");
 			System.out.println(dbdEnv.contains("key4"));
-			System.out.println(dbdEnv.get("key2"));
+			System.out.println(dbdEnv.get("key1"));
 					    
 		} catch(Exception dbe) {
 			System.out.println(dbe.toString());
