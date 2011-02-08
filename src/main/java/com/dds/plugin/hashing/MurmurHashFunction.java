@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.dds.utils;
+package com.dds.plugin.hashing;
 
 /**
  * This is a very fast, non-cryptographic hash suitable for general hash-based

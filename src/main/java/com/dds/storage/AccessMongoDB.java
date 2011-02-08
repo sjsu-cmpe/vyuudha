@@ -5,7 +5,7 @@ package com.dds.storage;
 
 import java.net.UnknownHostException;
 
-import com.dds.storage.mongodb.MongoDB;
+import com.dds.plugin.storage.mongodb.MongoDB;
 
 /**
  * To test the functionality of MongoDB.class

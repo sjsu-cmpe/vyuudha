@@ -1,4 +1,4 @@
-package com.dds.storage.bdb;
+package com.dds.plugin.storage.bdb;
 
 import java.io.File;
 import java.util.List;

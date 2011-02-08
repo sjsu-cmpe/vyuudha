@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dds.storage.mongodb;
+package com.dds.plugin.storage.mongodb;
 
 import java.net.UnknownHostException;
 import java.util.List;

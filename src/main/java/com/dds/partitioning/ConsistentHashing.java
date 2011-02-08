@@ -14,8 +14,8 @@ import java.net.*;
 import java.io.*;
 import org.apache.log4j.Logger;
 
+import com.dds.plugin.hashing.MurmurHashFunction;
 import com.dds.utils.Helper;
-import com.dds.utils.MurmurHashFunction; //HashFuction class should be imported, from there, Murmurhash or other hash functions can be derived
 
 /**
  * MemCached Java client, connection pool for Socket IO

@@ -1,5 +1,5 @@
 package com.dds.partitioning;
-import com.dds.utils.MurmurHashFunction;
+import com.dds.plugin.hashing.MurmurHashFunction;
 
 public class HashFunction {
 	

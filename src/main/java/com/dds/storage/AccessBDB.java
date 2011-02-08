@@ -2,7 +2,7 @@ package com.dds.storage;
 
 import java.io.File;
 
-import com.dds.storage.bdb.BDB;
+import com.dds.plugin.storage.bdb.BDB;
 
 public class AccessBDB {
 
