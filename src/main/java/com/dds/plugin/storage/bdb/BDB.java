@@ -25,7 +25,6 @@ public class BDB implements DBInterface{
 	private Database vendorDb;
 	
 	Logger logger = Logger.getLogger(BDB.class);
-	private final Helper helper;
 	
 	File envHome;
 	boolean readOnly;
@@ -39,12 +38,16 @@ public class BDB implements DBInterface{
 
 	public BDB() {
 		//create folder in <project base>/store/part1
+		setConfiguration();
+	}
+	
+	private void setConfiguration() {
+		// TODO Configurations to be read from file
 		setBdbPath(bdbPath);
 		setEnvHome(new File(bdbPath));
 		setReadOnly(false);
-		helper = new Helper();
 	}
-	
+
 	/**
 	 * @param bdbPath the bdbPath to set
 	 */
@@ -91,7 +94,7 @@ public class BDB implements DBInterface{
 
 	public String get(String key) {
 		
-		DatabaseEntry entryKey = new DatabaseEntry(helper.getBytes(key));
+		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		
 		Cursor cursor = null;
         DatabaseEntry entryValue = new DatabaseEntry();
@@ -101,7 +104,7 @@ public class BDB implements DBInterface{
 			cursor = getVendorDB().openCursor(null, null);
 	        for(OperationStatus status = cursor.getSearchKey(entryKey, entryValue, lockMode); 
 	        status == OperationStatus.SUCCESS; status = cursor.getNextDup(entryKey, entryValue, lockMode)) {
-	        	results.add(helper.getObject(entryValue.getData()));
+	        	results.add(Helper.getObject(entryValue.getData()));
 	        }
 	        cursor.close();
 		} catch (DatabaseException e) {
@@ -117,8 +120,8 @@ public class BDB implements DBInterface{
 	}
 
 	public void put(String key, String value) {
-		DatabaseEntry entryKey = new DatabaseEntry(helper.getBytes(key));
-		DatabaseEntry entryValue = new DatabaseEntry(helper.getBytes(value));
+		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
+		DatabaseEntry entryValue = new DatabaseEntry(Helper.getBytes(value));
 		
 		try {
 			getVendorDB().put(null, entryKey, entryValue);
@@ -130,7 +133,7 @@ public class BDB implements DBInterface{
 	}
 
 	public void delete(String key) {
-		DatabaseEntry entryKey = new DatabaseEntry(helper.getBytes(key));
+		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		
 		try {
 			OperationStatus status = getVendorDB().delete(null, entryKey);
@@ -159,7 +162,7 @@ public class BDB implements DBInterface{
 	}
 
 	public boolean contains(String key) {
-		DatabaseEntry entryKey = new DatabaseEntry(helper.getBytes(key));
+		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		
 		boolean keyFound = false;
 		Cursor cursor = null;

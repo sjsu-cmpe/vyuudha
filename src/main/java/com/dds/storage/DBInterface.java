@@ -25,5 +25,4 @@ public interface DBInterface {
 	public void closeConnection();
 	
 	public boolean contains(String key);
-
 }

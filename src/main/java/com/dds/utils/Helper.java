@@ -6,8 +6,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+/**
+ * 02/08: Made all functions static
+ * 
+ * @author ravid
+ *
+ */
 public class Helper {
-	public byte[] getBytes(Object obj) {
+	public static byte[] getBytes(Object obj) {
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
@@ -32,7 +38,7 @@ public class Helper {
 	 * @param bytes
 	 * @return Generic Object
 	 */
-	public Object getObject(byte[] bytes) {
+	public static Object getObject(byte[] bytes) {
 
         Object data = null;
     	ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
