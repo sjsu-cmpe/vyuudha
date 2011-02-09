@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.dds.storage.DBInterface;
+import com.dds.interfaces.storage.DBInterface;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -55,7 +55,7 @@ public class MongoDB extends Mongo implements DBInterface {
 	/**
 	 * Create connection to MongoDB
 	 * 
-	 * @see com.dds.storage.DBInterface#createConnection()
+	 * @see com.dds.interfaces.storage.DBInterface#createConnection()
 	 */
 	public void createConnection() {
 		try {
@@ -73,7 +73,7 @@ public class MongoDB extends Mongo implements DBInterface {
 	/**
 	 * Insert a key and value
 	 * 
-	 * @see com.dds.storage.DBInterface#put(java.lang.String, java.lang.String)
+	 * @see com.dds.interfaces.storage.DBInterface#put(java.lang.String, java.lang.String)
 	 */
 	public void put(String key, String value) {
 		BasicDBObject doc = new BasicDBObject();
@@ -92,7 +92,7 @@ public class MongoDB extends Mongo implements DBInterface {
 	/**
 	 * Delete a particular key
 	 * 
-	 * @see com.dds.storage.DBInterface#delete(java.lang.String)
+	 * @see com.dds.interfaces.storage.DBInterface#delete(java.lang.String)
 	 */
 	public void delete(String key) {
 		BasicDBObject lookUp = new BasicDBObject();
@@ -104,7 +104,7 @@ public class MongoDB extends Mongo implements DBInterface {
 	/**
 	 * Used to retrieve a value for the associated key
 	 * 
-	 * @see com.dds.storage.DBInterface#get(java.lang.String)
+	 * @see com.dds.interfaces.storage.DBInterface#get(java.lang.String)
 	 */
 	public String get(String key) {
 		BasicDBObject lookUp = new BasicDBObject();
@@ -141,7 +141,7 @@ public class MongoDB extends Mongo implements DBInterface {
 	/**
 	 * Return true if key is present else false
 	 * 
-	 * @see com.dds.storage.DBInterface#contains(java.lang.String)
+	 * @see com.dds.interfaces.storage.DBInterface#contains(java.lang.String)
 	 */
 	public boolean contains(String key) {
 		BasicDBObject lookUp = new BasicDBObject();
@@ -159,7 +159,7 @@ public class MongoDB extends Mongo implements DBInterface {
 	 * Close the connections, setting all to none No in-built close function for
 	 * MongoDB
 	 * 
-	 * @see com.dds.storage.DBInterface#closeConnection()
+	 * @see com.dds.interfaces.storage.DBInterface#closeConnection()
 	 */
 	public void closeConnection() {
 

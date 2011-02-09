@@ -26,7 +26,7 @@ public class DBRoot {
 	private void setConfigurations() {
 		dbToInstantiate = "MongoDB";
 		pluginsPath = "com.dds.plugin";
-		coreStorageInterface = "com.dds.storage.DBInterface";
+		coreStorageInterface = "com.dds.interfaces.storage.DBInterface";
 	}
 
 	public Object invoke(byte[] buffer) throws UnknownHostException, NoSuchMethodException {
@@ -51,15 +51,13 @@ public class DBRoot {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Object invokeDBMethod(String className, String methodName) throws NoSuchMethodException {
 		try {
-			System.out.println("Class Name: " + className);
 			Class cls = Class.forName(className);
 			Object iClass = cls.newInstance();
 			Class parameterTypes[] = new Class[0];
 			Method method = cls.getMethod(methodName, parameterTypes);
 			Object arguments[] = new Object[0];
 			Object object = method.invoke(iClass, arguments);
-			String retVal = (String) object;
-			System.out.println("Output :" + retVal);
+			
 			return object;
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
