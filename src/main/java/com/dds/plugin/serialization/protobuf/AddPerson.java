@@ -2,7 +2,7 @@ package com.dds.plugin.serialization.protobuf;
 
 /* GPB compiler required: http://code.google.com/apis/protocolbuffers/docs/javatutorial.html
  * 
- * protoc -I=$SRC_DIR --java_out=$DST_DIR $SRC_DIR/model.proto
+ * protoc -I=/Users/utkarsh/Desktop/ --java_out=/Users/utkarsh/Desktop/ /Users/utkarsh/Desktop/DataExchangeInternal.proto
  *  
  */
 

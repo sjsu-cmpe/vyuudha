@@ -8,37 +8,11 @@ public final class DataExchangeInternal {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface PersonOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-    
-    // required string name = 1;
-    boolean hasName();
-    String getName();
-    
-    // required int32 id = 2;
-    boolean hasId();
-    int getId();
-    
-    // optional string email = 3;
-    boolean hasEmail();
-    String getEmail();
-    
-    // repeated .protobuf.Person.PhoneNumber phone = 4;
-    java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber> 
-        getPhoneList();
-    com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber getPhone(int index);
-    int getPhoneCount();
-    java.util.List<? extends com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumberOrBuilder> 
-        getPhoneOrBuilderList();
-    com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumberOrBuilder getPhoneOrBuilder(
-        int index);
-  }
   public static final class Person extends
-      com.google.protobuf.GeneratedMessage
-      implements PersonOrBuilder {
+      com.google.protobuf.GeneratedMessage {
     // Use Person.newBuilder() to construct.
-    private Person(Builder builder) {
-      super(builder);
+    private Person() {
+      initFields();
     }
     private Person(boolean noInit) {}
     
@@ -68,10 +42,6 @@ public final class DataExchangeInternal {
       WORK(2, 2),
       ;
       
-      public static final int MOBILE_VALUE = 0;
-      public static final int HOME_VALUE = 1;
-      public static final int WORK_VALUE = 2;
-      
       
       public final int getNumber() { return value; }
       
@@ -92,8 +62,8 @@ public final class DataExchangeInternal {
           internalValueMap =
             new com.google.protobuf.Internal.EnumLiteMap<PhoneType>() {
               public PhoneType findValueByNumber(int number) {
-                return PhoneType.valueOf(number);
-              }
+                return PhoneType.valueOf(number)
+      ;        }
             };
       
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
@@ -112,7 +82,6 @@ public final class DataExchangeInternal {
       private static final PhoneType[] VALUES = {
         MOBILE, HOME, WORK, 
       };
-      
       public static PhoneType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
@@ -121,35 +90,25 @@ public final class DataExchangeInternal {
         }
         return VALUES[desc.getIndex()];
       }
-      
       private final int index;
       private final int value;
-      
       private PhoneType(int index, int value) {
         this.index = index;
         this.value = value;
       }
       
+      static {
+        com.dds.plugin.serialization.protobuf.DataExchangeInternal.getDescriptor();
+      }
+      
       // @@protoc_insertion_point(enum_scope:protobuf.Person.PhoneType)
     }
     
-    public interface PhoneNumberOrBuilder
-        extends com.google.protobuf.MessageOrBuilder {
-      
-      // required string number = 1;
-      boolean hasNumber();
-      String getNumber();
-      
-      // optional .protobuf.Person.PhoneType type = 2 [default = HOME];
-      boolean hasType();
-      com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneType getType();
-    }
     public static final class PhoneNumber extends
-        com.google.protobuf.GeneratedMessage
-        implements PhoneNumberOrBuilder {
+        com.google.protobuf.GeneratedMessage {
       // Use PhoneNumber.newBuilder() to construct.
-      private PhoneNumber(Builder builder) {
-        super(builder);
+      private PhoneNumber() {
+        initFields();
       }
       private PhoneNumber(boolean noInit) {}
       
@@ -172,74 +131,36 @@ public final class DataExchangeInternal {
         return com.dds.plugin.serialization.protobuf.DataExchangeInternal.internal_static_protobuf_Person_PhoneNumber_fieldAccessorTable;
       }
       
-      private int bitField0_;
       // required string number = 1;
       public static final int NUMBER_FIELD_NUMBER = 1;
-      private Object number_;
-      public boolean hasNumber() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      public String getNumber() {
-        Object ref = number_;
-        if (ref instanceof String) {
-          return (String) ref;
-        } else {
-          com.google.protobuf.ByteString bs = 
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-            number_ = s;
-          }
-          return s;
-        }
-      }
-      private com.google.protobuf.ByteString getNumberBytes() {
-        Object ref = number_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-          number_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
+      private boolean hasNumber;
+      private java.lang.String number_ = "";
+      public boolean hasNumber() { return hasNumber; }
+      public java.lang.String getNumber() { return number_; }
       
       // optional .protobuf.Person.PhoneType type = 2 [default = HOME];
       public static final int TYPE_FIELD_NUMBER = 2;
+      private boolean hasType;
       private com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneType type_;
-      public boolean hasType() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneType getType() {
-        return type_;
-      }
+      public boolean hasType() { return hasType; }
+      public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneType getType() { return type_; }
       
       private void initFields() {
-        number_ = "";
         type_ = com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneType.HOME;
       }
-      private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
-        byte isInitialized = memoizedIsInitialized;
-        if (isInitialized != -1) return isInitialized == 1;
-        
-        if (!hasNumber()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-        memoizedIsInitialized = 1;
+        if (!hasNumber) return false;
         return true;
       }
       
       public void writeTo(com.google.protobuf.CodedOutputStream output)
                           throws java.io.IOException {
         getSerializedSize();
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          output.writeBytes(1, getNumberBytes());
+        if (hasNumber()) {
+          output.writeString(1, getNumber());
         }
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          output.writeEnum(2, type_.getNumber());
+        if (hasType()) {
+          output.writeEnum(2, getType().getNumber());
         }
         getUnknownFields().writeTo(output);
       }
@@ -250,22 +171,17 @@ public final class DataExchangeInternal {
         if (size != -1) return size;
       
         size = 0;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        if (hasNumber()) {
           size += com.google.protobuf.CodedOutputStream
-            .computeBytesSize(1, getNumberBytes());
+            .computeStringSize(1, getNumber());
         }
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        if (hasType()) {
           size += com.google.protobuf.CodedOutputStream
-            .computeEnumSize(2, type_.getNumber());
+            .computeEnumSize(2, getType().getNumber());
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
         return size;
-      }
-      
-      @java.lang.Override
-      protected Object writeReplace() throws java.io.ObjectStreamException {
-        return super.writeReplace();
       }
       
       public static com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber parseFrom(
@@ -342,53 +258,34 @@ public final class DataExchangeInternal {
       }
       public Builder toBuilder() { return newBuilder(this); }
       
-      @java.lang.Override
-      protected Builder newBuilderForType(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        Builder builder = new Builder(parent);
-        return builder;
-      }
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder>
-         implements com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumberOrBuilder {
-        public static final com.google.protobuf.Descriptors.Descriptor
-            getDescriptor() {
-          return com.dds.plugin.serialization.protobuf.DataExchangeInternal.internal_static_protobuf_Person_PhoneNumber_descriptor;
-        }
-        
-        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-            internalGetFieldAccessorTable() {
-          return com.dds.plugin.serialization.protobuf.DataExchangeInternal.internal_static_protobuf_Person_PhoneNumber_fieldAccessorTable;
-        }
+          com.google.protobuf.GeneratedMessage.Builder<Builder> {
+        private com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber result;
         
         // Construct using com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.newBuilder()
-        private Builder() {
-          maybeForceBuilderInitialization();
+        private Builder() {}
+        
+        private static Builder create() {
+          Builder builder = new Builder();
+          builder.result = new com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber();
+          return builder;
         }
         
-        private Builder(BuilderParent parent) {
-          super(parent);
-          maybeForceBuilderInitialization();
-        }
-        private void maybeForceBuilderInitialization() {
-          if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          }
-        }
-        private static Builder create() {
-          return new Builder();
+        protected com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber internalGetResult() {
+          return result;
         }
         
         public Builder clear() {
-          super.clear();
-          number_ = "";
-          bitField0_ = (bitField0_ & ~0x00000001);
-          type_ = com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneType.HOME;
-          bitField0_ = (bitField0_ & ~0x00000002);
+          if (result == null) {
+            throw new IllegalStateException(
+              "Cannot call clear() after build().");
+          }
+          result = new com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber();
           return this;
         }
         
         public Builder clone() {
-          return create().mergeFrom(buildPartial());
+          return create().mergeFrom(result);
         }
         
         public com.google.protobuf.Descriptors.Descriptor
@@ -400,39 +297,33 @@ public final class DataExchangeInternal {
           return com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.getDefaultInstance();
         }
         
+        public boolean isInitialized() {
+          return result.isInitialized();
+        }
         public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber build() {
-          com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber result = buildPartial();
-          if (!result.isInitialized()) {
+          if (result != null && !isInitialized()) {
             throw newUninitializedMessageException(result);
           }
-          return result;
+          return buildPartial();
         }
         
         private com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber buildParsed()
             throws com.google.protobuf.InvalidProtocolBufferException {
-          com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber result = buildPartial();
-          if (!result.isInitialized()) {
+          if (!isInitialized()) {
             throw newUninitializedMessageException(
               result).asInvalidProtocolBufferException();
           }
-          return result;
+          return buildPartial();
         }
         
         public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber buildPartial() {
-          com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber result = new com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber(this);
-          int from_bitField0_ = bitField0_;
-          int to_bitField0_ = 0;
-          if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-            to_bitField0_ |= 0x00000001;
+          if (result == null) {
+            throw new IllegalStateException(
+              "build() has already been called on this Builder.");
           }
-          result.number_ = number_;
-          if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-            to_bitField0_ |= 0x00000002;
-          }
-          result.type_ = type_;
-          result.bitField0_ = to_bitField0_;
-          onBuilt();
-          return result;
+          com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber returnMe = result;
+          result = null;
+          return returnMe;
         }
         
         public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -456,14 +347,6 @@ public final class DataExchangeInternal {
           return this;
         }
         
-        public final boolean isInitialized() {
-          if (!hasNumber()) {
-            
-            return false;
-          }
-          return true;
-        }
-        
         public Builder mergeFrom(
             com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -476,20 +359,17 @@ public final class DataExchangeInternal {
             switch (tag) {
               case 0:
                 this.setUnknownFields(unknownFields.build());
-                onChanged();
                 return this;
               default: {
                 if (!parseUnknownField(input, unknownFields,
                                        extensionRegistry, tag)) {
                   this.setUnknownFields(unknownFields.build());
-                  onChanged();
                   return this;
                 }
                 break;
               }
               case 10: {
-                bitField0_ |= 0x00000001;
-                number_ = input.readBytes();
+                setNumber(input.readString());
                 break;
               }
               case 16: {
@@ -498,8 +378,7 @@ public final class DataExchangeInternal {
                 if (value == null) {
                   unknownFields.mergeVarintField(2, rawValue);
                 } else {
-                  bitField0_ |= 0x00000002;
-                  type_ = value;
+                  setType(value);
                 }
                 break;
               }
@@ -507,65 +386,46 @@ public final class DataExchangeInternal {
           }
         }
         
-        private int bitField0_;
         
         // required string number = 1;
-        private Object number_ = "";
         public boolean hasNumber() {
-          return ((bitField0_ & 0x00000001) == 0x00000001);
+          return result.hasNumber();
         }
-        public String getNumber() {
-          Object ref = number_;
-          if (!(ref instanceof String)) {
-            String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-            number_ = s;
-            return s;
-          } else {
-            return (String) ref;
-          }
+        public java.lang.String getNumber() {
+          return result.getNumber();
         }
-        public Builder setNumber(String value) {
+        public Builder setNumber(java.lang.String value) {
           if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000001;
-          number_ = value;
-          onChanged();
+  result.hasNumber = true;
+          result.number_ = value;
           return this;
         }
         public Builder clearNumber() {
-          bitField0_ = (bitField0_ & ~0x00000001);
-          number_ = getDefaultInstance().getNumber();
-          onChanged();
+          result.hasNumber = false;
+          result.number_ = getDefaultInstance().getNumber();
           return this;
-        }
-        void setNumber(com.google.protobuf.ByteString value) {
-          bitField0_ |= 0x00000001;
-          number_ = value;
-          onChanged();
         }
         
         // optional .protobuf.Person.PhoneType type = 2 [default = HOME];
-        private com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneType type_ = com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneType.HOME;
         public boolean hasType() {
-          return ((bitField0_ & 0x00000002) == 0x00000002);
+          return result.hasType();
         }
         public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneType getType() {
-          return type_;
+          return result.getType();
         }
         public Builder setType(com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneType value) {
           if (value == null) {
             throw new NullPointerException();
           }
-          bitField0_ |= 0x00000002;
-          type_ = value;
-          onChanged();
+          result.hasType = true;
+          result.type_ = value;
           return this;
         }
         public Builder clearType() {
-          bitField0_ = (bitField0_ & ~0x00000002);
-          type_ = com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneType.HOME;
-          onChanged();
+          result.hasType = false;
+          result.type_ = com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneType.HOME;
           return this;
         }
         
@@ -574,151 +434,71 @@ public final class DataExchangeInternal {
       
       static {
         defaultInstance = new PhoneNumber(true);
+        com.dds.plugin.serialization.protobuf.DataExchangeInternal.internalForceInit();
         defaultInstance.initFields();
       }
       
       // @@protoc_insertion_point(class_scope:protobuf.Person.PhoneNumber)
     }
     
-    private int bitField0_;
     // required string name = 1;
     public static final int NAME_FIELD_NUMBER = 1;
-    private Object name_;
-    public boolean hasName() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    public String getName() {
-      Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          name_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getNameBytes() {
-      Object ref = name_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        name_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
+    private boolean hasName;
+    private java.lang.String name_ = "";
+    public boolean hasName() { return hasName; }
+    public java.lang.String getName() { return name_; }
     
     // required int32 id = 2;
     public static final int ID_FIELD_NUMBER = 2;
-    private int id_;
-    public boolean hasId() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    public int getId() {
-      return id_;
-    }
+    private boolean hasId;
+    private int id_ = 0;
+    public boolean hasId() { return hasId; }
+    public int getId() { return id_; }
     
     // optional string email = 3;
     public static final int EMAIL_FIELD_NUMBER = 3;
-    private Object email_;
-    public boolean hasEmail() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    public String getEmail() {
-      Object ref = email_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          email_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getEmailBytes() {
-      Object ref = email_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        email_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
+    private boolean hasEmail;
+    private java.lang.String email_ = "";
+    public boolean hasEmail() { return hasEmail; }
+    public java.lang.String getEmail() { return email_; }
     
     // repeated .protobuf.Person.PhoneNumber phone = 4;
     public static final int PHONE_FIELD_NUMBER = 4;
-    private java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber> phone_;
+    private java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber> phone_ =
+      java.util.Collections.emptyList();
     public java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber> getPhoneList() {
       return phone_;
     }
-    public java.util.List<? extends com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumberOrBuilder> 
-        getPhoneOrBuilderList() {
-      return phone_;
-    }
-    public int getPhoneCount() {
-      return phone_.size();
-    }
+    public int getPhoneCount() { return phone_.size(); }
     public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber getPhone(int index) {
-      return phone_.get(index);
-    }
-    public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumberOrBuilder getPhoneOrBuilder(
-        int index) {
       return phone_.get(index);
     }
     
     private void initFields() {
-      name_ = "";
-      id_ = 0;
-      email_ = "";
-      phone_ = java.util.Collections.emptyList();
     }
-    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-      
-      if (!hasName()) {
-        memoizedIsInitialized = 0;
-        return false;
+      if (!hasName) return false;
+      if (!hasId) return false;
+      for (com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber element : getPhoneList()) {
+        if (!element.isInitialized()) return false;
       }
-      if (!hasId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      for (int i = 0; i < getPhoneCount(); i++) {
-        if (!getPhone(i).isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
-      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getNameBytes());
+      if (hasName()) {
+        output.writeString(1, getName());
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, id_);
+      if (hasId()) {
+        output.writeInt32(2, getId());
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getEmailBytes());
+      if (hasEmail()) {
+        output.writeString(3, getEmail());
       }
-      for (int i = 0; i < phone_.size(); i++) {
-        output.writeMessage(4, phone_.get(i));
+      for (com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber element : getPhoneList()) {
+        output.writeMessage(4, element);
       }
       getUnknownFields().writeTo(output);
     }
@@ -729,30 +509,25 @@ public final class DataExchangeInternal {
       if (size != -1) return size;
     
       size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+      if (hasName()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getNameBytes());
+          .computeStringSize(1, getName());
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      if (hasId()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, id_);
+          .computeInt32Size(2, getId());
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (hasEmail()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getEmailBytes());
+          .computeStringSize(3, getEmail());
       }
-      for (int i = 0; i < phone_.size(); i++) {
+      for (com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber element : getPhoneList()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, phone_.get(i));
+          .computeMessageSize(4, element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
-    }
-    
-    @java.lang.Override
-    protected Object writeReplace() throws java.io.ObjectStreamException {
-      return super.writeReplace();
     }
     
     public static com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person parseFrom(
@@ -829,62 +604,34 @@ public final class DataExchangeInternal {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.dds.plugin.serialization.protobuf.DataExchangeInternal.PersonOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.dds.plugin.serialization.protobuf.DataExchangeInternal.internal_static_protobuf_Person_descriptor;
-      }
-      
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.dds.plugin.serialization.protobuf.DataExchangeInternal.internal_static_protobuf_Person_fieldAccessorTable;
-      }
+        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+      private com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person result;
       
       // Construct using com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
+      private Builder() {}
+      
+      private static Builder create() {
+        Builder builder = new Builder();
+        builder.result = new com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person();
+        return builder;
       }
       
-      private Builder(BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getPhoneFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
+      protected com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person internalGetResult() {
+        return result;
       }
       
       public Builder clear() {
-        super.clear();
-        name_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        id_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        email_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        if (phoneBuilder_ == null) {
-          phone_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
-        } else {
-          phoneBuilder_.clear();
+        if (result == null) {
+          throw new IllegalStateException(
+            "Cannot call clear() after build().");
         }
+        result = new com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person();
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(buildPartial());
+        return create().mergeFrom(result);
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -896,52 +643,37 @@ public final class DataExchangeInternal {
         return com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.getDefaultInstance();
       }
       
+      public boolean isInitialized() {
+        return result.isInitialized();
+      }
       public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person build() {
-        com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person result = buildPartial();
-        if (!result.isInitialized()) {
+        if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return result;
+        return buildPartial();
       }
       
       private com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person result = buildPartial();
-        if (!result.isInitialized()) {
+        if (!isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return result;
+        return buildPartial();
       }
       
       public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person buildPartial() {
-        com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person result = new com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
+        if (result == null) {
+          throw new IllegalStateException(
+            "build() has already been called on this Builder.");
         }
-        result.name_ = name_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
+        if (result.phone_ != java.util.Collections.EMPTY_LIST) {
+          result.phone_ =
+            java.util.Collections.unmodifiableList(result.phone_);
         }
-        result.id_ = id_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.email_ = email_;
-        if (phoneBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008)) {
-            phone_ = java.util.Collections.unmodifiableList(phone_);
-            bitField0_ = (bitField0_ & ~0x00000008);
-          }
-          result.phone_ = phone_;
-        } else {
-          result.phone_ = phoneBuilder_.build();
-        }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
+        com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person returnMe = result;
+        result = null;
+        return returnMe;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -964,52 +696,14 @@ public final class DataExchangeInternal {
         if (other.hasEmail()) {
           setEmail(other.getEmail());
         }
-        if (phoneBuilder_ == null) {
-          if (!other.phone_.isEmpty()) {
-            if (phone_.isEmpty()) {
-              phone_ = other.phone_;
-              bitField0_ = (bitField0_ & ~0x00000008);
-            } else {
-              ensurePhoneIsMutable();
-              phone_.addAll(other.phone_);
-            }
-            onChanged();
+        if (!other.phone_.isEmpty()) {
+          if (result.phone_.isEmpty()) {
+            result.phone_ = new java.util.ArrayList<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber>();
           }
-        } else {
-          if (!other.phone_.isEmpty()) {
-            if (phoneBuilder_.isEmpty()) {
-              phoneBuilder_.dispose();
-              phoneBuilder_ = null;
-              phone_ = other.phone_;
-              bitField0_ = (bitField0_ & ~0x00000008);
-              phoneBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getPhoneFieldBuilder() : null;
-            } else {
-              phoneBuilder_.addAllMessages(other.phone_);
-            }
-          }
+          result.phone_.addAll(other.phone_);
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
-      }
-      
-      public final boolean isInitialized() {
-        if (!hasName()) {
-          
-          return false;
-        }
-        if (!hasId()) {
-          
-          return false;
-        }
-        for (int i = 0; i < getPhoneCount(); i++) {
-          if (!getPhone(i).isInitialized()) {
-            
-            return false;
-          }
-        }
-        return true;
       }
       
       public Builder mergeFrom(
@@ -1024,30 +718,25 @@ public final class DataExchangeInternal {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
-              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
-                onChanged();
                 return this;
               }
               break;
             }
             case 10: {
-              bitField0_ |= 0x00000001;
-              name_ = input.readBytes();
+              setName(input.readString());
               break;
             }
             case 16: {
-              bitField0_ |= 0x00000002;
-              id_ = input.readInt32();
+              setId(input.readInt32());
               break;
             }
             case 26: {
-              bitField0_ |= 0x00000004;
-              email_ = input.readBytes();
+              setEmail(input.readString());
               break;
             }
             case 34: {
@@ -1060,285 +749,116 @@ public final class DataExchangeInternal {
         }
       }
       
-      private int bitField0_;
       
       // required string name = 1;
-      private Object name_ = "";
       public boolean hasName() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
+        return result.hasName();
       }
-      public String getName() {
-        Object ref = name_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          name_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
+      public java.lang.String getName() {
+        return result.getName();
       }
-      public Builder setName(String value) {
+      public Builder setName(java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000001;
-        name_ = value;
-        onChanged();
+  result.hasName = true;
+        result.name_ = value;
         return this;
       }
       public Builder clearName() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        name_ = getDefaultInstance().getName();
-        onChanged();
+        result.hasName = false;
+        result.name_ = getDefaultInstance().getName();
         return this;
-      }
-      void setName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000001;
-        name_ = value;
-        onChanged();
       }
       
       // required int32 id = 2;
-      private int id_ ;
       public boolean hasId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return result.hasId();
       }
       public int getId() {
-        return id_;
+        return result.getId();
       }
       public Builder setId(int value) {
-        bitField0_ |= 0x00000002;
-        id_ = value;
-        onChanged();
+        result.hasId = true;
+        result.id_ = value;
         return this;
       }
       public Builder clearId() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        id_ = 0;
-        onChanged();
+        result.hasId = false;
+        result.id_ = 0;
         return this;
       }
       
       // optional string email = 3;
-      private Object email_ = "";
       public boolean hasEmail() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return result.hasEmail();
       }
-      public String getEmail() {
-        Object ref = email_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          email_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
+      public java.lang.String getEmail() {
+        return result.getEmail();
       }
-      public Builder setEmail(String value) {
+      public Builder setEmail(java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
-        email_ = value;
-        onChanged();
+  result.hasEmail = true;
+        result.email_ = value;
         return this;
       }
       public Builder clearEmail() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        email_ = getDefaultInstance().getEmail();
-        onChanged();
+        result.hasEmail = false;
+        result.email_ = getDefaultInstance().getEmail();
         return this;
-      }
-      void setEmail(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000004;
-        email_ = value;
-        onChanged();
       }
       
       // repeated .protobuf.Person.PhoneNumber phone = 4;
-      private java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber> phone_ =
-        java.util.Collections.emptyList();
-      private void ensurePhoneIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          phone_ = new java.util.ArrayList<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber>(phone_);
-          bitField0_ |= 0x00000008;
-         }
-      }
-      
-      private com.google.protobuf.RepeatedFieldBuilder<
-          com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.Builder, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumberOrBuilder> phoneBuilder_;
-      
       public java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber> getPhoneList() {
-        if (phoneBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(phone_);
-        } else {
-          return phoneBuilder_.getMessageList();
-        }
+        return java.util.Collections.unmodifiableList(result.phone_);
       }
       public int getPhoneCount() {
-        if (phoneBuilder_ == null) {
-          return phone_.size();
-        } else {
-          return phoneBuilder_.getCount();
-        }
+        return result.getPhoneCount();
       }
       public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber getPhone(int index) {
-        if (phoneBuilder_ == null) {
-          return phone_.get(index);
-        } else {
-          return phoneBuilder_.getMessage(index);
-        }
+        return result.getPhone(index);
       }
-      public Builder setPhone(
-          int index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber value) {
-        if (phoneBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensurePhoneIsMutable();
-          phone_.set(index, value);
-          onChanged();
-        } else {
-          phoneBuilder_.setMessage(index, value);
+      public Builder setPhone(int index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber value) {
+        if (value == null) {
+          throw new NullPointerException();
         }
+        result.phone_.set(index, value);
         return this;
       }
-      public Builder setPhone(
-          int index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.Builder builderForValue) {
-        if (phoneBuilder_ == null) {
-          ensurePhoneIsMutable();
-          phone_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          phoneBuilder_.setMessage(index, builderForValue.build());
-        }
+      public Builder setPhone(int index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.Builder builderForValue) {
+        result.phone_.set(index, builderForValue.build());
         return this;
       }
       public Builder addPhone(com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber value) {
-        if (phoneBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensurePhoneIsMutable();
-          phone_.add(value);
-          onChanged();
-        } else {
-          phoneBuilder_.addMessage(value);
+        if (value == null) {
+          throw new NullPointerException();
         }
+        if (result.phone_.isEmpty()) {
+          result.phone_ = new java.util.ArrayList<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber>();
+        }
+        result.phone_.add(value);
         return this;
       }
-      public Builder addPhone(
-          int index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber value) {
-        if (phoneBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensurePhoneIsMutable();
-          phone_.add(index, value);
-          onChanged();
-        } else {
-          phoneBuilder_.addMessage(index, value);
+      public Builder addPhone(com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.Builder builderForValue) {
+        if (result.phone_.isEmpty()) {
+          result.phone_ = new java.util.ArrayList<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber>();
         }
-        return this;
-      }
-      public Builder addPhone(
-          com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.Builder builderForValue) {
-        if (phoneBuilder_ == null) {
-          ensurePhoneIsMutable();
-          phone_.add(builderForValue.build());
-          onChanged();
-        } else {
-          phoneBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addPhone(
-          int index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.Builder builderForValue) {
-        if (phoneBuilder_ == null) {
-          ensurePhoneIsMutable();
-          phone_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          phoneBuilder_.addMessage(index, builderForValue.build());
-        }
+        result.phone_.add(builderForValue.build());
         return this;
       }
       public Builder addAllPhone(
           java.lang.Iterable<? extends com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber> values) {
-        if (phoneBuilder_ == null) {
-          ensurePhoneIsMutable();
-          super.addAll(values, phone_);
-          onChanged();
-        } else {
-          phoneBuilder_.addAllMessages(values);
+        if (result.phone_.isEmpty()) {
+          result.phone_ = new java.util.ArrayList<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber>();
         }
+        super.addAll(values, result.phone_);
         return this;
       }
       public Builder clearPhone() {
-        if (phoneBuilder_ == null) {
-          phone_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
-          onChanged();
-        } else {
-          phoneBuilder_.clear();
-        }
+        result.phone_ = java.util.Collections.emptyList();
         return this;
-      }
-      public Builder removePhone(int index) {
-        if (phoneBuilder_ == null) {
-          ensurePhoneIsMutable();
-          phone_.remove(index);
-          onChanged();
-        } else {
-          phoneBuilder_.remove(index);
-        }
-        return this;
-      }
-      public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.Builder getPhoneBuilder(
-          int index) {
-        return getPhoneFieldBuilder().getBuilder(index);
-      }
-      public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumberOrBuilder getPhoneOrBuilder(
-          int index) {
-        if (phoneBuilder_ == null) {
-          return phone_.get(index);  } else {
-          return phoneBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      public java.util.List<? extends com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumberOrBuilder> 
-           getPhoneOrBuilderList() {
-        if (phoneBuilder_ != null) {
-          return phoneBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(phone_);
-        }
-      }
-      public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.Builder addPhoneBuilder() {
-        return getPhoneFieldBuilder().addBuilder(
-            com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.getDefaultInstance());
-      }
-      public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.Builder addPhoneBuilder(
-          int index) {
-        return getPhoneFieldBuilder().addBuilder(
-            index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.getDefaultInstance());
-      }
-      public java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.Builder> 
-           getPhoneBuilderList() {
-        return getPhoneFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.Builder, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumberOrBuilder> 
-          getPhoneFieldBuilder() {
-        if (phoneBuilder_ == null) {
-          phoneBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumber.Builder, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.PhoneNumberOrBuilder>(
-                  phone_,
-                  ((bitField0_ & 0x00000008) == 0x00000008),
-                  getParentForChildren(),
-                  isClean());
-          phone_ = null;
-        }
-        return phoneBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:protobuf.Person)
@@ -1346,31 +866,18 @@ public final class DataExchangeInternal {
     
     static {
       defaultInstance = new Person(true);
+      com.dds.plugin.serialization.protobuf.DataExchangeInternal.internalForceInit();
       defaultInstance.initFields();
     }
     
     // @@protoc_insertion_point(class_scope:protobuf.Person)
   }
   
-  public interface AddressBookOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-    
-    // repeated .protobuf.Person person = 1;
-    java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person> 
-        getPersonList();
-    com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person getPerson(int index);
-    int getPersonCount();
-    java.util.List<? extends com.dds.plugin.serialization.protobuf.DataExchangeInternal.PersonOrBuilder> 
-        getPersonOrBuilderList();
-    com.dds.plugin.serialization.protobuf.DataExchangeInternal.PersonOrBuilder getPersonOrBuilder(
-        int index);
-  }
   public static final class AddressBook extends
-      com.google.protobuf.GeneratedMessage
-      implements AddressBookOrBuilder {
+      com.google.protobuf.GeneratedMessage {
     // Use AddressBook.newBuilder() to construct.
-    private AddressBook(Builder builder) {
-      super(builder);
+    private AddressBook() {
+      initFields();
     }
     private AddressBook(boolean noInit) {}
     
@@ -1395,48 +902,30 @@ public final class DataExchangeInternal {
     
     // repeated .protobuf.Person person = 1;
     public static final int PERSON_FIELD_NUMBER = 1;
-    private java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person> person_;
+    private java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person> person_ =
+      java.util.Collections.emptyList();
     public java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person> getPersonList() {
       return person_;
     }
-    public java.util.List<? extends com.dds.plugin.serialization.protobuf.DataExchangeInternal.PersonOrBuilder> 
-        getPersonOrBuilderList() {
-      return person_;
-    }
-    public int getPersonCount() {
-      return person_.size();
-    }
+    public int getPersonCount() { return person_.size(); }
     public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person getPerson(int index) {
-      return person_.get(index);
-    }
-    public com.dds.plugin.serialization.protobuf.DataExchangeInternal.PersonOrBuilder getPersonOrBuilder(
-        int index) {
       return person_.get(index);
     }
     
     private void initFields() {
-      person_ = java.util.Collections.emptyList();
     }
-    private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-      
-      for (int i = 0; i < getPersonCount(); i++) {
-        if (!getPerson(i).isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
+      for (com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person element : getPersonList()) {
+        if (!element.isInitialized()) return false;
       }
-      memoizedIsInitialized = 1;
       return true;
     }
     
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      for (int i = 0; i < person_.size(); i++) {
-        output.writeMessage(1, person_.get(i));
+      for (com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person element : getPersonList()) {
+        output.writeMessage(1, element);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1447,18 +936,13 @@ public final class DataExchangeInternal {
       if (size != -1) return size;
     
       size = 0;
-      for (int i = 0; i < person_.size(); i++) {
+      for (com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person element : getPersonList()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, person_.get(i));
+          .computeMessageSize(1, element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
-    }
-    
-    @java.lang.Override
-    protected Object writeReplace() throws java.io.ObjectStreamException {
-      return super.writeReplace();
     }
     
     public static com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook parseFrom(
@@ -1535,56 +1019,34 @@ public final class DataExchangeInternal {
     }
     public Builder toBuilder() { return newBuilder(this); }
     
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBookOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return com.dds.plugin.serialization.protobuf.DataExchangeInternal.internal_static_protobuf_AddressBook_descriptor;
-      }
-      
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return com.dds.plugin.serialization.protobuf.DataExchangeInternal.internal_static_protobuf_AddressBook_fieldAccessorTable;
-      }
+        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+      private com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook result;
       
       // Construct using com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
+      private Builder() {}
+      
+      private static Builder create() {
+        Builder builder = new Builder();
+        builder.result = new com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook();
+        return builder;
       }
       
-      private Builder(BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getPersonFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
+      protected com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook internalGetResult() {
+        return result;
       }
       
       public Builder clear() {
-        super.clear();
-        if (personBuilder_ == null) {
-          person_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          personBuilder_.clear();
+        if (result == null) {
+          throw new IllegalStateException(
+            "Cannot call clear() after build().");
         }
+        result = new com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook();
         return this;
       }
       
       public Builder clone() {
-        return create().mergeFrom(buildPartial());
+        return create().mergeFrom(result);
       }
       
       public com.google.protobuf.Descriptors.Descriptor
@@ -1596,38 +1058,37 @@ public final class DataExchangeInternal {
         return com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook.getDefaultInstance();
       }
       
+      public boolean isInitialized() {
+        return result.isInitialized();
+      }
       public com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook build() {
-        com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook result = buildPartial();
-        if (!result.isInitialized()) {
+        if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
-        return result;
+        return buildPartial();
       }
       
       private com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook result = buildPartial();
-        if (!result.isInitialized()) {
+        if (!isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
         }
-        return result;
+        return buildPartial();
       }
       
       public com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook buildPartial() {
-        com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook result = new com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook(this);
-        int from_bitField0_ = bitField0_;
-        if (personBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            person_ = java.util.Collections.unmodifiableList(person_);
-            bitField0_ = (bitField0_ & ~0x00000001);
-          }
-          result.person_ = person_;
-        } else {
-          result.person_ = personBuilder_.build();
+        if (result == null) {
+          throw new IllegalStateException(
+            "build() has already been called on this Builder.");
         }
-        onBuilt();
-        return result;
+        if (result.person_ != java.util.Collections.EMPTY_LIST) {
+          result.person_ =
+            java.util.Collections.unmodifiableList(result.person_);
+        }
+        com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook returnMe = result;
+        result = null;
+        return returnMe;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
@@ -1641,44 +1102,14 @@ public final class DataExchangeInternal {
       
       public Builder mergeFrom(com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook other) {
         if (other == com.dds.plugin.serialization.protobuf.DataExchangeInternal.AddressBook.getDefaultInstance()) return this;
-        if (personBuilder_ == null) {
-          if (!other.person_.isEmpty()) {
-            if (person_.isEmpty()) {
-              person_ = other.person_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-            } else {
-              ensurePersonIsMutable();
-              person_.addAll(other.person_);
-            }
-            onChanged();
+        if (!other.person_.isEmpty()) {
+          if (result.person_.isEmpty()) {
+            result.person_ = new java.util.ArrayList<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person>();
           }
-        } else {
-          if (!other.person_.isEmpty()) {
-            if (personBuilder_.isEmpty()) {
-              personBuilder_.dispose();
-              personBuilder_ = null;
-              person_ = other.person_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              personBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getPersonFieldBuilder() : null;
-            } else {
-              personBuilder_.addAllMessages(other.person_);
-            }
-          }
+          result.person_.addAll(other.person_);
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
-      }
-      
-      public final boolean isInitialized() {
-        for (int i = 0; i < getPersonCount(); i++) {
-          if (!getPerson(i).isInitialized()) {
-            
-            return false;
-          }
-        }
-        return true;
       }
       
       public Builder mergeFrom(
@@ -1693,13 +1124,11 @@ public final class DataExchangeInternal {
           switch (tag) {
             case 0:
               this.setUnknownFields(unknownFields.build());
-              onChanged();
               return this;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
                 this.setUnknownFields(unknownFields.build());
-                onChanged();
                 return this;
               }
               break;
@@ -1714,192 +1143,56 @@ public final class DataExchangeInternal {
         }
       }
       
-      private int bitField0_;
       
       // repeated .protobuf.Person person = 1;
-      private java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person> person_ =
-        java.util.Collections.emptyList();
-      private void ensurePersonIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          person_ = new java.util.ArrayList<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person>(person_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-      
-      private com.google.protobuf.RepeatedFieldBuilder<
-          com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.Builder, com.dds.plugin.serialization.protobuf.DataExchangeInternal.PersonOrBuilder> personBuilder_;
-      
       public java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person> getPersonList() {
-        if (personBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(person_);
-        } else {
-          return personBuilder_.getMessageList();
-        }
+        return java.util.Collections.unmodifiableList(result.person_);
       }
       public int getPersonCount() {
-        if (personBuilder_ == null) {
-          return person_.size();
-        } else {
-          return personBuilder_.getCount();
-        }
+        return result.getPersonCount();
       }
       public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person getPerson(int index) {
-        if (personBuilder_ == null) {
-          return person_.get(index);
-        } else {
-          return personBuilder_.getMessage(index);
-        }
+        return result.getPerson(index);
       }
-      public Builder setPerson(
-          int index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person value) {
-        if (personBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensurePersonIsMutable();
-          person_.set(index, value);
-          onChanged();
-        } else {
-          personBuilder_.setMessage(index, value);
+      public Builder setPerson(int index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person value) {
+        if (value == null) {
+          throw new NullPointerException();
         }
+        result.person_.set(index, value);
         return this;
       }
-      public Builder setPerson(
-          int index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.Builder builderForValue) {
-        if (personBuilder_ == null) {
-          ensurePersonIsMutable();
-          person_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          personBuilder_.setMessage(index, builderForValue.build());
-        }
+      public Builder setPerson(int index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.Builder builderForValue) {
+        result.person_.set(index, builderForValue.build());
         return this;
       }
       public Builder addPerson(com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person value) {
-        if (personBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensurePersonIsMutable();
-          person_.add(value);
-          onChanged();
-        } else {
-          personBuilder_.addMessage(value);
+        if (value == null) {
+          throw new NullPointerException();
         }
+        if (result.person_.isEmpty()) {
+          result.person_ = new java.util.ArrayList<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person>();
+        }
+        result.person_.add(value);
         return this;
       }
-      public Builder addPerson(
-          int index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person value) {
-        if (personBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensurePersonIsMutable();
-          person_.add(index, value);
-          onChanged();
-        } else {
-          personBuilder_.addMessage(index, value);
+      public Builder addPerson(com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.Builder builderForValue) {
+        if (result.person_.isEmpty()) {
+          result.person_ = new java.util.ArrayList<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person>();
         }
-        return this;
-      }
-      public Builder addPerson(
-          com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.Builder builderForValue) {
-        if (personBuilder_ == null) {
-          ensurePersonIsMutable();
-          person_.add(builderForValue.build());
-          onChanged();
-        } else {
-          personBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addPerson(
-          int index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.Builder builderForValue) {
-        if (personBuilder_ == null) {
-          ensurePersonIsMutable();
-          person_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          personBuilder_.addMessage(index, builderForValue.build());
-        }
+        result.person_.add(builderForValue.build());
         return this;
       }
       public Builder addAllPerson(
           java.lang.Iterable<? extends com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person> values) {
-        if (personBuilder_ == null) {
-          ensurePersonIsMutable();
-          super.addAll(values, person_);
-          onChanged();
-        } else {
-          personBuilder_.addAllMessages(values);
+        if (result.person_.isEmpty()) {
+          result.person_ = new java.util.ArrayList<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person>();
         }
+        super.addAll(values, result.person_);
         return this;
       }
       public Builder clearPerson() {
-        if (personBuilder_ == null) {
-          person_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-          onChanged();
-        } else {
-          personBuilder_.clear();
-        }
+        result.person_ = java.util.Collections.emptyList();
         return this;
-      }
-      public Builder removePerson(int index) {
-        if (personBuilder_ == null) {
-          ensurePersonIsMutable();
-          person_.remove(index);
-          onChanged();
-        } else {
-          personBuilder_.remove(index);
-        }
-        return this;
-      }
-      public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.Builder getPersonBuilder(
-          int index) {
-        return getPersonFieldBuilder().getBuilder(index);
-      }
-      public com.dds.plugin.serialization.protobuf.DataExchangeInternal.PersonOrBuilder getPersonOrBuilder(
-          int index) {
-        if (personBuilder_ == null) {
-          return person_.get(index);  } else {
-          return personBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      public java.util.List<? extends com.dds.plugin.serialization.protobuf.DataExchangeInternal.PersonOrBuilder> 
-           getPersonOrBuilderList() {
-        if (personBuilder_ != null) {
-          return personBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(person_);
-        }
-      }
-      public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.Builder addPersonBuilder() {
-        return getPersonFieldBuilder().addBuilder(
-            com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.getDefaultInstance());
-      }
-      public com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.Builder addPersonBuilder(
-          int index) {
-        return getPersonFieldBuilder().addBuilder(
-            index, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.getDefaultInstance());
-      }
-      public java.util.List<com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.Builder> 
-           getPersonBuilderList() {
-        return getPersonFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.Builder, com.dds.plugin.serialization.protobuf.DataExchangeInternal.PersonOrBuilder> 
-          getPersonFieldBuilder() {
-        if (personBuilder_ == null) {
-          personBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person, com.dds.plugin.serialization.protobuf.DataExchangeInternal.Person.Builder, com.dds.plugin.serialization.protobuf.DataExchangeInternal.PersonOrBuilder>(
-                  person_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
-                  getParentForChildren(),
-                  isClean());
-          person_ = null;
-        }
-        return personBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:protobuf.AddressBook)
@@ -1907,6 +1200,7 @@ public final class DataExchangeInternal {
     
     static {
       defaultInstance = new AddressBook(true);
+      com.dds.plugin.serialization.protobuf.DataExchangeInternal.internalForceInit();
       defaultInstance.initFields();
     }
     
@@ -1985,6 +1279,8 @@ public final class DataExchangeInternal {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
   }
+  
+  public static void internalForceInit() {}
   
   // @@protoc_insertion_point(outer_class_scope)
 }
