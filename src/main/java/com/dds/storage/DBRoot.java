@@ -29,7 +29,7 @@ public class DBRoot {
 		coreStorageInterface = "com.dds.interfaces.storage.DBInterface";
 	}
 
-	public Object invoke(byte[] buffer) throws UnknownHostException, NoSuchMethodException {
+	public Object invoke(byte[] buffer) throws UnknownHostException, NoSuchMethodException, InvocationTargetException {
 
 		String buf = (String) Helper.getObject(buffer);
 
@@ -39,24 +39,37 @@ public class DBRoot {
 		if (checkMethodExists(methodName)) {
 			StringBuilder builder = new StringBuilder(pluginsPath);
 			builder.append(".storage." +  dbToInstantiate.toLowerCase() + "." + dbToInstantiate);
-			return invokeDBMethod(builder.toString(), methodName);
+			return invokeDBMethod(builder.toString(), methodName, bufArray);
 
 		} else {
 			StringBuilder builder = new StringBuilder(pluginsPath);
 			builder.append(".storage." +  dbToInstantiate.toLowerCase() + "." + dbToInstantiate);
-			return invokeDBMethod(builder.toString(), methodName);
+			return invokeDBMethod(builder.toString(), methodName, bufArray);
 		}
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Object invokeDBMethod(String className, String methodName) throws NoSuchMethodException {
+	private Object invokeDBMethod(String className, String methodName, String[] bufArray) 
+	throws NoSuchMethodException, InvocationTargetException {
 		try {
+			int bufArrayLength = bufArray.length;
 			Class cls = Class.forName(className);
 			Object iClass = cls.newInstance();
-			Class parameterTypes[] = new Class[0];
+			Class parameterTypes[] = new Class[bufArrayLength - 1];
+			for (int i = 0; i < bufArrayLength - 1; i++) {
+				parameterTypes[i] = String.class;
+			}
 			Method method = cls.getMethod(methodName, parameterTypes);
-			Object arguments[] = new Object[0];
+			Object arguments[] = new Object[bufArray.length - 1];
+			for (int i = 0; i < bufArrayLength - 1; i++) {
+				arguments[i] = bufArray[i + 1];
+			}
+			Method createConMethod = cls.getMethod("createConnection", null);
+			createConMethod.invoke(iClass, null);
 			Object object = method.invoke(iClass, arguments);
+			
+			Method closeConMethod = cls.getMethod("closeConnection", null);
+			closeConMethod.invoke(iClass, null);
 			
 			return object;
 		} catch (IllegalArgumentException e) {

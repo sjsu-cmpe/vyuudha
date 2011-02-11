@@ -117,6 +117,7 @@ public class MongoDB extends Mongo implements DBInterface {
 		for (DBObject obj : list) {
 			value = obj.get("value").toString();
 		}
+
 		return value;
 	}
 
@@ -165,5 +166,6 @@ public class MongoDB extends Mongo implements DBInterface {
 
 		db = null;
 		coll = null;
+		logger.info("MongoDB connection closed");
 	}
 }
