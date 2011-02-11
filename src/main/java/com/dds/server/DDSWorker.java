@@ -1,8 +1,14 @@
 package com.dds.server;
 
+import java.lang.reflect.InvocationTargetException;
+import java.net.UnknownHostException;
 import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.dds.storage.DBRoot;
+import com.dds.utils.Exceptions;
+import com.dds.utils.Helper;
 
 public class DDSWorker implements Runnable {
 	private List queue = new LinkedList();
@@ -11,10 +17,34 @@ public class DDSWorker implements Runnable {
 			byte[] data, int count) {
 		byte[] dataCopy = new byte[count];
 		System.arraycopy(data, 0, dataCopy, 0, count);
+
+		dataCopy = Helper.getBytes(storageCall(dataCopy));
 		synchronized (queue) {
 			queue.add(new ServerDataEvent(server, socket, dataCopy));
 			queue.notify();
 		}
+	}
+
+	private Object storageCall(byte[] dataCopy) {
+		DBRoot dbRoot = new DBRoot();
+		Object objectReturned = null;
+		try {
+			objectReturned = dbRoot.invoke(dataCopy);
+			if (objectReturned != null) {
+				String retVal = (String) objectReturned;
+				return objectReturned;
+			}
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO LOG!
+			System.out.println("Could not fetch : " + e.getMessage());
+			//e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			System.out.println("Key not found : " + e.getMessage());
+		}
+		return objectReturned;
 	}
 
 	public void run() {
@@ -31,7 +61,8 @@ public class DDSWorker implements Runnable {
 				}
 				dataEvent = (ServerDataEvent) queue.remove(0);
 			}
-
+			String out = (String) Helper.getObject(dataEvent.data);
+			System.out.println("Value : " + out);
 			// Return to sender
 			dataEvent.server.send(dataEvent.socket, dataEvent.data);
 		}

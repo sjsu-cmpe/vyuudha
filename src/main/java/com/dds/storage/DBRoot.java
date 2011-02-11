@@ -19,12 +19,12 @@ public class DBRoot {
 	private String coreStorageInterface;
 	private String pluginsPath;
 
-	DBRoot() {
+	public DBRoot() {
 		setConfigurations();
 	}
 
 	private void setConfigurations() {
-		dbToInstantiate = "MongoDB";
+		dbToInstantiate = "BDB";
 		pluginsPath = "com.dds.plugin";
 		coreStorageInterface = "com.dds.interfaces.storage.DBInterface";
 	}
@@ -32,7 +32,6 @@ public class DBRoot {
 	public Object invoke(byte[] buffer) throws UnknownHostException, NoSuchMethodException, InvocationTargetException {
 
 		String buf = (String) Helper.getObject(buffer);
-
 		String[] bufArray = buf.split(",");
 		String methodName = bufArray[0];
 

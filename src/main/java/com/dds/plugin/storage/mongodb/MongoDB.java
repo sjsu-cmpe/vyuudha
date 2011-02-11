@@ -87,6 +87,7 @@ public class MongoDB extends Mongo implements DBInterface {
 			delete(key);
 			coll.insert(doc);
 		}
+		logger.info(key + " : " + value + " inserted into DB");
 	}
 
 	/**
@@ -99,6 +100,7 @@ public class MongoDB extends Mongo implements DBInterface {
 		lookUp.put("key", key);
 
 		coll.remove(lookUp);
+		logger.info(key + " deleted from DB");
 	}
 
 	/**
@@ -117,12 +119,13 @@ public class MongoDB extends Mongo implements DBInterface {
 		for (DBObject obj : list) {
 			value = obj.get("value").toString();
 		}
-
+		logger.info(key + " : " + value + " retrieved from DB");
 		return value;
 	}
 
 	/**
 	 * Display all the keys in the Collection
+	 * TODO Incomplete
 	 */
 	public void showAll() {
 		DBCursor cur = coll.find();
