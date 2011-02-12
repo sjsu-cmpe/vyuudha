@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.dds.storage.DBRoot;
-import com.dds.utils.Exceptions;
 import com.dds.utils.Helper;
 
 public class DDSWorker implements Runnable {
@@ -25,6 +24,12 @@ public class DDSWorker implements Runnable {
 		}
 	}
 
+	/**
+	 * Makes a call to the DBRoot, vyuudha storage abstraction engine
+	 * 
+	 * @param dataCopy
+	 * @return object from the core storage layer
+	 */
 	private Object storageCall(byte[] dataCopy) {
 		DBRoot dbRoot = new DBRoot();
 		Object objectReturned = null;

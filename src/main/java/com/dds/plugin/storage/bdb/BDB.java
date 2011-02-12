@@ -42,6 +42,11 @@ public class BDB implements DBInterface{
 		setConfiguration();
 	}
 	
+	/**
+	 * Used to set the configuration for BDB. Ideally this function
+	 * should read from a properties file
+	 * 
+	 */
 	private void setConfiguration() {
 		// TODO Configurations to be read from file
 		bdbPath = getBdbPath();
@@ -116,6 +121,9 @@ public class BDB implements DBInterface{
 		return vendorDb;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.dds.interfaces.storage.DBInterface#get(java.lang.String)
+	 */
 	public String get(String key) {
 		
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
@@ -144,6 +152,9 @@ public class BDB implements DBInterface{
 		return (String) retObj;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.dds.interfaces.storage.DBInterface#put(java.lang.String, java.lang.String)
+	 */
 	public void put(String key, String value) {
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		DatabaseEntry entryValue = new DatabaseEntry(Helper.getBytes(value));
@@ -157,6 +168,9 @@ public class BDB implements DBInterface{
 		logger.info(key + " : " + value + " inserted into DB");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.dds.interfaces.storage.DBInterface#delete(java.lang.String)
+	 */
 	public void delete(String key) {
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		
@@ -174,6 +188,9 @@ public class BDB implements DBInterface{
 		logger.info(key + " deleted from DB");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.dds.interfaces.storage.DBInterface#closeConnection()
+	 */
 	public void closeConnection() {
 		if (myEnv != null) {
 			try {		
@@ -187,6 +204,9 @@ public class BDB implements DBInterface{
 		logger.info("BDB connection closed");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.dds.interfaces.storage.DBInterface#contains(java.lang.String)
+	 */
 	public boolean contains(String key) {
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		

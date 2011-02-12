@@ -233,7 +233,7 @@ public class DDSClient implements Runnable {
 			t.setDaemon(true);
 			t.start();
 			RspHandler handler = new RspHandler();
-			//client.send(Helper.getBytes("put,keyUtkarsh,KuchBhi"), handler);
+			client.send(Helper.getBytes("put,keyUtkarsh,KuchBhi"), handler);
 			client.send(Helper.getBytes("get,keyUtkarsh"), handler);
 			handler.waitForResponse();
 		} catch (Exception e) {
