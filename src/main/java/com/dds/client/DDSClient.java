@@ -217,12 +217,10 @@ public class DDSClient implements Runnable {
 		synchronized (this.pendingChanges) {
 			this.pendingChanges.add(new ChangeRequest(socketChannel, ChangeRequest.REGISTER, SelectionKey.OP_CONNECT));
 		}
-
 		return socketChannel;
 	}
 
 	private Selector initSelector() throws IOException {
-		// Create a new selector
 		return SelectorProvider.provider().openSelector();
 	}
 
