@@ -1,10 +1,14 @@
 package com.dds.plugin.storage.bdb;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.dds.interfaces.storage.DBInterface;
+import com.dds.utils.Helper;
+import com.google.common.collect.Lists;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;
@@ -14,9 +18,6 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
-import com.dds.interfaces.storage.DBInterface;
-import com.dds.utils.Helper;
-import com.google.common.collect.Lists;
 
 public class BDB implements DBInterface{
 
@@ -41,8 +42,14 @@ public class BDB implements DBInterface{
 		setConfiguration();
 	}
 	
+	/**
+	 * Used to set the configuration for BDB. Ideally this function
+	 * should read from a properties file
+	 * 
+	 */
 	private void setConfiguration() {
 		// TODO Configurations to be read from file
+		bdbPath = getBdbPath();
 		setBdbPath(bdbPath);
 		setEnvHome(new File(bdbPath));
 		setReadOnly(false);
@@ -56,6 +63,27 @@ public class BDB implements DBInterface{
 	}
 
 	/**
+	 * @return the bdbPath
+	 */
+	public static String getBdbPath() {
+		StringBuilder path = new StringBuilder("");
+		try {
+			path = new StringBuilder(new java.io.File(".").getCanonicalPath());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		path.append("/store/bdb/");
+
+		File bdbPath = new File(path.toString());
+		if (!bdbPath.exists()) {
+		 	bdbPath.mkdirs();
+	 	}
+
+		return path.toString();
+	}
+
+	/**
 	 * @param envHome the envHome to set
 	 */
 	private void setEnvHome(File envHome) {
@@ -64,7 +92,6 @@ public class BDB implements DBInterface{
 
 	public void createConnection() {
 
-		logger.info("Getting into setup()");
 		EnvironmentConfig myEnvConfig = new EnvironmentConfig();
 		DatabaseConfig myDbConfig = new DatabaseConfig();
 
@@ -81,6 +108,8 @@ public class BDB implements DBInterface{
 		} catch (Exception ex) {
 			logger.info("Error in setup: " + ex.toString());
 		}
+		
+		logger.info("BDB connection created");
 	}
 
 	// Getter methods
@@ -92,6 +121,9 @@ public class BDB implements DBInterface{
 		return vendorDb;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.dds.interfaces.storage.DBInterface#get(java.lang.String)
+	 */
 	public String get(String key) {
 		
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
@@ -115,10 +147,14 @@ public class BDB implements DBInterface{
 		for (Object obj : results)	{
 			retObj = obj;
 		}
-		
+		String value = (String) retObj;
+		logger.info(key + " : " + value + " retrieved from DB");
 		return (String) retObj;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.dds.interfaces.storage.DBInterface#put(java.lang.String, java.lang.String)
+	 */
 	public void put(String key, String value) {
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		DatabaseEntry entryValue = new DatabaseEntry(Helper.getBytes(value));
@@ -129,9 +165,12 @@ public class BDB implements DBInterface{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}		
-		logger.info("Key " + key + " inserted!");
+		logger.info(key + " : " + value + " inserted into DB");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.dds.interfaces.storage.DBInterface#delete(java.lang.String)
+	 */
 	public void delete(String key) {
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		
@@ -145,11 +184,14 @@ public class BDB implements DBInterface{
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
+		logger.info(key + " deleted from DB");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.dds.interfaces.storage.DBInterface#closeConnection()
+	 */
 	public void closeConnection() {
-		logger.info("Closing database");
 		if (myEnv != null) {
 			try {		
 				getVendorDB().close();
@@ -158,9 +200,13 @@ public class BDB implements DBInterface{
 				logger.info("Error in closing database: " + dbe.toString());
 				System.exit(-1);
 			}
-		}		
+		}
+		logger.info("BDB connection closed");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.dds.interfaces.storage.DBInterface#contains(java.lang.String)
+	 */
 	public boolean contains(String key) {
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		

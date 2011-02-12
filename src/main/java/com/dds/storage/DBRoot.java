@@ -10,8 +10,11 @@ import java.net.UnknownHostException;
 import com.dds.utils.Helper;
 
 /**
- * @author ravid
+ * This class provides the abstraction layer over the Storage calls.
+ * All calls to BDB/MongoDB and etc will need to pass thru DBRoot * @author ravid
  * 
+ * @author ravid
+ *
  */
 public class DBRoot {
 
@@ -19,44 +22,89 @@ public class DBRoot {
 	private String coreStorageInterface;
 	private String pluginsPath;
 
-	DBRoot() {
+	public DBRoot() {
 		setConfigurations();
 	}
 
+	/**
+	 * Upon object creation of DBRoot, the first thing to do is
+	 * set the configurations.
+	 * 
+	 * These will be read from .properties file.
+	 * 
+	 * DB to use, pluginsPath and coreInterface variables are
+	 * retrieved from properties file
+	 * 
+	 * @author ravid
+	 *
+	 */
 	private void setConfigurations() {
-		dbToInstantiate = "MongoDB";
+		dbToInstantiate = "BDB";
 		pluginsPath = "com.dds.plugin";
 		coreStorageInterface = "com.dds.interfaces.storage.DBInterface";
 	}
 
-	public Object invoke(byte[] buffer) throws UnknownHostException, NoSuchMethodException {
+	/**
+	 * This function is used to check if the method being called is a native API 
+	 * or from our API. 
+	 * 
+	 * @param buffer
+	 * @return Object retrieved from storage layer
+	 * @throws UnknownHostException
+	 * @throws NoSuchMethodException
+	 * @throws InvocationTargetException
+	 */
+	public Object invoke(byte[] buffer) throws UnknownHostException, NoSuchMethodException, InvocationTargetException {
 
 		String buf = (String) Helper.getObject(buffer);
-
 		String[] bufArray = buf.split(",");
 		String methodName = bufArray[0];
 
 		if (checkMethodExists(methodName)) {
 			StringBuilder builder = new StringBuilder(pluginsPath);
 			builder.append(".storage." +  dbToInstantiate.toLowerCase() + "." + dbToInstantiate);
-			return invokeDBMethod(builder.toString(), methodName);
+			return invokeDBMethod(builder.toString(), methodName, bufArray);
 
 		} else {
 			StringBuilder builder = new StringBuilder(pluginsPath);
 			builder.append(".storage." +  dbToInstantiate.toLowerCase() + "." + dbToInstantiate);
-			return invokeDBMethod(builder.toString(), methodName);
+			return invokeDBMethod(builder.toString(), methodName, bufArray);
 		}
 	}
 
+	/**
+	 * This function does the actual hard work of interpreting which storage class to
+	 * instantiate and invoke the respective function using reflections.
+	 * 
+	 * @param className
+	 * @param methodName
+	 * @param bufArray
+	 * @return Object retrieved from storage
+	 * @throws NoSuchMethodException
+	 * @throws InvocationTargetException
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Object invokeDBMethod(String className, String methodName) throws NoSuchMethodException {
+	private Object invokeDBMethod(String className, String methodName, String[] bufArray) 
+	throws NoSuchMethodException, InvocationTargetException {
 		try {
+			int bufArrayLength = bufArray.length;
 			Class cls = Class.forName(className);
 			Object iClass = cls.newInstance();
-			Class parameterTypes[] = new Class[0];
+			Class parameterTypes[] = new Class[bufArrayLength - 1];
+			for (int i = 0; i < bufArrayLength - 1; i++) {
+				parameterTypes[i] = String.class;
+			}
 			Method method = cls.getMethod(methodName, parameterTypes);
-			Object arguments[] = new Object[0];
+			Object arguments[] = new Object[bufArray.length - 1];
+			for (int i = 0; i < bufArrayLength - 1; i++) {
+				arguments[i] = bufArray[i + 1];
+			}
+			Method createConMethod = cls.getMethod("createConnection", null);
+			createConMethod.invoke(iClass, null);
 			Object object = method.invoke(iClass, arguments);
+			
+			Method closeConMethod = cls.getMethod("closeConnection", null);
+			closeConMethod.invoke(iClass, null);
 			
 			return object;
 		} catch (IllegalArgumentException e) {
@@ -81,35 +129,13 @@ public class DBRoot {
 		return null;
 	}
 
-//	private static void invokeMethod(String name) {
-//		try {
-//			Class cls = Class.forName("test.DummyClass");
-//			Class partypes[] = new Class[2];
-//			partypes[0] = Integer.TYPE;
-//			partypes[1] = Integer.TYPE;
-//			Method meth = cls.getMethod(name, partypes);
-//			Method meth2 = cls.getMethod("get", null);
-//			MongoDB methobj = new MongoDB();
-//			Object arglist[] = new Object[2];
-//			arglist[0] = new Integer(37);
-//			arglist[1] = new Integer(47);
-//			Object retobj = meth.invoke(methobj, arglist);
-//			Integer retval = (Integer) retobj;
-//			System.out.println(retval.intValue());
-//
-//			retobj = meth2.invoke(methobj, null);
-//			String str = (String) retobj;
-//			System.out.println("output : " + str);
-//			Method meth3 = cls.getMethod(str, null);
-//			retobj = meth3.invoke(methobj, null);
-//			str = (String) retobj;
-//			System.out.println("output : " + str);
-//		} catch (Throwable e) {
-//			System.err.println(e);
-//		}
-//
-//	}
-
+	/**
+	 * Function simply checks if the method invoked by Client exists in vyuudha core
+	 * storage API.
+	 * 
+	 * @param methodName
+	 * @return
+	 */
 	@SuppressWarnings({ "rawtypes" })
 	private boolean checkMethodExists(String methodName) {
 		String test = methodName;

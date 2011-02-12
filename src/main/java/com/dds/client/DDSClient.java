@@ -11,6 +11,8 @@ import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.*;
 
+import com.dds.utils.Helper;
+
 public class DDSClient implements Runnable {
 	// The host:port combination to connect to
 	private InetAddress hostAddress;
@@ -231,7 +233,8 @@ public class DDSClient implements Runnable {
 			t.setDaemon(true);
 			t.start();
 			RspHandler handler = new RspHandler();
-			client.send("Hello World".getBytes(), handler);
+			client.send(Helper.getBytes("put,keyUtkarsh,KuchBhi"), handler);
+			client.send(Helper.getBytes("get,keyUtkarsh"), handler);
 			handler.waitForResponse();
 		} catch (Exception e) {
 			e.printStackTrace();

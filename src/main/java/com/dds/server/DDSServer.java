@@ -209,7 +209,7 @@ public class DDSServer implements Runnable {
 	public static void main(String[] args) {
 		try {
 			DDSWorker worker = new DDSWorker();
-			new Thread(worker).start();
+			//new Thread(worker).start();
 			new Thread(new DDSServer(null, 9090, worker)).start();
 		} catch (IOException e) {
 			e.printStackTrace();
