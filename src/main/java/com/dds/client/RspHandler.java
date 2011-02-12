@@ -1,5 +1,7 @@
 package com.dds.client;
 
+import com.dds.utils.Helper;
+
 public class RspHandler {
 	private byte[] rsp = null;
 
@@ -13,10 +15,11 @@ public class RspHandler {
 		while (this.rsp == null) {
 			try {
 				this.wait();
+	 
 			} catch (InterruptedException e) {
 			}
 		}
-
-		System.out.println(new String(this.rsp));
+		
+		System.out.println((String)Helper.getObject(this.rsp));
 	}
 }
