@@ -1,4 +1,4 @@
-package com.dds.server;
+package com.dds.server.nio;
 
 //Read more: www.cs.brown.edu/courses/cs161/papers/j-nio-ltr.pdf+java+nio+tutorial , pg 30
 //NIO: http://rox-xmlrpc.sourceforge.net/niotut/index.html
@@ -15,7 +15,7 @@ import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.*;
 
-import com.dds.client.ChangeRequest;
+import com.dds.client.nio.ChangeRequest;
 
 public class DDSServer implements Runnable {
 	// The host:port combination to listen on

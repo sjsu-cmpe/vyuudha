@@ -1,4 +1,4 @@
-package com.dds.server;
+package com.dds.server.nio;
 
 import java.nio.channels.SocketChannel;
 
