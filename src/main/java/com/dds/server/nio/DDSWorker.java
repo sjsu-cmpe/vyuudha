@@ -12,7 +12,7 @@ import com.dds.utils.Helper;
 public class DDSWorker implements Runnable {
 	private List queue = new LinkedList();
 
-	public void processData(DDSServer server, SocketChannel socket,
+	public void processData(DDSServerNIO server, SocketChannel socket,
 			byte[] data, int count) {
 		byte[] dataCopy = new byte[count];
 		System.arraycopy(data, 0, dataCopy, 0, count);

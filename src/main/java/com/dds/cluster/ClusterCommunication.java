@@ -8,8 +8,6 @@ import org.jgroups.util.Util;
 
 import java.util.List;
 import java.util.LinkedList;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 public class ClusterCommunication extends ReceiverAdapter {
 	JChannel channel;
@@ -69,7 +67,7 @@ public class ClusterCommunication extends ReceiverAdapter {
 	private void eventLoop() {
 		while (true) {
 			try {
-				String line = "I am alive with NodeID";
+				String line = "I am alive with NodeID"; //Data (replication) + nodeid + gossip
 				Message msg = new Message(null, null, line);
 				channel.send(msg);
 			} catch (Exception e) {

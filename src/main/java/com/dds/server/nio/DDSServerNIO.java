@@ -16,8 +16,9 @@ import java.nio.channels.spi.SelectorProvider;
 import java.util.*;
 
 import com.dds.client.nio.ChangeRequest;
+import com.dds.interfaces.server.ServerInterface;
 
-public class DDSServer implements Runnable {
+public class DDSServerNIO implements Runnable, ServerInterface {
 	// The host:port combination to listen on
 	private InetAddress hostAddress;
 	private int port;
@@ -39,18 +40,11 @@ public class DDSServer implements Runnable {
 	// Maps a SocketChannel to a list of ByteBuffer instances
 	private Map pendingData = new HashMap();
 
-	public DDSServer(InetAddress hostAddress, int port, DDSWorker worker)
-			throws IOException {
-		this.hostAddress = hostAddress;
-		this.port = port;
-		this.selector = this.initSelector();
-		this.worker = worker;
-	}
-
 	public void send(SocketChannel socket, byte[] data) {
 		synchronized (this.pendingChanges) {
 			// Indicate we want the interest ops set changed
-			this.pendingChanges.add(new ChangeRequest(socket, ChangeRequest.CHANGEOPS, SelectionKey.OP_WRITE));
+			this.pendingChanges.add(new ChangeRequest(socket,
+					ChangeRequest.CHANGEOPS, SelectionKey.OP_WRITE));
 
 			// And queue the data we want written
 			synchronized (this.pendingData) {
@@ -196,9 +190,10 @@ public class DDSServer implements Runnable {
 		serverChannel.configureBlocking(false);
 
 		// Bind the server socket to the specified address and port
-		InetSocketAddress isa = new InetSocketAddress(this.hostAddress, this.port);
+		InetSocketAddress isa = new InetSocketAddress(this.hostAddress,
+				this.port);
 		serverChannel.socket().bind(isa);
-		
+
 		// Register the server socket channel, indicating an interest in
 		// accepting new connections
 		serverChannel.register(socketSelector, SelectionKey.OP_ACCEPT);
@@ -206,13 +201,24 @@ public class DDSServer implements Runnable {
 		return socketSelector;
 	}
 
-	public static void main(String[] args) {
+	public void start(InetAddress hostAddress, int port) {
 		try {
+			this.hostAddress = hostAddress;
+			this.port = port;
 			DDSWorker worker = new DDSWorker();
+			this.worker = worker;
+			this.selector = this.initSelector();
+			
+			//Finally start the two threads
 			new Thread(worker).start();
-			new Thread(new DDSServer(null, 9090, worker)).start();
+			new Thread(this).start();
 		} catch (IOException e) {
-			e.printStackTrace();
+
 		}
+	}
+
+	public void stop(InetAddress hostAddress, int port) {
+		// TODO Auto-generated method stub
+
 	}
 }

@@ -1,21 +1,18 @@
 package com.dds.init;
 
-import java.io.IOException;
-
-import com.dds.server.nio.DDSServer;
-import com.dds.server.nio.DDSWorker;
+import com.dds.cluster.ClusterCommunication;
+import com.dds.server.nio.DDSServerNIO;
 
 public class InitDDS {
-	
-	public static void main(String[] args) {
-		try {
-			DDSWorker worker = new DDSWorker();
-			new Thread(worker).start();
-			new Thread(new DDSServer(null, 9090, worker)).start();
-			System.out.println("Vyuudha Server Started...");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
+	public static void main(String[] args) {
+		
+		DDSServerNIO ddsNIO = new DDSServerNIO();
+		ddsNIO.start(null, 9090);
+		System.out.println("Vyuudha NIO Server Started...");
+		
+		// Starting JGroups channel
+		new ClusterCommunication().startCommunication();
+		System.out.println("JGroups channel established...");
+	}
 }
