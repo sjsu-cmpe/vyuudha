@@ -5,14 +5,14 @@ The primary objective of this project will be to develop a middleware which is s
 
 The application has a pluggable architecture where the following functionalities/algorithms can be configured:  
 
-1. Server (BIO/NIO): com.dds.interfaces.server.*
-2. Persistent store mechanism (plug in BDB, MongoDB, MySQL etc): com.dds.interfaces.storage.*
-3. Routing mechanism (Consistent hashing/vBuckets): com.dds.interfaces.routing.*
-4. Hashing function: com.dds.interfaces.hashing.*
-5. Serialization format (Client side and node-to-node communication): com.dds.interfaces.serialization.*
+1. Server (BIO/NIO): `com.dds.interfaces.server.*`
+2. Persistent store mechanism (plug in BDB, MongoDB, MySQL etc): `com.dds.interfaces.storage.*`
+3. Routing mechanism (Consistent hashing/vBuckets): `com.dds.interfaces.routing.*`
+4. Hashing function: `com.dds.interfaces.hashing.*`
+5. Serialization format (Client side and node-to-node communication): `com.dds.interfaces.serialization.*`
 
-Q: What does Vyuudha mean?  
-A: Vyuudha in sanskrit means "Distributed". Prounounced "vy-uudh".  
+Q: What does `Vyuudha` mean?  
+A: Vyuudha in sanskrit means `Distributed`. Prounounced "vy-uudh".  
 
 Requirements:  
 -------------
@@ -21,9 +21,9 @@ Requirements:
     
     
 For dependecies which are not found in maven, then do this:  
-1. Download the jar file
-2. mvn install:install-file -Dfile=location/jar_name.jar -DgroupId=group_id_here -DartifactId=artifact_id_here -Dversion=version_number_here -Dpackaging=jar
-3. The jar file will be installed in your local maven repo.
+1. Download the jar file from the web.  
+2. mvn install:`install-file -Dfile=location/jar_name.jar -DgroupId=group_id_here -DartifactId=artifact_id_here -Dversion=version_number_here -Dpackaging=jar`  
+3. The jar file will be installed in your local maven repo.  
     
     
 How to setup dev environment:
