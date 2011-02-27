@@ -1,25 +1,26 @@
-Vyuudha - A clean room implementation of a distributed storage middleware for education and research.
-
-Q: What does Vyuudha mean?
-
-A: Vyuudha in sanskrit means "Distributed". Prounounced "vy-uudh".
-
-It is free software, licensed under the terms of the GNU General Public License.
-
-Dynamic Distributed Storage
+Vyuudha - Think Distributed
 ===========================
+A clean room implementation of a distributed storage middleware for education and research.
+The application has a pluggable architecture where the following functionalities/algorithms can be configured:  
+    1. Server (BIO/NIO): `com.dds.interfaces.server.*`
+    2. Persistent store mechanism (plug in BDB, MongoDB, MySQL etc): `com.dds.interfaces.storage.*`
+    3. Routing mechanism (Consistent hashing/vBuckets): `com.dds.interfaces.routing.*`
+    4. Hashing function: `com.dds.interfaces.hashing.*`
+    5. Serialization format (Client side and node-to-node communication): `com.dds.interfaces.serialization.*`
 
-Implement a bare-metal Dynamo like Distributed storage middleware for educational and learning purpose.
+Q: What does Vyuudha mean?  
+A: Vyuudha in sanskrit means "Distributed". Prounounced "vy-uudh".  
+
+Vyuudha - Dynamic Distributed Storage
+=====================================
+
+Implement a bare-metal Distributed storage middleware for educational and learning purpose.
 The primary objective of this project will be to develop a middleware which is simple not production quality and used for understaing a distributed storage system. To achieve this the design should be very much flexible and have a pluggable architecture for various algorithms which can be implemented and used with this system.
 
-Requirements: ((all listed in pom.xml) Java version: 1.6.0_22) 
+Requirements:  
 -------------
-    1. Apache Maven 2.2.1, 
-    2. Google Guava r07, 
-    3. log4j 1.2.16, 
-    4. BDB Java Edition 3.3.75, 
-    5. Google Protocol Buffer 2.3.0,
-    6. jUnit 3.8.1
+    1. All listed in pom.xml.
+    2. Java version: 1.6.0_22
     
     
     For dependecies which are not found in maven, then do this:
@@ -44,5 +45,7 @@ Contact us!
 -----------
     
 
-More details to be updated!
+License
+-------
+It is free software, licensed under the terms of the GNU General Public License.
 
