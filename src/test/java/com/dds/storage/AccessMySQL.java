@@ -1,7 +1,9 @@
 /**
  * 
  */
-package com.dds.plugin.storage.mysql;
+package com.dds.storage;
+
+import com.dds.plugin.storage.mysql.MySQLDB;
 
 /**
  * @author ravid
