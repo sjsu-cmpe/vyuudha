@@ -11,9 +11,9 @@ import org.apache.log4j.Logger;
  */
 public class HandleException {
 
-	Logger logger = Logger.getLogger(HandleException.class);
+	static Logger logger = Logger.getLogger(HandleException.class);
 	
-	public void handleException(String message, String className) {
-		logger.info("In " + className + ":" + message);
+	public static void handler(String message, String className, String methodName) {
+		logger.info("In " + className + "; Method : " + methodName + "; Message : " + message);
 	}
 }
