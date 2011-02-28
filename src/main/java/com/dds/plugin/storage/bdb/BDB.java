@@ -1,109 +1,40 @@
 package com.dds.plugin.storage.bdb;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.dds.exception.HandleException;
 import com.dds.interfaces.storage.DBInterface;
 import com.dds.utils.Helper;
 import com.google.common.collect.Lists;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.Database;
-import com.sleepycat.je.DatabaseConfig;
 import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.Environment;
-import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
 
-public class BDB implements DBInterface{
+public class BDB extends Database implements DBInterface{
 
-	private static String bdbPath;
 	private static Environment myEnv;
 	private Database vendorDb;
 	
 	Logger logger = Logger.getLogger(BDB.class);
+	static BDBConfiguration bdbConfiguration = new BDBConfiguration();
 	
-	File envHome;
-	boolean readOnly;
-	
-	/**
-	 * @param readOnly the readOnly to set
-	 */
-	private void setReadOnly(boolean readOnly) {
-		this.readOnly = readOnly;
-	}
-
 	public BDB() {
-		//create folder in <project base>/store/part1
-		setConfiguration();
-	}
-	
-	/**
-	 * Used to set the configuration for BDB. Ideally this function
-	 * should read from a properties file
-	 * 
-	 */
-	private void setConfiguration() {
-		// TODO Configurations to be read from file
-		bdbPath = getBdbPath();
-		setBdbPath(bdbPath);
-		setEnvHome(new File(bdbPath));
-		setReadOnly(false);
-	}
-
-	/**
-	 * @param bdbPath the bdbPath to set
-	 */
-	public static void setBdbPath(String _bdbPath) {
-		bdbPath = _bdbPath;
-	}
-
-	/**
-	 * @return the bdbPath
-	 */
-	public static String getBdbPath() {
-		StringBuilder path = new StringBuilder("");
-		try {
-			path = new StringBuilder(new java.io.File(".").getCanonicalPath());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		path.append("/store/bdb/");
-
-		File bdbPath = new File(path.toString());
-		if (!bdbPath.exists()) {
-		 	bdbPath.mkdirs();
-	 	}
-
-		return path.toString();
-	}
-
-	/**
-	 * @param envHome the envHome to set
-	 */
-	private void setEnvHome(File envHome) {
-		this.envHome = envHome;
+		super(bdbConfiguration.getConfiguration());
 	}
 
 	public void createConnection() {
 
-		EnvironmentConfig myEnvConfig = new EnvironmentConfig();
-		DatabaseConfig myDbConfig = new DatabaseConfig();
-
-		myEnvConfig.setReadOnly(readOnly);
-		myDbConfig.setReadOnly(readOnly);
-		myEnvConfig.setAllowCreate(!readOnly);
-		myDbConfig.setAllowCreate(!readOnly);
 		try {
-			myEnv = new Environment(envHome, myEnvConfig);
+			myEnv = bdbConfiguration.getConfiguration();
 			// Now create and open our databases.
-			logger.info("Create and open database");
-			vendorDb = myEnv.openDatabase(null, "VendorDB", myDbConfig);
+			logger.info("Connection to BDB database established");
+			vendorDb = myEnv.openDatabase(null, "VyuudhaDB", bdbConfiguration.getDbConfig());
 			
 		} catch (Exception ex) {
 			logger.info("Error in setup: " + ex.toString());
@@ -163,7 +94,8 @@ public class BDB implements DBInterface{
 			getVendorDB().put(null, entryKey, entryValue);
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			HandleException.handler(e.getMessage(), 
+					this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
 		}		
 		logger.info(key + " : " + value + " inserted into DB");
 	}
