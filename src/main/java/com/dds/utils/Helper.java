@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Calendar;
 
 /**
  * 02/08: Made all functions static
@@ -56,5 +57,17 @@ public class Helper {
 		}   
         
         return data;
+	}
+	
+	/**
+	 * For use particularly with SQL queries, but also at other places
+	 * to get Current Time Stamp in SQL format
+	 * 
+	 * @return Current Time Stamp
+	 */
+	public static java.sql.Timestamp getCurrentTime() {
+		Calendar calendar = Calendar.getInstance();
+		java.util.Date now = calendar.getTime();
+		return new java.sql.Timestamp(now.getTime());
 	}
 }
