@@ -4,8 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Calendar;
 
 import org.apache.log4j.Logger;
 
@@ -13,22 +13,138 @@ import com.dds.exception.HandleException;
 import com.dds.interfaces.storage.DBInterface;
 import com.dds.utils.Helper;
 
+/**
+ * @author ravid
+ *
+ */
 public class MySQLDB implements DBInterface {
 
 	Logger logger = Logger.getLogger(MySQLDB.class);
-	
+
 	private Connection connect = null;
 	private Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
+
+	private String driver;
+	private String jdbcURL;
+	private String user;
+	private String password;
+	private String database;
+	private String table;
+
+	/**
+	 * @return the driver
+	 */
+	public String getDriver() {
+		return driver;
+	}
+
+	/**
+	 * @return the jdbcURL
+	 */
+	public String getJdbcURL() {
+		return jdbcURL;
+	}
+
+	/**
+	 * @return the user
+	 */
+	public String getUser() {
+		return user;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param driver the driver to set
+	 */
+	public void setDriver(String driver) {
+		this.driver = driver;
+	}
+
+	/**
+	 * @param jdbcURL the jdbcURL to set
+	 */
+	public void setJdbcURL(String jdbcURL) {
+		this.jdbcURL = jdbcURL;
+	}
+
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	/**
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/**
+	 * @return the database
+	 */
+	public String getDatabase() {
+		return database;
+	}
+
+	/**
+	 * @return the table
+	 */
+	public String getTable() {
+		return table;
+	}
+
+	/**
+	 * @param database the database to set
+	 */
+	public void setDatabase(String database) {
+		this.database = database;
+	}
+
+	/**
+	 * @param table the table to set
+	 */
+	public void setTable(String table) {
+		this.table = table;
+	}
+
+	public MySQLDB() {
+		setDriver("com.mysql.jdbc.Driver");
+		setJdbcURL("jdbc:mysql://localhost/?");
+		setDatabase("VYUUDHA");
+		setTable("STORE");
+		setUser("root");
+		setPassword("");	
+	}
 	
+	/**
+	 * Create Database and Table if they don't exist
+	 * @throws SQLException 
+	 */
+	private void initialSetup() throws SQLException {
+		String createDBQuery = "CREATE DATABASE IF NOT EXISTS " + getDatabase();
+		String createTableQuery = "CREATE TABLE IF NOT EXISTS  " + getDatabase() + "."+ getTable() +"(`KEY` varchar(100) NOT NULL, `VALUE` varchar(500) NOT NULL, `TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`KEY`))"; 
+        statement.executeUpdate(createDBQuery);
+        statement.executeUpdate(createTableQuery);
+	}
+
 	public void createConnection() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName(getDriver());
 			// Need to read from settings file
 			connect = DriverManager
-					.getConnection("jdbc:mysql://localhost/VYUUDHA?"
-							+ "user=root&password=");
+			.getConnection(getJdbcURL() + "user=" + getUser() + "&password=" + getPassword());
+			statement = connect.createStatement();
+			initialSetup();
 		} catch (Exception ex) {
 			HandleException.handler(ex.getMessage(), this.getClass().getName(),
 					Thread.currentThread().getStackTrace()[2].getMethodName());
@@ -37,29 +153,53 @@ public class MySQLDB implements DBInterface {
 	}
 
 	public String get(String key) {
-		// TODO Auto-generated method stub
+		try {
+			resultSet = statement
+			.executeQuery("select VYUUDHA.STORE.VALUE from VYUUDHA.STORE where VYUUDHA.STORE.KEY = \"" + key + "\"");
+
+			resultSet.next();
+
+			return resultSet.getString("value");
+
+		} catch (Exception ex) {
+			HandleException.handler(ex.getMessage(), this.getClass().getName(),
+					Thread.currentThread().getStackTrace()[2].getMethodName());			
+		}
 		return null;
 	}
 
 	public void put(String key, String value) {
 		try {
-			preparedStatement = connect
-			.prepareStatement("insert into  VYUUDHA.STORE values (? , ?, ?)");
+			if (!contains(key)) {
+				preparedStatement = connect
+				.prepareStatement("insert into VYUUDHA.STORE values (?, ?, ?)");
 
-			preparedStatement.setString(1, key);
-			preparedStatement.setString(2, "Value");
-			preparedStatement.setTimestamp(3, Helper.getCurrentTime());
+				preparedStatement.setString(1, key);
+				preparedStatement.setString(2, value);
+				preparedStatement.setTimestamp(3, Helper.getCurrentTime());
+			} else {
+				preparedStatement = connect
+				.prepareStatement("update VYUUDHA.STORE set VYUUDHA.STORE.VALUE = \"" 
+						+ value + "\" where VYUUDHA.STORE.KEY = \"" + key + "\"");
+			}
 			preparedStatement.executeUpdate();	
-			
+
 		} catch (Exception ex) {
 			HandleException.handler(ex.getMessage(), this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
 		}
-		logger.info(key + ", " + value + " Inserted into MySQL");
+		logger.info(key + ", " + value + " inserted into MySQL");
 	}
 
 	public void delete(String key) {
-		// TODO Auto-generated method stub
-		
+		try {
+			if (contains(key)) {
+				preparedStatement = connect
+				.prepareStatement("delete from  VYUUDHA.STORE where VYUUDHA.STORE.KEY = \'" + key + "\'");
+				preparedStatement.executeUpdate();	
+			}
+		} catch (Exception ex) {
+			HandleException.handler(ex.getMessage(), this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
+		}
 	}
 
 	public void closeConnection() {
@@ -82,7 +222,10 @@ public class MySQLDB implements DBInterface {
 	}
 
 	public boolean contains(String key) {
-		// TODO Auto-generated method stub
-		return false;
+		if (get(key) == null){
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

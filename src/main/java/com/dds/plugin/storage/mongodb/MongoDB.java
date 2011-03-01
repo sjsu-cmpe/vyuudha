@@ -23,7 +23,6 @@ import com.mongodb.MongoException;
  */
 public class MongoDB extends Mongo implements DBInterface {
 
-	//Mongo m = null;
 	DB db = null;
 	DBCollection coll = null;
 	Logger logger = Logger.getLogger(MongoDB.class);
@@ -59,11 +58,9 @@ public class MongoDB extends Mongo implements DBInterface {
 	 */
 	public void createConnection() {
 		try {
-			//m = new Mongo();
 			db = this.getDB(dbName);
 			coll = db.getCollection(collection);
-//		} catch (UnknownHostException e) {
-//			e.printStackTrace();
+
 		} catch (MongoException e) {
 			e.printStackTrace();
 		}

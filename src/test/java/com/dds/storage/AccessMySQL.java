@@ -14,5 +14,18 @@ public class AccessMySQL {
 		MySQLDB mySQLDB = new MySQLDB();
 		
 		mySQLDB.createConnection();
+		
+		mySQLDB.put("yellow", "stone");
+		String result;
+		result = mySQLDB.get("yellow");
+		System.out.println("Value " + result);
+		mySQLDB.put("yellow", "stoned");
+		result = mySQLDB.get("yellow");
+		System.out.println("Value " + result);
+		//mySQLDB.delete("yellow");
+		result = mySQLDB.get("yellow");
+		System.out.println("Value " + result);
+		
+		mySQLDB.closeConnection();
 	}
 }
