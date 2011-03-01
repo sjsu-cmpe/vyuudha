@@ -3,7 +3,7 @@
  */
 package com.dds.storage;
 
-import com.dds.plugin.storage.mysql.MySQLDB;
+import com.dds.plugin.storage.mysqldb.MySQLDB;
 
 /**
  * @author ravid

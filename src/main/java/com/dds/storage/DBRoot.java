@@ -39,7 +39,8 @@ public class DBRoot {
 	 *
 	 */
 	private void setConfigurations() {
-		dbToInstantiate = "BDB";
+		//BDB or MongoDB or MySQLDB
+		dbToInstantiate = "MySQLDB";
 		pluginsPath = "com.dds.plugin";
 		coreStorageInterface = "com.dds.interfaces.storage.DBInterface";
 	}

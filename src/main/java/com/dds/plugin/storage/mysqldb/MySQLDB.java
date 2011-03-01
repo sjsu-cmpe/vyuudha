@@ -1,4 +1,4 @@
-package com.dds.plugin.storage.mysql;
+package com.dds.plugin.storage.mysqldb;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
