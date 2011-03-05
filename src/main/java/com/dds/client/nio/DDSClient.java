@@ -36,7 +36,7 @@ public class DDSClient implements Runnable {
 	public DDSClient(InetAddress hostAddress, int port) throws IOException {
 		this.hostAddress = hostAddress;
 		this.port = port;
-		this.selector = this.initSelector();
+		this.selector = SelectorProvider.provider().openSelector();
 	}
 
 	public void send(byte[] data, RspHandler handler) throws IOException {
@@ -218,10 +218,6 @@ public class DDSClient implements Runnable {
 			this.pendingChanges.add(new ChangeRequest(socketChannel, ChangeRequest.REGISTER, SelectionKey.OP_CONNECT));
 		}
 		return socketChannel;
-	}
-
-	private Selector initSelector() throws IOException {
-		return SelectorProvider.provider().openSelector();
 	}
 
 	public static void main(String[] args) {

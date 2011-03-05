@@ -35,11 +35,13 @@ public class DDSServerNIO implements Runnable, ServerInterface {
 	private DDSWorker worker;
 
 	// A list of PendingChange instances
-	private List pendingChanges = new LinkedList();
+	private List<ChangeRequest> pendingChanges = new LinkedList<ChangeRequest>();
 
 	// Maps a SocketChannel to a list of ByteBuffer instances
-	private Map pendingData = new HashMap();
+	@SuppressWarnings("rawtypes")
+	private Map<SocketChannel, List> pendingData = new HashMap<SocketChannel, List>();
 
+	@SuppressWarnings("unchecked")
 	public void send(SocketChannel socket, byte[] data) {
 		synchronized (this.pendingChanges) {
 			// Indicate we want the interest ops set changed
@@ -48,9 +50,9 @@ public class DDSServerNIO implements Runnable, ServerInterface {
 
 			// And queue the data we want written
 			synchronized (this.pendingData) {
-				List queue = (List) this.pendingData.get(socket);
+				List<ByteBuffer> queue = this.pendingData.get(socket);
 				if (queue == null) {
-					queue = new ArrayList();
+					queue = new ArrayList<ByteBuffer>();
 					this.pendingData.put(socket, queue);
 				}
 				queue.add(ByteBuffer.wrap(data));
@@ -67,13 +69,13 @@ public class DDSServerNIO implements Runnable, ServerInterface {
 			try {
 				// Process any pending changes
 				synchronized (this.pendingChanges) {
-					Iterator changes = this.pendingChanges.iterator();
+					Iterator<ChangeRequest> changes = this.pendingChanges.iterator();
 					while (changes.hasNext()) {
-						ChangeRequest change = (ChangeRequest) changes.next();
+						ChangeRequest change = changes.next();
 						switch (change.type) {
 						case ChangeRequest.CHANGEOPS:
 							SelectionKey key = change.socket
-									.keyFor(this.selector);
+							.keyFor(this.selector);
 							key.interestOps(change.ops);
 						}
 					}
@@ -84,7 +86,7 @@ public class DDSServerNIO implements Runnable, ServerInterface {
 				this.selector.select();
 
 				// Iterate over the set of keys for which events are available
-				Iterator selectedKeys = this.selector.selectedKeys().iterator();
+				Iterator<?> selectedKeys = this.selector.selectedKeys().iterator();
 				while (selectedKeys.hasNext()) {
 					SelectionKey key = (SelectionKey) selectedKeys.next();
 					selectedKeys.remove();
@@ -112,7 +114,7 @@ public class DDSServerNIO implements Runnable, ServerInterface {
 		// For an accept to be pending the channel must be a server socket
 		// channel.
 		ServerSocketChannel serverSocketChannel = (ServerSocketChannel) key
-				.channel();
+		.channel();
 
 		// Accept the connection and make it non-blocking
 		SocketChannel socketChannel = serverSocketChannel.accept();
@@ -159,7 +161,7 @@ public class DDSServerNIO implements Runnable, ServerInterface {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 
 		synchronized (this.pendingData) {
-			List queue = (List) this.pendingData.get(socketChannel);
+			List<?> queue = this.pendingData.get(socketChannel);
 
 			// Write until there's not more data ...
 			while (!queue.isEmpty()) {
@@ -208,7 +210,7 @@ public class DDSServerNIO implements Runnable, ServerInterface {
 			DDSWorker worker = new DDSWorker();
 			this.worker = worker;
 			this.selector = this.initSelector();
-			
+
 			//Finally start the two threads
 			new Thread(worker).start();
 			new Thread(this).start();

@@ -10,7 +10,7 @@ import com.dds.storage.DBRoot;
 import com.dds.utils.Helper;
 
 public class DDSWorker implements Runnable {
-	private List queue = new LinkedList();
+	private List<ServerDataEvent> queue = new LinkedList<ServerDataEvent>();
 
 	public void processData(DDSServerNIO server, SocketChannel socket,
 			byte[] data, int count) {
@@ -25,7 +25,7 @@ public class DDSWorker implements Runnable {
 	}
 
 	/**
-	 * Makes a call to the DBRoot, vyuudha storage abstraction engine
+	 * Makes a call to the DBRoot, Vyuudha storage abstraction engine
 	 * 
 	 * @param dataCopy
 	 * @return object from the core storage layer
@@ -36,7 +36,6 @@ public class DDSWorker implements Runnable {
 		try {
 			objectReturned = dbRoot.invoke(dataCopy);
 			if (objectReturned != null) {
-				String retVal = (String) objectReturned;
 				return objectReturned;
 			}
 		} catch (UnknownHostException e) {
@@ -67,9 +66,10 @@ public class DDSWorker implements Runnable {
 				dataEvent = (ServerDataEvent) queue.remove(0);
 			}
 			String out = (String) Helper.getObject(dataEvent.data);
-			System.out.println("Value : " + out);
-			// Return to sender
-			dataEvent.server.send(dataEvent.socket, dataEvent.data);
+			if (out != null) {
+				// Return to sender
+				dataEvent.server.send(dataEvent.socket, dataEvent.data);
+			}
 		}
 	}
 }
