@@ -1,6 +1,7 @@
 package com.dds.init;
 
 import com.dds.interfaces.server.ServerInterface;
+import com.dds.properties.Property;
 import com.dds.server.bio.DDSServerBIO;
 import com.dds.server.nio.DDSServerNIO;
 
@@ -32,6 +33,7 @@ public class InitDDS {
 		}
 		ddsIO.start(null, 9090);
 		System.out.println("Vyuudha " + initDDS.serverType + " Server Started...");
+		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("dbToInstantiate"));
 		
 		// Starting JGroups channel
 		//new ClusterCommunication().startCommunication();

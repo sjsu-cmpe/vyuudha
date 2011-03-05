@@ -5,10 +5,12 @@ package com.dds.plugin.storage.mongodb;
 
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import com.dds.interfaces.storage.DBInterface;
+import com.dds.properties.Property;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -31,8 +33,9 @@ public class MongoDB extends Mongo implements DBInterface {
 	private String collection = null;
 
 	public MongoDB() throws UnknownHostException {
-		setDbName("newDB");
-		setCollection("newCollection");
+		Map<String, String> props = Property.getProperty().getDatabaseProperties();
+		setDbName(props.get("mongo_dbName"));
+		setCollection(props.get("mongo_collection"));
 	}
 
 	/**

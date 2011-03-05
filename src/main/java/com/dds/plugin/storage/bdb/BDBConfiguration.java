@@ -5,8 +5,10 @@ package com.dds.plugin.storage.bdb;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import com.dds.exception.HandleException;
+import com.dds.properties.Property;
 import com.sleepycat.je.DatabaseConfig;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.Environment;
@@ -20,6 +22,7 @@ import com.sleepycat.je.EnvironmentLockedException;
 public class BDBConfiguration {
 
 	private boolean readOnly;
+	private String store;
 	private String bdbPath;
 	private Environment myEnv;
 	private File envHome;
@@ -27,10 +30,11 @@ public class BDBConfiguration {
 	private DatabaseConfig dbConfig;
 
 	private void setConfiguration() {
-		// TODO Configurations to be read from file
-		setBdbPath("");
-		setEnvHome(getBdbPath());
-		setReadOnly(false);
+		Map<String, String> props = Property.getProperty().getDatabaseProperties();
+		setStore(props.get("bdb_store"));
+		setBdbPath(props.get("bdb_path"));
+		setEnvHome(this.bdbPath);
+		setReadOnly(Boolean.parseBoolean(props.get("bdb_readOnly")));
 	}
 	
 	public Environment getConfiguration() {
@@ -53,21 +57,32 @@ public class BDBConfiguration {
 	}
 
 	/**
+	 * @param store the store to set
+	 */
+	private void setStore(String store) {
+		this.store = store;
+	}
+
+	/**
 	 * @param bdbPath
 	 *            the bdbPath to set
 	 */
 	private void setBdbPath(String bdbPath) {
-		StringBuilder path = new StringBuilder(bdbPath);
-		if (!path.equals("EMPTY")) {
-			try {
+		try {
+			StringBuilder path;
+			if (bdbPath == null || bdbPath.equals("")) {
 				path = new StringBuilder(new java.io.File(".").getCanonicalPath());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} else {
+				bdbPath = bdbPath.endsWith("/") ? bdbPath : bdbPath.concat("/"); 
+				path = new StringBuilder(bdbPath);
 			}
+			String store = this.store.startsWith("/") ? this.store.replaceFirst("/", "") : this.store;
+			path.append(store);
+			this.bdbPath = path.toString();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		path.append("/store/bdb/");
-		this.bdbPath = path.toString();
 	}
 
 	/**
@@ -90,46 +105,9 @@ public class BDBConfiguration {
 	}
 
 	private void setEnvironment() throws EnvironmentLockedException, DatabaseException {
+		this.myEnv = new Environment(this.envHome, envConfig);
+    }
 
-		
-		this.myEnv = new Environment(getEnvHome(), envConfig);
-		
-		
-	}
-	/**
-	 * @return
-	 */
-	public Environment getEnvironment() {
-		return myEnv;
-	}
-
-	/**
-	 * @return the bdbPath
-	 */
-	private String getBdbPath() {
-		return bdbPath;
-	}
-
-	/**
-	 * @return the envHome
-	 */
-	private File getEnvHome() {
-		return envHome;
-	}
-
-	/**
-	 * @return
-	 */
-	private boolean getReadOnly() {
-		return readOnly;
-	}
-
-	/**
-	 * @return the envConfig
-	 */
-	public EnvironmentConfig getEnvConfig() {
-		return envConfig;
-	}
 
 	/**
 	 * @return the myDbConfig
@@ -143,8 +121,8 @@ public class BDBConfiguration {
 	 */
 	private void setEnvConfig() {
 		envConfig = new EnvironmentConfig();
-		envConfig.setReadOnly(getReadOnly());
-		envConfig.setAllowCreate(!getReadOnly());
+		envConfig.setReadOnly(this.readOnly);
+		envConfig.setAllowCreate(!this.readOnly);
 	}
 
 	/**
@@ -152,7 +130,7 @@ public class BDBConfiguration {
 	 */
 	private void setDbConfig() {	
 		dbConfig = new DatabaseConfig();
-		dbConfig.setReadOnly(getReadOnly());
-		dbConfig.setAllowCreate(!getReadOnly());
+		dbConfig.setReadOnly(this.readOnly);
+		dbConfig.setAllowCreate(!this.readOnly);
 	}
 }

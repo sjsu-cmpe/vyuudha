@@ -6,7 +6,9 @@ package com.dds.storage;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.UnknownHostException;
+import java.util.Map;
 
+import com.dds.properties.Property;
 import com.dds.utils.Helper;
 
 /**
@@ -27,6 +29,27 @@ public class DBRoot {
 	}
 
 	/**
+	 * @param dbToInstantiate the dbToInstantiate to set
+	 */
+	private void setDbToInstantiate(String dbToInstantiate) {
+		this.dbToInstantiate = dbToInstantiate;
+	}
+
+	/**
+	 * @param coreStorageInterface the coreStorageInterface to set
+	 */
+	private void setCoreStorageInterface(String coreStorageInterface) {
+		this.coreStorageInterface = coreStorageInterface;
+	}
+
+	/**
+	 * @param pluginsPath the pluginsPath to set
+	 */
+	private void setPluginsPath(String pluginsPath) {
+		this.pluginsPath = pluginsPath;
+	}
+
+	/**
 	 * Upon object creation of DBRoot, the first thing to do is
 	 * set the configurations.
 	 * 
@@ -39,10 +62,10 @@ public class DBRoot {
 	 *
 	 */
 	private void setConfigurations() {
-		//BDB or MongoDB or MySQLDB
-		dbToInstantiate = "MySQLDB";
-		pluginsPath = "com.dds.plugin";
-		coreStorageInterface = "com.dds.interfaces.storage.DBInterface";
+		Map<String, String> props = Property.getProperty().getDatabaseProperties();
+		setDbToInstantiate(props.get("dbToInstantiate"));
+		setPluginsPath(props.get("pluginsPath"));
+		setCoreStorageInterface(props.get("coreStorageInterface"));
 	}
 
 	/**

@@ -6,11 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
 import com.dds.exception.HandleException;
 import com.dds.interfaces.storage.DBInterface;
+import com.dds.properties.Property;
 import com.dds.utils.Helper;
 
 /**
@@ -33,35 +35,7 @@ public class MySQLDB implements DBInterface {
 	private String database;
 	private String table;
 
-	/**
-	 * @return the driver
-	 */
-	public String getDriver() {
-		return driver;
-	}
-
-	/**
-	 * @return the jdbcURL
-	 */
-	public String getJdbcURL() {
-		return jdbcURL;
-	}
-
-	/**
-	 * @return the user
-	 */
-	public String getUser() {
-		return user;
-	}
-
-	/**
-	 * @return the password
-	 */
-	public String getPassword() {
-		return password;
-	}
-
-	/**
+    /**
 	 * @param driver the driver to set
 	 */
 	public void setDriver(String driver) {
@@ -90,20 +64,6 @@ public class MySQLDB implements DBInterface {
 	}
 
 	/**
-	 * @return the database
-	 */
-	public String getDatabase() {
-		return database;
-	}
-
-	/**
-	 * @return the table
-	 */
-	public String getTable() {
-		return table;
-	}
-
-	/**
 	 * @param database the database to set
 	 */
 	public void setDatabase(String database) {
@@ -118,12 +78,13 @@ public class MySQLDB implements DBInterface {
 	}
 
 	public MySQLDB() {
-		setDriver("com.mysql.jdbc.Driver");
-		setJdbcURL("jdbc:mysql://localhost/?");
-		setDatabase("VYUUDHA");
-		setTable("STORE");
-		setUser("root");
-		setPassword("");	
+		Map<String, String> props = Property.getProperty().getDatabaseProperties();
+		setDriver(props.get("mysql_driver"));
+		setJdbcURL(props.get("mysql_jdbcUrl"));
+		setDatabase(props.get("mysql_database"));
+		setTable(props.get("mysql_store"));
+		setUser(props.get("mysql_user"));
+		setPassword(props.get("mysql_password"));	
 	}
 	
 	/**
@@ -131,18 +92,18 @@ public class MySQLDB implements DBInterface {
 	 * @throws SQLException 
 	 */
 	private void initialSetup() throws SQLException {
-		String createDBQuery = "CREATE DATABASE IF NOT EXISTS " + getDatabase();
-		String createTableQuery = "CREATE TABLE IF NOT EXISTS  " + getDatabase() + "."+ getTable() +"(`KEY` varchar(100) NOT NULL, `VALUE` varchar(500) NOT NULL, `TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`KEY`))"; 
+		String createDBQuery = "CREATE DATABASE IF NOT EXISTS " + this.database;
+		String createTableQuery = "CREATE TABLE IF NOT EXISTS  " + this.database + "."+ this.table +"(`KEY` varchar(100) NOT NULL, `VALUE` varchar(500) NOT NULL, `TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`KEY`))"; 
         statement.executeUpdate(createDBQuery);
         statement.executeUpdate(createTableQuery);
 	}
 
 	public void createConnection() {
 		try {
-			Class.forName(getDriver());
+			Class.forName(this.driver);
 			// Need to read from settings file
 			connect = DriverManager
-			.getConnection(getJdbcURL() + "user=" + getUser() + "&password=" + getPassword());
+			.getConnection(this.jdbcURL + "user=" + this.user + "&password=" + this.password);
 			statement = connect.createStatement();
 			initialSetup();
 		} catch (Exception ex) {
