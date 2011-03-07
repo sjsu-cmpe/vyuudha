@@ -15,16 +15,16 @@ public class AccessMySQL {
 		
 		mySQLDB.createConnection();
 		
-		mySQLDB.put("yellow", "stone");
+		mySQLDB.put("yellow1", "hehaheha");
 		String result;
 		result = mySQLDB.get("yellow");
 		System.out.println("Value " + result);
-		mySQLDB.put("yellow", "stoned");
-		result = mySQLDB.get("yellow");
-		System.out.println("Value " + result);
-		//mySQLDB.delete("yellow");
-		result = mySQLDB.get("yellow");
-		System.out.println("Value " + result);
+//		mySQLDB.put("yellow", "stoned");
+//		result = mySQLDB.get("yellow");
+//		System.out.println("Value " + result);
+//		//mySQLDB.delete("yellow");
+//		result = mySQLDB.get("yellow");
+//		System.out.println("Value " + result);
 		
 		mySQLDB.closeConnection();
 	}

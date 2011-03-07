@@ -140,15 +140,17 @@ public class MySQLDB implements DBInterface {
 				preparedStatement.setTimestamp(3, Helper.getCurrentTime());
 			} else {
 				preparedStatement = connect
-				.prepareStatement("update VYUUDHA.STORE set VYUUDHA.STORE.VALUE = \"" 
-						+ value + "\" where VYUUDHA.STORE.KEY = \"" + key + "\"");
+				.prepareStatement("update VYUUDHA.STORE set VYUUDHA.STORE.VALUE = ?, VYUUDHA.STORE.TIME = ? where VYUUDHA.STORE.KEY =  ? ");
+
+				preparedStatement.setString(1, value);
+				preparedStatement.setTimestamp(2, Helper.getCurrentTime());
+				preparedStatement.setString(3, key);
 			}
 			preparedStatement.executeUpdate();	
-
+			logger.info(key + ", " + value + " inserted into MySQL");
 		} catch (Exception ex) {
 			HandleException.handler(ex.getMessage(), this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
 		}
-		logger.info(key + ", " + value + " inserted into MySQL");
 	}
 
 	public void delete(String key) {
@@ -176,10 +178,10 @@ public class MySQLDB implements DBInterface {
 			if (connect != null) {
 				connect.close();
 			}
+			logger.info("MySQL connection closed");
 		} catch (Exception e) {
 			HandleException.handler(e.getMessage(), this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
 		}
-		logger.info("MySQL connection closed");
 	}
 
 	public boolean contains(String key) {
