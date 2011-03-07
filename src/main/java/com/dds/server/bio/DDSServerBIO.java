@@ -10,9 +10,7 @@ import com.dds.interfaces.server.ServerInterface;
 public class DDSServerBIO implements ServerInterface {
 	private ServerSocket server;
 
-	private void handleConnection() {
-		System.out.println("Waiting for client message...");
-
+	private void handleConnection(ServerSocket server) {
 		while (true) {
 			try {
 				Socket socket = server.accept();
@@ -25,9 +23,9 @@ public class DDSServerBIO implements ServerInterface {
 
 	public void start(InetAddress hostAddress, int port) {
 		try {
-			server = new ServerSocket(port);
+			server = new ServerSocket(port, 0, hostAddress);
 			DDSServerBIO ddsServerObj = new DDSServerBIO();
-			ddsServerObj.handleConnection();
+			ddsServerObj.handleConnection(server);
 		} catch (IOException e) {
 			
 		}
