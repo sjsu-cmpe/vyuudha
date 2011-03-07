@@ -11,6 +11,7 @@ import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.*;
 
+import com.dds.properties.Property;
 import com.dds.utils.Helper;
 
 public class DDSClient implements Runnable {
@@ -25,17 +26,18 @@ public class DDSClient implements Runnable {
 	private ByteBuffer readBuffer = ByteBuffer.allocate(8192);
 
 	// A list of PendingChange instances
-	private List pendingChanges = new LinkedList();
+	private List<ChangeRequest> pendingChanges = new LinkedList<ChangeRequest>();
 
 	// Maps a SocketChannel to a list of ByteBuffer instances
-	private Map pendingData = new HashMap();
+	private Map<SocketChannel, List> pendingData = new HashMap<SocketChannel, List>();
 
 	// Maps a SocketChannel to a RspHandler
-	private Map rspHandlers = Collections.synchronizedMap(new HashMap());
+	private Map<SocketChannel, RspHandler> rspHandlers = Collections.synchronizedMap(new HashMap<SocketChannel, RspHandler>());
 
 	public DDSClient(InetAddress hostAddress, int port) throws IOException {
-		this.hostAddress = hostAddress;
-		this.port = port;
+		Map<String, String> props = Property.getProperty().getServerConfigProperties();
+		this.hostAddress = InetAddress.getByName(props.get("server_ip"));
+		this.port = Integer.parseInt(props.get("server_port"));
 		this.selector = SelectorProvider.provider().openSelector();
 	}
 
@@ -48,9 +50,9 @@ public class DDSClient implements Runnable {
 
 		// And queue the data we want written
 		synchronized (this.pendingData) {
-			List queue = (List) this.pendingData.get(socket);
+			List<ByteBuffer> queue = this.pendingData.get(socket);
 			if (queue == null) {
-				queue = new ArrayList();
+				queue = new ArrayList<ByteBuffer>();
 				this.pendingData.put(socket, queue);
 			}
 			queue.add(ByteBuffer.wrap(data));
@@ -66,9 +68,9 @@ public class DDSClient implements Runnable {
 			try {
 				// Process any pending changes
 				synchronized (this.pendingChanges) {
-					Iterator changes = this.pendingChanges.iterator();
+					Iterator<ChangeRequest> changes = this.pendingChanges.iterator();
 					while (changes.hasNext()) {
-						ChangeRequest change = (ChangeRequest) changes.next();
+						ChangeRequest change = changes.next();
 						switch (change.type) {
 						case ChangeRequest.CHANGEOPS:
 							SelectionKey key = change.socket
@@ -87,7 +89,7 @@ public class DDSClient implements Runnable {
 				this.selector.select();
 
 				// Iterate over the set of keys for which events are available
-				Iterator selectedKeys = this.selector.selectedKeys().iterator();
+				Iterator<?> selectedKeys = this.selector.selectedKeys().iterator();
 				while (selectedKeys.hasNext()) {
 					SelectionKey key = (SelectionKey) selectedKeys.next();
 					selectedKeys.remove();
@@ -148,7 +150,7 @@ public class DDSClient implements Runnable {
 		System.arraycopy(data, 0, rspData, 0, numRead);
 
 		// Look up the handler for this channel
-		RspHandler handler = (RspHandler) this.rspHandlers.get(socketChannel);
+		RspHandler handler = this.rspHandlers.get(socketChannel);
 
 		// And pass the response to it
 		if (handler.handleResponse(rspData)) {
@@ -162,7 +164,7 @@ public class DDSClient implements Runnable {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 
 		synchronized (this.pendingData) {
-			List queue = (List) this.pendingData.get(socketChannel);
+			List<?> queue = this.pendingData.get(socketChannel);
 
 			// Write until there's not more data ...
 			while (!queue.isEmpty()) {

@@ -1,5 +1,9 @@
 package com.dds.init;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Map;
+
 import com.dds.interfaces.server.ServerInterface;
 import com.dds.properties.Property;
 import com.dds.server.bio.DDSServerBIO;
@@ -7,7 +11,9 @@ import com.dds.server.nio.DDSServerNIO;
 
 public class InitDDS {
 	
-	String serverType;
+	private String serverType;
+	private int serverPort;
+	private String serverIp;
 	
 	InitDDS() {
 		setConfiguration();
@@ -18,10 +24,13 @@ public class InitDDS {
 	 * initialize from a configuration file
 	 */
 	private void setConfiguration() {
-		serverType = "NIO";
+		Map<String, String> props = Property.getProperty().getServerConfigProperties();
+		serverType = props.get("server_type");
+		serverPort = Integer.parseInt(props.get("server_port"));
+		serverIp = props.get("server_ip");
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnknownHostException {
 	
 		InitDDS initDDS = new InitDDS();
 		ServerInterface ddsIO;
@@ -31,8 +40,10 @@ public class InitDDS {
 		} else  {  
 			ddsIO = new DDSServerBIO();
 		}
-		ddsIO.start(null, 9090);
-		System.out.println("Vyuudha " + initDDS.serverType + " Server Started...");
+		InetAddress address = InetAddress.getByName(initDDS.serverIp);
+		
+		ddsIO.start(address, initDDS.serverPort);
+		System.out.println("Vyuudha " + initDDS.serverType + " Server Started at " + initDDS.serverIp);
 		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("dbToInstantiate"));
 		
 		// Starting JGroups channel
