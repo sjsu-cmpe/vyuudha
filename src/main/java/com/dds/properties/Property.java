@@ -139,4 +139,8 @@ public class Property {
 		}
 		return map;
 	}	
+    
+    public boolean containsKey(Object k) {
+        return this.props.containsKey(k);
+    }
 }
