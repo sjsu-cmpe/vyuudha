@@ -1,5 +1,7 @@
 package com.dds.plugin.routing.consistenthashing;
 
+import java.util.ArrayList;
+import com.dds.plugin.hashing.MurmurHashFunction;
 import java.util.Collection;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -11,7 +13,7 @@ public class ConsistentHashing {
 
 	private final HashingInterface hashFunction;
 	private final int numberOfReplicas;
-	private final SortedMap<Integer, Node> circle = new TreeMap<Integer, Node>();
+	private final TreeMap<Integer, Node> circle = new TreeMap<Integer, Node>();
 
 	public ConsistentHashing(
 			HashingInterface hashFunction, 
@@ -27,7 +29,7 @@ public class ConsistentHashing {
 
 	public void add(Node node) {
 		for (int i = 0; i < numberOfReplicas; i++) {
-			circle.put(hashFunction.hash((node.toString() + i).getBytes()), node);
+			circle.put(hashFunction.hash(node.getNodeName().getBytes()), node);
 		}
 	}
 
@@ -48,5 +50,31 @@ public class ConsistentHashing {
 		}
 		return circle.get(hash);
 	}
-
+	
+//	public static void main(String[] args)
+//	{	
+//		MurmurHashFunction mhf = new MurmurHashFunction();
+//		Collection<Node> nodes = new ArrayList<Node>();
+//		Node n;
+//		for(int i=0; i<5;i++)
+//		{
+//			n = new Node();
+//			n.setNodeId(i);
+//			n.setNodeName("Node:"+i);
+//			nodes.add(n);
+//		}
+//		
+//		
+//		ConsistentHashing ch = new ConsistentHashing(mhf, 2, nodes);
+//		
+//		int hashedKeyOfValue = mhf.hash("Hello".getBytes());
+//		n = ch.get(hashedKeyOfValue);
+//		
+//		/*
+//		 * When you get the Node object, persist the value in that given node.
+//		 * The  Node object will be returned by ConsistentHashing.java
+//		 */
+//		
+//		System.out.println(n.getNodeName());
+//	}
 }
