@@ -6,10 +6,11 @@ import java.util.Collection;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import com.dds.interfaces.hashing.HashingInterface;
+import com.dds.interfaces.routing.RoutingInterface;
 import com.dds.utils.Helper;
 import com.dds.cluster.Node;
 
-public class ConsistentHashing {
+public class ConsistentHashing implements RoutingInterface{
 
 	private final HashingInterface hashFunction;
 	private final int numberOfReplicas;
@@ -23,23 +24,23 @@ public class ConsistentHashing {
 		this.numberOfReplicas = numberOfReplicas;
 
 		for (Node node : nodes) {
-			add(node);
+			addNode(node);
 		}
 	}
 
-	public void add(Node node) {
+	public void addNode(Node node) {
 		for (int i = 0; i < numberOfReplicas; i++) {
 			circle.put(hashFunction.hash(node.getNodeName().getBytes()), node);
 		}
 	}
 
-	public void remove(Node node) {
+	public void removeNode(Node node) {
 		for (int i = 0; i < numberOfReplicas; i++) {
 			circle.remove(hashFunction.hash((node.toString() + i).getBytes()));
 		}
 	}
 
-	public Node get(Object key) {
+	public Node getNode(Object key) {
 		if (circle.isEmpty()) {
 			return null;
 		}
@@ -68,7 +69,7 @@ public class ConsistentHashing {
 //		ConsistentHashing ch = new ConsistentHashing(mhf, 2, nodes);
 //		
 //		int hashedKeyOfValue = mhf.hash("Hello".getBytes());
-//		n = ch.get(hashedKeyOfValue);
+//		n = getNode(hashedKeyOfValue);
 //		
 //		/*
 //		 * When you get the Node object, persist the value in that given node.
