@@ -16,7 +16,7 @@ import java.nio.channels.spi.SelectorProvider;
 import java.util.*;
 
 import com.dds.client.nio.ChangeRequest;
-import com.dds.interfaces.server.ServerInterface;
+import com.dds.interfaces.ServerInterface;
 
 public class DDSServerNIO implements Runnable, ServerInterface {
 	// The host:port combination to listen on

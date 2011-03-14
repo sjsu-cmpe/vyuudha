@@ -1,7 +1,7 @@
 package com.dds.plugin.routing.vbuckets;
 
 import com.dds.cluster.Node;
-import com.dds.interfaces.routing.RoutingInterface;
+import com.dds.interfaces.RoutingInterface;
 
 /*
  * Inspired from membase. Need to work on the alog.

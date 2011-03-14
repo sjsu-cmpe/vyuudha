@@ -11,7 +11,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.dds.exception.HandleException;
-import com.dds.interfaces.storage.DBInterface;
+import com.dds.interfaces.DBInterface;
 import com.dds.properties.Property;
 import com.dds.utils.Helper;
 

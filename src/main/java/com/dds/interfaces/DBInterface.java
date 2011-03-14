@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dds.interfaces.storage;
+package com.dds.interfaces;
 
 
 

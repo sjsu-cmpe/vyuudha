@@ -18,7 +18,7 @@
 
 package com.dds.plugin.hashing;
 
-import com.dds.interfaces.hashing.HashingInterface;
+import com.dds.interfaces.HashingInterface;
 
 /**
  * This is a very fast, non-cryptographic hash suitable for general hash-based

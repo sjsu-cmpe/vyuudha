@@ -5,8 +5,9 @@ import com.dds.plugin.hashing.MurmurHashFunction;
 import java.util.Collection;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import com.dds.interfaces.hashing.HashingInterface;
-import com.dds.interfaces.routing.RoutingInterface;
+
+import com.dds.interfaces.HashingInterface;
+import com.dds.interfaces.RoutingInterface;
 import com.dds.utils.Helper;
 import com.dds.cluster.Node;
 

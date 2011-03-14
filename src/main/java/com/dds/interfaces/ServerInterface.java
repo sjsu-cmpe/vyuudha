@@ -1,4 +1,4 @@
-package com.dds.interfaces.server;
+package com.dds.interfaces;
 
 /*
  * Used by InitDDS.java to start the server. The hostAddress and port number will

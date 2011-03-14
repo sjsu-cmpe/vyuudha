@@ -1,4 +1,4 @@
-package com.dds.interfaces.routing;
+package com.dds.interfaces;
 
 import com.dds.cluster.Node;
 

@@ -5,7 +5,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import com.dds.interfaces.server.ServerInterface;
+import com.dds.interfaces.ServerInterface;
 
 public class DDSServerBIO implements ServerInterface {
 	private ServerSocket server;

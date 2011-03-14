@@ -4,7 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
 
-import com.dds.interfaces.server.ServerInterface;
+import com.dds.interfaces.ServerInterface;
 import com.dds.properties.Property;
 import com.dds.server.bio.DDSServerBIO;
 import com.dds.server.nio.DDSServerNIO;

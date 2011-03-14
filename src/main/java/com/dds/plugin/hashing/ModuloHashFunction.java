@@ -1,6 +1,6 @@
 package com.dds.plugin.hashing;
 
-import com.dds.interfaces.hashing.HashingInterface;
+import com.dds.interfaces.HashingInterface;
 
 public class ModuloHashFunction implements HashingInterface {
 
