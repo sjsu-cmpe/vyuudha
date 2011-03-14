@@ -18,6 +18,8 @@
 
 package com.dds.plugin.hashing;
 
+import com.dds.interfaces.hashing.HashingInterface;
+
 /**
  * This is a very fast, non-cryptographic hash suitable for general hash-based
  * lookup.  See http://murmurhash.googlepages.com/ for more details.
@@ -25,8 +27,9 @@ package com.dds.plugin.hashing;
  * <p>The C version of MurmurHash 2.0 found at that site was ported
  * to Java by Andrzej Bialecki (ab at getopt org).</p>
  */
-public class MurmurHashFunction {
-  public int hash(byte[] data, int seed) {
+public class MurmurHashFunction implements HashingInterface {
+  public int hash(byte[] data) {
+	int seed = 1; //Why is this seed important? Need to discuss
     int m = 0x5bd1e995;
     int r = 24;
 
