@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
 
+import com.dds.cluster.Cluster;
 import com.dds.interfaces.ServerInterface;
 import com.dds.properties.Property;
 import com.dds.server.bio.DDSServerBIO;
@@ -43,11 +44,11 @@ public class InitDDS {
 		InetAddress address = InetAddress.getByName(initDDS.serverIp);
 		
 		ddsIO.start(address, initDDS.serverPort);
+		
+		Cluster initCluster = new Cluster("vyuudha", 3);
+		
+		
 		System.out.println("Vyuudha " + initDDS.serverType + " Server Started at " + initDDS.serverIp);
 		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("dbToInstantiate"));
-		
-		// Starting JGroups channel
-		//new ClusterCommunication().startCommunication();
-		//System.out.println("JGroups channel established...");
 	}
 }

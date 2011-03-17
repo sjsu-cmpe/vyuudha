@@ -1,29 +1,50 @@
 package com.dds.cluster;
 
 /*
- * TO-DO: Need to specify the attributes of a Node.
+ * The note attributed go in here. The values of the values will be fetched from the config file.
  */
 public class Node {
-	private Integer nodeId;
-	private String nodeName;
-	
-	public void setNodeId(Integer nodeId)
-	{
+	private int nodeId;
+	private String nodeIpAddress;
+	private int nodeExternalPort;
+	private int nodeInternalPort;
+
+	public Node(int nodeId, String nodeIpAddress, int nodeExternalPort, int nodeInternalPort) {
+		this.nodeId = nodeId;
+		this.nodeIpAddress = nodeIpAddress;
+		this.nodeExternalPort = nodeExternalPort;
+		this.nodeInternalPort = nodeInternalPort;
+	}
+
+	public void setNodeId(Integer nodeId) {
 		this.nodeId = nodeId;
 	}
-	
-	public Integer getNodeId()
-	{
+
+	public void setExternalPort(Integer nodeExternalPort) {
+		this.nodeExternalPort = nodeExternalPort;
+	}
+
+	public void setInternalPort(Integer nodeInternalPort) {
+		this.nodeInternalPort = nodeInternalPort;
+	}
+
+	public void setNodeIpAddress(String nodeName) {
+		this.nodeIpAddress = nodeName;
+	}
+
+	public Integer getNodeId() {
 		return this.nodeId;
 	}
-	
-	public void setNodeName(String nodeName)
-	{
-		this.nodeName = nodeName;
+
+	public String getNodeIpAddress() {
+		return this.nodeIpAddress;
 	}
-	
-	public String getNodeName()
-	{
-		return this.nodeName;
+
+	public int getExternalPort() {
+		return this.nodeExternalPort;
+	}
+
+	public int getInternalPort() {
+		return this.nodeInternalPort;
 	}
 }

@@ -1,0 +1,23 @@
+{ 
+  "NodeCount": "3", 
+  "Nodes": [ 
+      {
+          "nodeId": "1", 
+          "nodeIpAddress":"127.0.0.1"
+          "nodeExternalPort":"8081"
+          "nodeInternalPort":"9091"
+      }, 
+      {
+          "nodeId": "2", 
+          "nodeIpAddress":"127.0.0.1"
+          "nodeExternalPort":"8082"
+          "nodeInternalPort":"9092"
+      }, 
+      {
+          "nodeId": "3", 
+          "nodeIpAddress":"127.0.0.1"
+          "nodeExternalPort":"8083"
+          "nodeInternalPort":"9093"
+      }
+   ] 
+}

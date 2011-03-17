@@ -1,7 +1,5 @@
 package com.dds.plugin.routing.consistenthashing;
 
-import java.util.ArrayList;
-import com.dds.plugin.hashing.MurmurHashFunction;
 import java.util.Collection;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -11,11 +9,12 @@ import com.dds.interfaces.RoutingInterface;
 import com.dds.utils.Helper;
 import com.dds.cluster.Node;
 
-public class ConsistentHashing implements RoutingInterface{
+public class ConsistentHashing implements RoutingInterface {
 
 	private final HashingInterface hashFunction;
 	private final int numberOfReplicas;
 	private final TreeMap<Integer, Node> circle = new TreeMap<Integer, Node>();
+	private Collection<Node> nodes;
 
 	public ConsistentHashing(
 			HashingInterface hashFunction, 
@@ -23,21 +22,26 @@ public class ConsistentHashing implements RoutingInterface{
 			Collection<Node> nodes) {
 		this.hashFunction = hashFunction;
 		this.numberOfReplicas = numberOfReplicas;
+		this.nodes = nodes;
+	}
+	
+	public void setupRoutingCluster()
+	{
 
 		for (Node node : nodes) {
 			addNode(node);
 		}
 	}
-
+	
 	public void addNode(Node node) {
 		for (int i = 0; i < numberOfReplicas; i++) {
-			circle.put(hashFunction.hash(node.getNodeName().getBytes()), node);
+			circle.put(hashFunction.hash(node.toString().getBytes()), node); // Need to discuss
 		}
 	}
 
 	public void removeNode(Node node) {
 		for (int i = 0; i < numberOfReplicas; i++) {
-			circle.remove(hashFunction.hash((node.toString() + i).getBytes()));
+			circle.remove(hashFunction.hash(node.toString().getBytes()));
 		}
 	}
 
@@ -52,31 +56,31 @@ public class ConsistentHashing implements RoutingInterface{
 		}
 		return circle.get(hash);
 	}
-	
-//	public static void main(String[] args)
-//	{	
-//		MurmurHashFunction mhf = new MurmurHashFunction();
-//		Collection<Node> nodes = new ArrayList<Node>();
-//		Node n;
-//		for(int i=0; i<5;i++)
-//		{
-//			n = new Node();
-//			n.setNodeId(i);
-//			n.setNodeName("Node:"+i);
-//			nodes.add(n);
-//		}
-//		
-//		
-//		ConsistentHashing ch = new ConsistentHashing(mhf, 2, nodes);
-//		
-//		int hashedKeyOfValue = mhf.hash("Hello".getBytes());
-//		n = getNode(hashedKeyOfValue);
-//		
-//		/*
-//		 * When you get the Node object, persist the value in that given node.
-//		 * The  Node object will be returned by ConsistentHashing.java
-//		 */
-//		
-//		System.out.println(n.getNodeName());
-//	}
+
+	// public static void main(String[] args)
+	// {
+	// MurmurHashFunction mhf = new MurmurHashFunction();
+	// Collection<Node> nodes = new ArrayList<Node>();
+	// Node n;
+	// for(int i=0; i<5;i++)
+	// {
+	// n = new Node();
+	// n.setNodeId(i);
+	// n.setNodeName("Node:"+i);
+	// nodes.add(n);
+	// }
+	//
+	//
+	// ConsistentHashing ch = new ConsistentHashing(mhf, 2, nodes);
+	//
+	// int hashedKeyOfValue = mhf.hash("Hello".getBytes());
+	// n = getNode(hashedKeyOfValue);
+	//
+	// /*
+	// * When you get the Node object, persist the value in that given node.
+	// * The Node object will be returned by ConsistentHashing.java
+	// */
+	//
+	// System.out.println(n.getNodeName());
+	// }
 }

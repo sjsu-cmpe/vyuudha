@@ -23,4 +23,10 @@ public class VBuckets implements RoutingInterface{
 		return null;
 	}
 
+	@Override
+	public void setupRoutingCluster() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

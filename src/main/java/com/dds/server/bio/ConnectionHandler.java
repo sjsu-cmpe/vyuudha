@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import com.dds.storage.StorageDelegation;
+import com.dds.storage.StorageHandler;
 import com.dds.utils.Helper;
 
 public class ConnectionHandler implements Runnable{
@@ -58,7 +58,7 @@ public class ConnectionHandler implements Runnable{
 	 * @return object from the core storage layer
 	 */
 	private Object storageCall(byte[] dataCopy) {
-		StorageDelegation dbRoot = new StorageDelegation();
+		StorageHandler dbRoot = new StorageHandler();
 		Object objectReturned = null;
 		try {
 			objectReturned = dbRoot.invoke(dataCopy);
