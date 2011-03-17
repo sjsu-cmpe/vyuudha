@@ -1,23 +1,20 @@
-{ 
-  "NodeCount": "3", 
-  "Nodes": [ 
-      {
-          "nodeId": "1", 
-          "nodeIpAddress":"127.0.0.1"
-          "nodeExternalPort":"8081"
-          "nodeInternalPort":"9091"
-      }, 
-      {
-          "nodeId": "2", 
-          "nodeIpAddress":"127.0.0.1"
-          "nodeExternalPort":"8082"
-          "nodeInternalPort":"9092"
-      }, 
-      {
-          "nodeId": "3", 
-          "nodeIpAddress":"127.0.0.1"
-          "nodeExternalPort":"8083"
-          "nodeInternalPort":"9093"
-      }
-   ] 
-}
+<nodes>
+	<node>
+		<nodeId>1</nodeId>
+		<nodeIpAddress>127.0.0.1</nodeIpAddress>
+		<nodeExternalPort>8081</nodeExternalPort>
+		<nodeInternalPort>9091</nodeInternalPort>
+	</node>
+	<node>
+		<nodeId>2</nodeId>
+		<nodeIpAddress>127.0.0.1</nodeIpAddress>
+		<nodeExternalPort>8082</nodeExternalPort>
+		<nodeInternalPort>9092</nodeInternalPort>
+	</node>
+	<node>
+		<nodeId>3</nodeId>
+		<nodeIpAddress>127.0.0.1</nodeIpAddress>
+		<nodeExternalPort>8083</nodeExternalPort>
+		<nodeInternalPort>9093</nodeInternalPort>
+	</node>
+</nodes>
