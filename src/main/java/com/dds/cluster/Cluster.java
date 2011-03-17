@@ -7,12 +7,14 @@ import com.dds.interfaces.HashingInterface;
 import com.dds.interfaces.RoutingInterface;
 import com.dds.plugin.hashing.MurmurHashFunction;
 import com.dds.plugin.routing.consistenthashing.ConsistentHashing;
+import com.dds.utils.XMLConfigParser;
 
 public class Cluster {
 
 	private String clusterName = null;
 	private int numberOfNodes = 0;
 	Node node;
+	Collection<Node> nodes = new ArrayList<Node>();
 	
 	public Cluster(String clusterName, int numberOfNodes){
 		this.clusterName = clusterName;
@@ -24,14 +26,8 @@ public class Cluster {
 		//Select hashing algorithm
 		HashingInterface mhf = new MurmurHashFunction();
 		
-		//Create nodes
-		//Get nodes info here from nodes.json
-		Collection<Node> nodes = new ArrayList<Node>();
-		for(int i=0; i<numberOfNodes; i++)
-		{
-			node = new Node(numberOfNodes, clusterName, numberOfNodes, numberOfNodes);
-			nodes.add(node);
-		}
+		//Create nodes collection
+		nodes = XMLConfigParser.readNodes();
 		
 		//Setup the routing strategy
 		RoutingInterface ch = new ConsistentHashing(mhf, 2, nodes);
