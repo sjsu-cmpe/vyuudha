@@ -1,12 +1,10 @@
 package com.dds.server.nio;
 
-import java.lang.reflect.InvocationTargetException;
-import java.net.UnknownHostException;
 import java.nio.channels.SocketChannel;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.dds.storage.DBRoot;
+import com.dds.storage.StorageDelegation;
 import com.dds.utils.Helper;
 
 public class DDSWorker implements Runnable {
@@ -31,22 +29,16 @@ public class DDSWorker implements Runnable {
 	 * @return object from the core storage layer
 	 */
 	private Object storageCall(byte[] dataCopy) {
-		DBRoot dbRoot = new DBRoot();
+		StorageDelegation dbRoot = new StorageDelegation();
 		Object objectReturned = null;
 		try {
 			objectReturned = dbRoot.invoke(dataCopy);
 			if (objectReturned != null) {
 				return objectReturned;
 			}
-		} catch (UnknownHostException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
-			// TODO LOG!
-			System.out.println("Could not fetch : " + e.getMessage());
-			//e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			System.out.println("Key not found : " + e.getMessage());
 		}
 		return objectReturned;
 	}
