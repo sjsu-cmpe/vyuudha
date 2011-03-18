@@ -7,6 +7,11 @@ import com.dds.interfaces.HashingInterface;
 import com.dds.interfaces.RoutingInterface;
 import com.dds.plugin.routing.consistenthashing.ConsistentHashing;
 
+/**
+ * @author utkarsh
+ *
+ *This class implements the StateContext of state pattern.
+ */
 public class RoutingContext implements RoutingInterface{
 	
 	private RoutingInterface routingObjectState;
@@ -15,7 +20,9 @@ public class RoutingContext implements RoutingInterface{
 			HashingInterface hashFunction, 
 			int numberOfReplicas, 
 			Collection<Node> nodes) {
-		 setState(new ConsistentHashing(hashFunction, numberOfReplicas, nodes)); //Make it read from config file
+		
+		//Make it read from config file
+		setState(new ConsistentHashing(hashFunction, numberOfReplicas, nodes));
 	}
 
 	public void setState(RoutingInterface newRoutingObjectState) {
