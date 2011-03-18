@@ -3,9 +3,8 @@ package com.dds.cluster;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.dds.interfaces.HashingInterface;
 import com.dds.interfaces.RoutingInterface;
-import com.dds.plugin.hashing.MurmurHashFunction;
+import com.dds.plugin.hashing.HashingContext;
 import com.dds.plugin.routing.consistenthashing.ConsistentHashing;
 import com.dds.utils.XMLConfigParser;
 
@@ -22,15 +21,15 @@ public class Cluster {
 	}
 	
 	public void setupCluster()
-	{
-		//Select hashing algorithm
-		HashingInterface mhf = new MurmurHashFunction();
-		
+	{		
 		//Create nodes collection
 		nodes = XMLConfigParser.readNodes();
 		
+		//Select hashing algorithm
+		HashingContext hash = new HashingContext();
+		
 		//Setup the routing strategy
-		RoutingInterface ch = new ConsistentHashing(mhf, 2, nodes);
+		RoutingInterface ch = new ConsistentHashing(hash, 2, nodes);
 		ch.setupRoutingCluster();
 	}
 	
