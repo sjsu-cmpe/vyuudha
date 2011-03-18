@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.dds.core.HashingContext;
+import com.dds.core.RoutingContext;
 import com.dds.interfaces.RoutingInterface;
 import com.dds.plugin.routing.consistenthashing.ConsistentHashing;
 import com.dds.utils.XMLConfigParser;
@@ -29,8 +30,8 @@ public class Cluster {
 		HashingContext hash = new HashingContext();
 		
 		//Setup the routing strategy
-		RoutingInterface ch = new ConsistentHashing(hash, 2, nodes);
-		ch.setupRoutingCluster();
+		RoutingContext routing = new RoutingContext(hash, 2, nodes);
+		routing.setupRoutingCluster();
 	}
 	
 	public String getclusterName()
