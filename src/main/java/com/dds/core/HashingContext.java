@@ -1,6 +1,7 @@
-package com.dds.plugin.hashing;
+package com.dds.core;
 
 import com.dds.interfaces.HashingInterface;
+import com.dds.plugin.hashing.MurmurHashFunction;
 
 public class HashingContext implements HashingInterface{
 	

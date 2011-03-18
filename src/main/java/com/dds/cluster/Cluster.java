@@ -3,8 +3,8 @@ package com.dds.cluster;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.dds.core.HashingContext;
 import com.dds.interfaces.RoutingInterface;
-import com.dds.plugin.hashing.HashingContext;
 import com.dds.plugin.routing.consistenthashing.ConsistentHashing;
 import com.dds.utils.XMLConfigParser;
 
