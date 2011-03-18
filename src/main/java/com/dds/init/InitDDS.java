@@ -44,8 +44,7 @@ public class InitDDS {
 		InetAddress address = InetAddress.getByName(initDDS.serverIp);
 		
 		ddsIO.start(address, initDDS.serverPort);
-		
-		Cluster initCluster = new Cluster("vyuudha", 3);
+		Cluster.setupCluster();
 		
 		
 		System.out.println("Vyuudha " + initDDS.serverType + " Server Started at " + initDDS.serverIp);

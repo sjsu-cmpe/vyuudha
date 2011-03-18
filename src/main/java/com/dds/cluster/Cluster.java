@@ -5,23 +5,14 @@ import java.util.Collection;
 
 import com.dds.core.HashingContext;
 import com.dds.core.RoutingContext;
-import com.dds.interfaces.RoutingInterface;
-import com.dds.plugin.routing.consistenthashing.ConsistentHashing;
 import com.dds.utils.XMLConfigParser;
 
 public class Cluster {
-
-	private String clusterName = null;
-	private int numberOfNodes = 0;
 	Node node;
-	Collection<Node> nodes = new ArrayList<Node>();
+	static Collection<Node> nodes = new ArrayList<Node>();
 	
-	public Cluster(String clusterName, int numberOfNodes){
-		this.clusterName = clusterName;
-		this.numberOfNodes = numberOfNodes;
-	}
 	
-	public void setupCluster()
+	public static void setupCluster()
 	{		
 		//Create nodes collection
 		nodes = XMLConfigParser.readNodes();
@@ -33,25 +24,4 @@ public class Cluster {
 		RoutingContext routing = new RoutingContext(hash, 2, nodes);
 		routing.setupRoutingCluster();
 	}
-	
-	public String getclusterName()
-	{
-		return clusterName;
-	}
-	
-	public int getnumberOfNodes()
-	{
-		return numberOfNodes;
-	}
-	
-	public void setclusterName(String clusterName)
-	{
-		this.clusterName = clusterName;
-	}
-	
-	public void setnumberOfNodes(int numberOfNodes)
-	{
-		this.numberOfNodes = numberOfNodes;
-	}
-	
 }
