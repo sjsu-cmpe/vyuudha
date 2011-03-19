@@ -11,7 +11,7 @@ public class RspHandler {
 		return true;
 	}
 
-	public synchronized void waitForResponse() {
+	public synchronized Object waitForResponse() {
 		while (this.rsp == null) {
 			try {
 				this.wait();
@@ -20,6 +20,6 @@ public class RspHandler {
 			}
 		}
 		
-		System.out.println((String)Helper.getObject(this.rsp));
+		return (Helper.getObject(this.rsp));
 	}
 }

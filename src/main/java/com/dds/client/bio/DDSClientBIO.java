@@ -11,12 +11,11 @@ import org.apache.log4j.Logger;
 
 import com.dds.client.interfaces.DDSClientInterface;
 import com.dds.exception.UnsupportedException;
-import com.dds.plugin.storage.mysqldb.MySQLDB;
 import com.dds.utils.Helper;
 
 public class DDSClientBIO implements DDSClientInterface {
 	
-	Logger logger = Logger.getLogger(MySQLDB.class);
+	Logger logger = Logger.getLogger(DDSClientBIO.class);
 	
 	private InetAddress host;
 	private int port;
@@ -24,24 +23,6 @@ public class DDSClientBIO implements DDSClientInterface {
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	
-	public static void main(String[] args) {
-        try {
-        	DDSClientBIO client = new DDSClientBIO();
-
-        	String[] serverInfo = {"127.0.0.1", "9092"};
-        	client.initialize(serverInfo);
-        	
-        	Object retObj = client.write("put,key2,value4");
-        	System.out.println("Return object : " + retObj);
-        	       	
-        	retObj = client.write("get,key2");
-        	System.out.println("Return object : " + retObj);
-        	
-        } catch (Exception e) {
-            e.printStackTrace();
-        } 
-    }
-
 	/**
 	 * @throws IOException 
 	 * @throws ClassNotFoundException 

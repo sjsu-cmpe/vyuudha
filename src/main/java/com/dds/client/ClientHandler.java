@@ -5,6 +5,7 @@ package com.dds.client;
 
 import com.dds.client.bio.DDSClientBIO;
 import com.dds.client.interfaces.DDSClientInterface;
+import com.dds.client.nio.DDSClientNIO;
 import com.dds.exception.UnsupportedException;
 import com.dds.interfaces.APIInterface;
 
@@ -31,7 +32,7 @@ public class ClientHandler implements APIInterface {
 		String[] array = bootstrapUrl.trim().split(":");
 		
 		if (array[0].equalsIgnoreCase("nio")) {
-			//client = new DDSClientNIO(hostAddress, port)
+			client = new DDSClientNIO();
 		} else {
 			client = new DDSClientBIO();
 		}
@@ -82,7 +83,6 @@ public class ClientHandler implements APIInterface {
 	 * @see com.dds.interfaces.APIInterface#contains(java.lang.String)
 	 */
 	public Boolean contains(String key) throws Exception {
-		// TODO Auto-generated method stub
 		return (Boolean)sendMessage("contains," + key);
 	}
 	
