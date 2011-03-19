@@ -7,7 +7,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import com.dds.exception.HandleException;
+import org.apache.log4j.Logger;
+
 import com.dds.properties.Property;
 import com.sleepycat.je.DatabaseConfig;
 import com.sleepycat.je.DatabaseException;
@@ -21,6 +22,8 @@ import com.sleepycat.je.EnvironmentLockedException;
  */
 public class BDBConfiguration {
 
+	Logger logger = Logger.getLogger(BDBConfiguration.class);
+	
 	private boolean readOnly;
 	private String store;
 	private String bdbPath;
@@ -44,13 +47,9 @@ public class BDBConfiguration {
 			setDbConfig();
 			setEnvironment();
 		} catch (EnvironmentLockedException e) {
-			// TODO Auto-generated catch block
-			HandleException.handler(e.getMessage(), 
-					this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
+			logger.error("Exception : " + e.getMessage());
 		} catch (DatabaseException e) {
-			// TODO Auto-generated catch block
-			HandleException.handler(e.getMessage(), 
-					this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
+			logger.error("Exception : " + e.getMessage());
 		}
 
 		return this.myEnv;
@@ -80,8 +79,7 @@ public class BDBConfiguration {
 			path.append(store);
 			this.bdbPath = path.toString();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception : " + e.getMessage());
 		}
 	}
 

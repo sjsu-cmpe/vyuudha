@@ -10,7 +10,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.dds.exception.HandleException;
+import com.dds.exception.UnsupportedException;
 import com.dds.interfaces.APIInterface;
 import com.dds.properties.Property;
 import com.dds.utils.Helper;
@@ -106,9 +106,8 @@ public class MySQLDB implements APIInterface {
 			.getConnection(this.jdbcURL + "user=" + this.user + "&password=" + this.password);
 			statement = connect.createStatement();
 			initialSetup();
-		} catch (Exception ex) {
-			HandleException.handler(ex.getMessage(), this.getClass().getName(),
-					Thread.currentThread().getStackTrace()[2].getMethodName());
+		} catch (Exception e) {
+			logger.error("Exception : " + e.getMessage());
 		}
 		logger.info("MySQL connection opened");
 	}
@@ -122,9 +121,8 @@ public class MySQLDB implements APIInterface {
 
 			return resultSet.getString("value");
 
-		} catch (Exception ex) {
-			HandleException.handler(ex.getMessage(), this.getClass().getName(),
-					Thread.currentThread().getStackTrace()[2].getMethodName());			
+		} catch (Exception e) {
+			logger.error("Exception : " + e.getMessage());			
 		}
 		return null;
 	}
@@ -148,8 +146,8 @@ public class MySQLDB implements APIInterface {
 			}
 			preparedStatement.executeUpdate();	
 			logger.info(key + ", " + value + " inserted into MySQL");
-		} catch (Exception ex) {
-			HandleException.handler(ex.getMessage(), this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
+		} catch (Exception e) {
+			logger.error("Exception : " + e.getMessage());
 		}
 	}
 
@@ -160,8 +158,8 @@ public class MySQLDB implements APIInterface {
 				.prepareStatement("delete from  VYUUDHA.STORE where VYUUDHA.STORE.KEY = \'" + key + "\'");
 				preparedStatement.executeUpdate();	
 			}
-		} catch (Exception ex) {
-			HandleException.handler(ex.getMessage(), this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
+		} catch (Exception e) {
+			logger.error("Exception : " + e.getMessage());
 		}
 	}
 
@@ -180,15 +178,19 @@ public class MySQLDB implements APIInterface {
 			}
 			logger.info("MySQL connection closed");
 		} catch (Exception e) {
-			HandleException.handler(e.getMessage(), this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
+			logger.error("Exception : " + e.getMessage());
 		}
 	}
 
-	public boolean contains(String key) {
+	public Boolean contains(String key) {
 		if (get(key) == null){
 			return false;
 		} else {
 			return true;
 		}
+	}
+
+	public void createConnection(String bootstrapUrl) throws Exception {
+		throw new UnsupportedException("Unsupported method");
 	}
 }

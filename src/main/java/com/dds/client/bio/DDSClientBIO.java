@@ -6,63 +6,99 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Map;
 
-import com.dds.properties.Property;
+import org.apache.log4j.Logger;
+
+import com.dds.client.interfaces.DDSClientInterface;
+import com.dds.exception.UnsupportedException;
+import com.dds.plugin.storage.mysqldb.MySQLDB;
 import com.dds.utils.Helper;
 
-public class DDSClientBIO {
+public class DDSClientBIO implements DDSClientInterface {
+	
+	Logger logger = Logger.getLogger(MySQLDB.class);
+	
+	private InetAddress host;
+	private int port;
+	private Socket socket;
+	private ObjectOutputStream oos;
+	private ObjectInputStream ois;
+	
 	public static void main(String[] args) {
         try {
-            //
-            // Create a connection to the server socket on the server application
-            //
-        	Map<String, String> props = Property.getProperty().getServerConfigProperties();
-            InetAddress host = InetAddress.getByName(props.get("server_ip"));
-            int port = Integer.parseInt(props.get("server_port"));
-            Socket socket = new Socket(host.getHostName(), port);
+        	DDSClientBIO client = new DDSClientBIO();
 
-            //
-            // Send a message to the client application
-            //
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-            oos.writeObject("put,serverBIO,test1");
-
-            //
-            // Read and display the response message sent by server application
-            //
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-            String message = (String) Helper.getObject((byte[]) ois.readObject());
-            System.out.println("Message: " + message);
-            
-            
-            //
-            // Send a message to the client application
-            //
-            oos.close();
-            ois.close();
-            socket.close();
-            
-            socket = new Socket(host.getHostName(), port);
-            
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            oos.writeObject("get,serverBIO");
-
-            //
-            // Read and display the response message sent by server application
-            //
-            ois = new ObjectInputStream(socket.getInputStream());
-            message = (String) Helper.getObject((byte[]) ois.readObject());
-            System.out.println("Message: " + message);
-
-            ois.close();
-            oos.close();
-        } catch (UnknownHostException e) {
+        	String[] serverInfo = {"127.0.0.1", "9092"};
+        	client.initialize(serverInfo);
+        	
+        	Object retObj = client.write("put,key2,value4");
+        	System.out.println("Return object : " + retObj);
+        	       	
+        	retObj = client.write("get,key2");
+        	System.out.println("Return object : " + retObj);
+        	
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        } 
     }
+
+	/**
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * 
+	 */
+	public Object write(String stream) throws IOException, ClassNotFoundException {
+		if (socket == null || oos == null) {
+			initialize();
+		}
+		oos.writeObject(stream);
+		ois = new ObjectInputStream(socket.getInputStream());
+        Object message = Helper.getObject((byte[]) ois.readObject());
+        
+        logger.info("write");
+        exit();
+        return message;
+	}
+
+	/**
+	 *
+	 * @throws IOException
+	 */
+	public void exit() throws IOException {
+		if (oos != null || ois != null || socket !=null) {
+			oos.close();
+			ois.close();
+			socket.close();
+			
+			oos = null;
+			ois = null;
+			socket = null;
+		}		
+		logger.info("exit");
+	}
+
+	/**
+	 * @throws UnknownHostException
+	 * @throws NumberFormatException
+	 * @throws IOException
+	 * @throws UnsupportedException 
+	 */
+	public void initialize(String[] serverInfo) throws UnknownHostException,
+			NumberFormatException, IOException, UnsupportedException {
+		if (serverInfo.length != 2) {
+			throw new UnsupportedException("Insufficient parameters");
+		}
+		host = InetAddress.getByName(serverInfo[0]);
+		port = Integer.parseInt(serverInfo[1]);
+		initialize();
+
+		logger.info("initialized");
+	}
+	
+	private void initialize() throws UnknownHostException, IOException  {
+		if (socket == null || oos == null) {
+			socket = new Socket(host.getHostName(), port);
+			oos = new ObjectOutputStream(socket.getOutputStream());
+		}	
+	}
 }

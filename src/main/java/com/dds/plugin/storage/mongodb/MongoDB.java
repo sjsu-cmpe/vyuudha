@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.dds.exception.UnsupportedException;
 import com.dds.interfaces.APIInterface;
 import com.dds.properties.Property;
 import com.mongodb.BasicDBObject;
@@ -147,7 +148,7 @@ public class MongoDB extends Mongo implements APIInterface {
 	 * 
 	 * @see com.dds.interfaces.APIInterface#contains(java.lang.String)
 	 */
-	public boolean contains(String key) {
+	public Boolean contains(String key) {
 		BasicDBObject lookUp = new BasicDBObject();
 		lookUp.put("key", key);
 
@@ -170,5 +171,9 @@ public class MongoDB extends Mongo implements APIInterface {
 		db = null;
 		coll = null;
 		logger.info("MongoDB connection closed");
+	}
+	
+	public void createConnection(String bootstrapUrl) throws Exception {
+		throw new UnsupportedException("Unsupported method");
 	}
 }

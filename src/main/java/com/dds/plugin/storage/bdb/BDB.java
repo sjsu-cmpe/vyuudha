@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.dds.exception.HandleException;
+import com.dds.exception.UnsupportedException;
 import com.dds.interfaces.APIInterface;
 import com.dds.utils.Helper;
 import com.google.common.collect.Lists;
@@ -71,8 +71,7 @@ public class BDB extends Database implements APIInterface{
 	        }
 	        cursor.close();
 		} catch (DatabaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception : " + e.getMessage());
 		} 
 		Object retObj = null;
 		for (Object obj : results)	{
@@ -93,9 +92,7 @@ public class BDB extends Database implements APIInterface{
 		try {
 			getVendorDB().put(null, entryKey, entryValue);
 		} catch (DatabaseException e) {
-			// TODO Auto-generated catch block
-			HandleException.handler(e.getMessage(), 
-					this.getClass().getSimpleName(), Thread.currentThread().getStackTrace()[2].getMethodName());
+			logger.error("Exception : " + e.getMessage());
 		}		
 		logger.info(key + " : " + value + " inserted into DB");
 	}
@@ -114,8 +111,7 @@ public class BDB extends Database implements APIInterface{
 				logger.info("Key " + key + " not found");
 			}			
 		} catch (DatabaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception : " + e.getMessage());
 		}
 		logger.info(key + " deleted from DB");
 	}
@@ -139,7 +135,7 @@ public class BDB extends Database implements APIInterface{
 	/* (non-Javadoc)
 	 * @see com.dds.interfaces.storage.DBInterface#contains(java.lang.String)
 	 */
-	public boolean contains(String key) {
+	public Boolean contains(String key) {
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		
 		boolean keyFound = false;
@@ -154,9 +150,12 @@ public class BDB extends Database implements APIInterface{
 	        }
 	        cursor.close();
 		} catch (DatabaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception : " + e.getMessage());
 		} 
 		return keyFound;
+	}
+	
+	public void createConnection(String bootstrapUrl) throws Exception {
+		throw new UnsupportedException("Unsupported method");
 	}
 }
