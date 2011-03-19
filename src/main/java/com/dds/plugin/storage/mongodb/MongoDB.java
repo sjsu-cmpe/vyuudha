@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.dds.interfaces.DBInterface;
+import com.dds.interfaces.APIInterface;
 import com.dds.properties.Property;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -23,7 +23,7 @@ import com.mongodb.MongoException;
  * @author ravid
  * 
  */
-public class MongoDB extends Mongo implements DBInterface {
+public class MongoDB extends Mongo implements APIInterface {
 
 	DB db = null;
 	DBCollection coll = null;
@@ -57,7 +57,7 @@ public class MongoDB extends Mongo implements DBInterface {
 	/**
 	 * Create connection to MongoDB
 	 * 
-	 * @see com.dds.interfaces.DBInterface#createConnection()
+	 * @see com.dds.interfaces.APIInterface#createConnection()
 	 */
 	public void createConnection() {
 		try {
@@ -73,7 +73,7 @@ public class MongoDB extends Mongo implements DBInterface {
 	/**
 	 * Insert a key and value
 	 * 
-	 * @see com.dds.interfaces.DBInterface#put(java.lang.String, java.lang.String)
+	 * @see com.dds.interfaces.APIInterface#put(java.lang.String, java.lang.String)
 	 */
 	public void put(String key, String value) {
 		BasicDBObject doc = new BasicDBObject();
@@ -93,7 +93,7 @@ public class MongoDB extends Mongo implements DBInterface {
 	/**
 	 * Delete a particular key
 	 * 
-	 * @see com.dds.interfaces.DBInterface#delete(java.lang.String)
+	 * @see com.dds.interfaces.APIInterface#delete(java.lang.String)
 	 */
 	public void delete(String key) {
 		BasicDBObject lookUp = new BasicDBObject();
@@ -106,7 +106,7 @@ public class MongoDB extends Mongo implements DBInterface {
 	/**
 	 * Used to retrieve a value for the associated key
 	 * 
-	 * @see com.dds.interfaces.DBInterface#get(java.lang.String)
+	 * @see com.dds.interfaces.APIInterface#get(java.lang.String)
 	 */
 	public String get(String key) {
 		BasicDBObject lookUp = new BasicDBObject();
@@ -145,7 +145,7 @@ public class MongoDB extends Mongo implements DBInterface {
 	/**
 	 * Return true if key is present else false
 	 * 
-	 * @see com.dds.interfaces.DBInterface#contains(java.lang.String)
+	 * @see com.dds.interfaces.APIInterface#contains(java.lang.String)
 	 */
 	public boolean contains(String key) {
 		BasicDBObject lookUp = new BasicDBObject();
@@ -163,7 +163,7 @@ public class MongoDB extends Mongo implements DBInterface {
 	 * Close the connections, setting all to none No in-built close function for
 	 * MongoDB
 	 * 
-	 * @see com.dds.interfaces.DBInterface#closeConnection()
+	 * @see com.dds.interfaces.APIInterface#closeConnection()
 	 */
 	public void closeConnection() {
 

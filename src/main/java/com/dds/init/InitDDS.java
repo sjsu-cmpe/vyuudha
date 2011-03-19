@@ -36,18 +36,17 @@ public class InitDDS {
 		InitDDS initDDS = new InitDDS();
 		ServerInterface ddsIO;
 		
-		if (initDDS.serverType.equals("NIO")) {
+		if (initDDS.serverType.contains("NIO")) {
 			ddsIO = new DDSServerNIO();	
 		} else  {  
 			ddsIO = new DDSServerBIO();
 		}
+		System.out.println("Vyuudha " + initDDS.serverType + " Server Started at " + initDDS.serverIp);
+		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("dbToInstantiate"));
+
 		InetAddress address = InetAddress.getByName(initDDS.serverIp);
 		
 		ddsIO.start(address, initDDS.serverPort);
-		Cluster.setupCluster();
-		
-		
-		System.out.println("Vyuudha " + initDDS.serverType + " Server Started at " + initDDS.serverIp);
-		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("dbToInstantiate"));
+		Cluster.setupCluster();		
 	}
 }

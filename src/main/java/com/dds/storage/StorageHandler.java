@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 import java.util.Map;
 
 import com.dds.exception.StorageException;
-import com.dds.interfaces.DBInterface;
+import com.dds.interfaces.APIInterface;
 import com.dds.plugin.storage.bdb.BDB;
 import com.dds.plugin.storage.mongodb.MongoDB;
 import com.dds.plugin.storage.mysqldb.MySQLDB;
@@ -24,7 +24,7 @@ import com.dds.utils.Helper;
  */
 public class StorageHandler {
 
-	private static DBInterface dbInterface;
+	private static APIInterface dbInterface;
 	private String dbToInstantiate;
 	private String coreStorageInterface;
 	private String pluginsPath;
@@ -68,7 +68,7 @@ public class StorageHandler {
 		setDbToInstantiate(props.get("dbToInstantiate"));
 	}
 
-	private DBInterface getInstance() throws UnknownHostException {
+	private APIInterface getInstance() throws UnknownHostException {
 		setConfigurations();
 
 		if (dbToInstantiate.equalsIgnoreCase("BDB")) {
@@ -144,7 +144,7 @@ public class StorageHandler {
 	}
 
 	/**
-	 * This function is used to invoke a function defined in DBInterface
+	 * This function is used to invoke a function defined in APIInterface
 	 * 
 	 * @param methodName
 	 * @param bufArray

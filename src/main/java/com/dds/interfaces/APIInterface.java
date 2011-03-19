@@ -15,7 +15,7 @@ package com.dds.interfaces;
  * @author ravid
  *
  */
-public interface DBInterface {
+public interface APIInterface {
 	
 	/**
 	 * Used to create connection with the storage engine

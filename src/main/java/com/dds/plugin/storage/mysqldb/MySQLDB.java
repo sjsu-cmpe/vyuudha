@@ -11,7 +11,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.dds.exception.HandleException;
-import com.dds.interfaces.DBInterface;
+import com.dds.interfaces.APIInterface;
 import com.dds.properties.Property;
 import com.dds.utils.Helper;
 
@@ -19,7 +19,7 @@ import com.dds.utils.Helper;
  * @author ravid
  *
  */
-public class MySQLDB implements DBInterface {
+public class MySQLDB implements APIInterface {
 
 	Logger logger = Logger.getLogger(MySQLDB.class);
 

@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.dds.exception.HandleException;
-import com.dds.interfaces.DBInterface;
+import com.dds.interfaces.APIInterface;
 import com.dds.utils.Helper;
 import com.google.common.collect.Lists;
 import com.sleepycat.je.Cursor;
@@ -16,7 +16,7 @@ import com.sleepycat.je.Environment;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
 
-public class BDB extends Database implements DBInterface{
+public class BDB extends Database implements APIInterface{
 
 	private static Environment myEnv;
 	private Database vendorDb;
