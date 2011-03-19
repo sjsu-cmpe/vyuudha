@@ -1,5 +1,6 @@
 package com.dds.plugin.storage.bdb;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -7,7 +8,6 @@ import org.apache.log4j.Logger;
 import com.dds.exception.HandleException;
 import com.dds.interfaces.DBInterface;
 import com.dds.utils.Helper;
-import com.google.common.collect.Lists;
 import com.sleepycat.je.Cursor;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseEntry;
@@ -61,7 +61,7 @@ public class BDB extends Database implements DBInterface{
 		
 		Cursor cursor = null;
         DatabaseEntry entryValue = new DatabaseEntry();
-        List<Object> results = Lists.newArrayList();
+        List<Object> results = new ArrayList<Object>();
         LockMode lockMode = LockMode.DEFAULT;
 		try {
 			cursor = getVendorDB().openCursor(null, null);
