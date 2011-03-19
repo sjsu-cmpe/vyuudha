@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import java.net.UnknownHostException;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.dds.exception.StorageException;
 import com.dds.interfaces.APIInterface;
 import com.dds.plugin.storage.bdb.BDB;
@@ -24,6 +26,8 @@ import com.dds.utils.Helper;
  */
 public class StorageHandler {
 
+	Logger logger = Logger.getLogger(StorageHandler.class);
+	
 	private static APIInterface dbInterface;
 	private String dbToInstantiate;
 	private String coreStorageInterface;
@@ -81,26 +85,34 @@ public class StorageHandler {
 		return null;
 	}
 	
-	public Object invoke(String buffer) throws StorageException {
+	public Object invoke(String buffer) throws Exception {
 		return invoke(Helper.getBytes(buffer));
 	}
 
-	public Object invoke(byte[] buffer) throws StorageException {
+	public Object invoke(byte[] buffer) throws Exception {
 		String buf = (String) Helper.getObject(buffer);
 		String[] bufArray = buf.split(",");
 		String methodName = bufArray[0].trim();
-		dbInterface.createConnection();
+		
+		if (this.coreStorageInterface == null || this.dbToInstantiate == null 
+				|| this.pluginsPath == null) {
+			setConfigurations();
+		}
 		try {
-			if (checkMethodExists(methodName) && bufArray.length > 2) {
+			dbInterface.createConnection();
+			if (checkMethodExists(methodName)) {
 				System.out.println("Method Exists! " + methodName);
 				return invokeMethod(methodName, bufArray);
 			} else {
-				System.out.println("Method Does Not Exists!" + methodName);
+				System.out.println("Method Does Not Exists! " + methodName);
 				return invokeNativeMethod(methodName, bufArray);
 			} 
+		} catch (Exception e) {
+			logger.error("Exception : " + e.getMessage());
 		} finally {
 			dbInterface.closeConnection();
 		}
+		return null;
 	}
 
 	/**
@@ -144,14 +156,14 @@ public class StorageHandler {
 	}
 
 	/**
-	 * This function is used to invoke a function defined in APIInterface
+	 * This function is used to invoke a function defined in DBInterface
 	 * 
 	 * @param methodName
 	 * @param bufArray
 	 * @return
-	 * @throws StorageException
+	 * @throws Exception 
 	 */
-	private Object invokeMethod(String methodName, String[] bufArray) throws StorageException {
+	private Object invokeMethod(String methodName, String[] bufArray) throws Exception {
 		if (methodName.equals("put")) {
 			dbInterface.put(bufArray[1].trim(), bufArray[2].trim());
 			return "put";
@@ -192,3 +204,4 @@ public class StorageHandler {
 	}
 
 }
+
