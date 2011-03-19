@@ -176,4 +176,8 @@ public class MongoDB extends Mongo implements APIInterface {
 	public void createConnection(String bootstrapUrl) throws Exception {
 		throw new UnsupportedException("Unsupported method");
 	}
+	
+	public Object nativeAPI(String... args) throws Exception {
+		throw new UnsupportedException("Unsupported method");
+	}
 }

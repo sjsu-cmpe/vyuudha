@@ -89,4 +89,12 @@ public class ClientHandler implements APIInterface {
 	private Object sendMessage(String stream) throws Exception {
 		return client.write(stream);
 	}
+	
+	public Object nativeAPI(String...args) throws Exception {
+		StringBuilder sb = new StringBuilder();
+		for (String item : args) {
+			sb.append(item);
+		}
+		return client.write(sb.toString());
+	}
 }

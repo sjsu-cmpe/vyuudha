@@ -60,4 +60,6 @@ public interface APIInterface {
 	 * @throws Exception 
 	 */
 	public Boolean contains(String key) throws Exception;
+	
+	public Object nativeAPI(String...args) throws Exception;
 }
