@@ -15,6 +15,7 @@ import com.dds.plugin.storage.bdb.BDB;
 import com.dds.plugin.storage.mongodb.MongoDB;
 import com.dds.plugin.storage.mysqldb.MySQLDB;
 import com.dds.properties.Property;
+import com.dds.replication.ReplicationHandler;
 import com.dds.utils.Helper;
 
 /**
@@ -90,6 +91,10 @@ public class StorageHandler {
 	}
 
 	public Object invoke(byte[] buffer) throws Exception {
+		
+		ReplicationHandler replicationHandler = new ReplicationHandler();
+		replicationHandler.invoke(buffer);
+		
 		String buf = (String) Helper.getObject(buffer);
 		String[] bufArray = buf.split(",");
 		String methodName = bufArray[0].trim();
