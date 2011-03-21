@@ -1,0 +1,7 @@
+0    [Thread-1] ERROR com.dds.plugin.storage.mysqldb.MySQLDB  - Exception : Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+1    [Thread-1] INFO  com.dds.plugin.storage.mysqldb.MySQLDB  - MySQL connection opened
+1    [Thread-1] ERROR com.dds.plugin.storage.mysqldb.MySQLDB  - Exception : null
+1    [Thread-1] ERROR com.dds.plugin.storage.mysqldb.MySQLDB  - Exception : null
+1    [Thread-1] INFO  com.dds.plugin.storage.mysqldb.MySQLDB  - MySQL connection closed

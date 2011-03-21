@@ -44,31 +44,4 @@ public class ConsistentHashing implements RoutingInterface {
 		}
 		return circle.get(hash);
 	}
-
-	// public static void main(String[] args)
-	// {
-	// MurmurHashFunction mhf = new MurmurHashFunction();
-	// Collection<Node> nodes = new ArrayList<Node>();
-	// Node n;
-	// for(int i=0; i<5;i++)
-	// {
-	// n = new Node();
-	// n.setNodeId(i);
-	// n.setNodeName("Node:"+i);
-	// nodes.add(n);
-	// }
-	//
-	//
-	// ConsistentHashing ch = new ConsistentHashing(mhf, 2, nodes);
-	//
-	// int hashedKeyOfValue = mhf.hash("Hello".getBytes());
-	// n = getNode(hashedKeyOfValue);
-	//
-	// /*
-	// * When you get the Node object, persist the value in that given node.
-	// * The Node object will be returned by ConsistentHashing.java
-	// */
-	//
-	// System.out.println(n.getNodeName());
-	// }
 }
