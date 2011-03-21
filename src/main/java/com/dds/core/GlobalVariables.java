@@ -10,4 +10,5 @@ public enum GlobalVariables {
 	public Collection<Node> nodes;
 	public HashingContext hash;
 	public MembershipContext membership;
+	public ServerContext server;
 }
