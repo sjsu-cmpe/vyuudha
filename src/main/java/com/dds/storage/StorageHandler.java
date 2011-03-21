@@ -106,10 +106,8 @@ public class StorageHandler {
 		try {
 			dbInterface.createConnection();
 			if (checkMethodExists(methodName)) {
-				System.out.println("Method Exists! " + methodName);
 				return invokeMethod(methodName, bufArray);
 			} else {
-				System.out.println("Method Does Not Exists! " + methodName);
 				return invokeNativeMethod(methodName, bufArray);
 			} 
 		} catch (Exception e) {
@@ -178,7 +176,7 @@ public class StorageHandler {
 			dbInterface.delete(bufArray[1]);
 			return "deleted";
 		} else if (methodName.equals("contains")) {
-			return new Boolean(dbInterface.contains(bufArray[1]));
+			return Boolean.valueOf(dbInterface.contains(bufArray[1]));
 		} else {
 			throw new StorageException("No matching method found");
 		} 
