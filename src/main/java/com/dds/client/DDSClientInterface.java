@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dds.client.interfaces;
+package com.dds.client;
 
 /**
  * @author ravid
@@ -16,7 +16,4 @@ public interface DDSClientInterface {
 	
 	public void initialize(String[] serverInfo) throws Exception;
 	//UnknownHostException,	NumberFormatException, IOException, UnsupportedException;
-	
-	
-
 }

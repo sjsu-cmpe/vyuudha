@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dds.client.nio;
+package com.dds.client;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -21,7 +21,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import com.dds.client.interfaces.DDSClientInterface;
 import com.dds.exception.UnsupportedException;
 import com.dds.utils.Helper;
 
@@ -240,4 +239,42 @@ public class DDSClientNIO implements DDSClientInterface, Runnable {
 		return socketChannel;
 	}
 
+}
+
+class ChangeRequest {
+	public static final int REGISTER = 1;
+	public static final int CHANGEOPS = 2;
+
+	public SocketChannel socket;
+	public int type;
+	public int ops;
+
+	public ChangeRequest(SocketChannel socket, int type, int ops) {
+		this.socket = socket;
+		this.type = type;
+		this.ops = ops;
+	}
+}
+
+
+class RspHandler {
+	private byte[] rsp = null;
+
+	public synchronized boolean handleResponse(byte[] rsp) {
+		this.rsp = rsp;
+		this.notify();
+		return true;
+	}
+
+	public synchronized Object waitForResponse() {
+		while (this.rsp == null) {
+			try {
+				this.wait();
+	 
+			} catch (InterruptedException e) {
+			}
+		}
+		
+		return (Helper.getObject(this.rsp));
+	}
 }

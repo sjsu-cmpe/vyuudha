@@ -3,7 +3,7 @@ package com.dds.core;
 import java.net.InetAddress;
 
 import com.dds.interfaces.ServerInterface;
-import com.dds.server.nio.DDSServerNIO;
+import com.dds.server.DDSServerNIO;
 
 public class ServerContext implements ServerInterface{
 	private ServerInterface serverObjectState;

@@ -1,4 +1,4 @@
-package com.dds.client.bio;
+package com.dds.client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -9,7 +9,6 @@ import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 
-import com.dds.client.interfaces.DDSClientInterface;
 import com.dds.exception.UnsupportedException;
 import com.dds.utils.Helper;
 

@@ -36,4 +36,9 @@ public class MembershipContext implements MembershipInterface {
 		this.membershipObjectState.setLocalNodeList();
 	}
 
+	@Override
+	public void start() {
+		this.membershipObjectState.start();
+	}
+
 }
