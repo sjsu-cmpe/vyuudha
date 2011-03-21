@@ -1,15 +1,20 @@
 Vyuudha - A Dynamic Distributed Store
 =====================================
-A clean room implementation of a distributed storage middleware for education and research. It's primary objective is to implement a bare-metal Distributed storage middleware for educational and learning purpose.
-The primary objective of this project will be to develop a middleware which is simple not production quality and used for understanding a distributed storage system. To achieve this the design should be very much flexible and have a pluggable architecture for various algorithms which can be implemented and used with this system.
+A clean room implementation of a distributed storage middleware for education and research. It's 
+primary objective is to implement a bare-metal distributed storage middleware for educational and 
+learning purpose. The middleware is intended to understand the dynamics and anatomy of a distributed
+storage system and is not production quality system.
+To achieve this the design should be flexible and have a pluggable architecture for various algorithms 
+which can be implemented and used with this system.
 
 The application has a pluggable architecture where the following functionalities/algorithms can be configured:  
 
-1. Server (BIO/NIO): `com.dds.interfaces.server.*`
-2. Persistent store mechanism (plug in BDB, MongoDB, MySQL etc): `com.dds.interfaces.storage.*`
-3. Routing mechanism (Consistent hashing/vBuckets): `com.dds.interfaces.routing.*`
-4. Hashing function: `com.dds.interfaces.hashing.*`
-5. Serialization format (Client side and node-to-node communication): `com.dds.interfaces.serialization.*`
+1. Server (BIO/NIO): `com.dds.server.*`
+2. Persistent store mechanism (plug in BDB, MongoDB, MySQL etc): `com.dds.plugin.storage.*`
+3. Routing mechanism (Consistent hashing/vBuckets): `com.dds.plugin.routing.*`
+4. Hashing function: `com.dds.plugin.hashing.*`
+5. Serialization format (Client side and node-to-node communication): `com.dds.plugin.serialization.*`  
+6. Membership: `com.dds.plugin.membership.*`
 
 Q: What does `Vyuudha` mean?  
 A: Vyuudha in sanskrit means `Distributed`. Prounounced "vy-uudh".  

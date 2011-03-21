@@ -1,7 +1,8 @@
-0    [Thread-1] ERROR com.dds.plugin.storage.mysqldb.MySQLDB  - Exception : Communications link failure
-
-The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
-1    [Thread-1] INFO  com.dds.plugin.storage.mysqldb.MySQLDB  - MySQL connection opened
-1    [Thread-1] ERROR com.dds.plugin.storage.mysqldb.MySQLDB  - Exception : null
-1    [Thread-1] ERROR com.dds.plugin.storage.mysqldb.MySQLDB  - Exception : null
-1    [Thread-1] INFO  com.dds.plugin.storage.mysqldb.MySQLDB  - MySQL connection closed
+0    [Thread-1] INFO  com.dds.plugin.storage.bdb.BDB  - Connection to BDB database established
+7    [Thread-1] INFO  com.dds.plugin.storage.bdb.BDB  - BDB connection created
+20   [Thread-1] INFO  com.dds.plugin.storage.bdb.BDB  - ebay : san jose inserted into DB
+20   [Thread-1] INFO  com.dds.plugin.storage.bdb.BDB  - BDB connection closed
+5641 [Thread-1] INFO  com.dds.plugin.storage.bdb.BDB  - Connection to BDB database established
+5642 [Thread-1] INFO  com.dds.plugin.storage.bdb.BDB  - BDB connection created
+5643 [Thread-1] INFO  com.dds.plugin.storage.bdb.BDB  - amazon : null retrieved from DB
+5643 [Thread-1] INFO  com.dds.plugin.storage.bdb.BDB  - BDB connection closed
