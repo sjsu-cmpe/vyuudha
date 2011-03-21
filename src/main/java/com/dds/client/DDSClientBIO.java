@@ -45,15 +45,18 @@ public class DDSClientBIO implements DDSClientInterface {
 	 * @throws IOException
 	 */
 	public void exit() throws IOException {
-		if (oos != null || ois != null || socket !=null) {
+		if (oos != null) {
 			oos.close();
+		}
+		if (ois != null) {
 			ois.close();
+		}
+		if (socket !=null) {
 			socket.close();
-			
-			oos = null;
-			ois = null;
-			socket = null;
-		}		
+		}
+		oos = null;
+		ois = null;
+		socket = null;		
 		logger.info("exit");
 	}
 

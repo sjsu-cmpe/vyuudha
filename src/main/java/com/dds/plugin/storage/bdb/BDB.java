@@ -18,7 +18,7 @@ import com.sleepycat.je.OperationStatus;
 
 public class BDB extends Database implements APIInterface{
 
-	private static Environment myEnv;
+	private Environment myEnv;
 	private Database vendorDb;
 	
 	Logger logger = Logger.getLogger(BDB.class);
@@ -126,7 +126,6 @@ public class BDB extends Database implements APIInterface{
 				getEnvironment().close();
 			} catch (DatabaseException dbe) {
 				logger.info("Error in closing database: " + dbe.toString());
-				System.exit(-1);
 			}
 		}
 		logger.info("BDB connection closed");

@@ -11,12 +11,16 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author ravid
  *
  */
 public class Property {
 
+	Logger logger = Logger.getLogger(Property.class);
+	
 	private static Property singleton = new Property();
 	Properties props = new Properties();
 	
@@ -49,8 +53,7 @@ public class Property {
 			path.append("/config/database.properties");
 			this.databasePropertyFile = path.toString();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception : " + e.getMessage());
 		}
 	}
 
@@ -65,8 +68,7 @@ public class Property {
 			path.append("/config/server-config.properties");
 			this.serverConfigPropertyFile = path.toString();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception : " + e.getMessage());
 		}
 	}
 
@@ -91,11 +93,9 @@ public class Property {
 				this.serverConfigProperties = generateMap(this.serverConfigPropertyFile);
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception : " + e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception : " + e.getMessage());
 		}
 	}
 		
@@ -121,11 +121,9 @@ public class Property {
 				this.databaseProperties = generateMap(this.databasePropertyFile);
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception : " + e.getMessage());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception : " + e.getMessage());
 		}
 	}
 	
