@@ -11,38 +11,26 @@ import com.dds.cluster.Node;
 
 public class ConsistentHashing implements RoutingInterface {
 
-	private final HashingInterface hashFunction;
-	private final int numberOfReplicas;
-	private final TreeMap<Integer, Node> circle = new TreeMap<Integer, Node>();
-	private Collection<Node> nodes;
-
-	public ConsistentHashing(
-			HashingInterface hashFunction, 
-			int numberOfReplicas, 
-			Collection<Node> nodes) {
+	private HashingInterface hashFunction;
+	private TreeMap<Integer, Node> circle = new TreeMap<Integer, Node>();
+	
+	public void setHashingTechnique(HashingInterface hashFunction)
+	{
 		this.hashFunction = hashFunction;
-		this.numberOfReplicas = numberOfReplicas;
-		this.nodes = nodes;
 	}
 	
-	public void setupRoutingCluster()
-	{
-
+	public void setupRoutingCluster(Collection<Node> nodes){
 		for (Node node : nodes) {
 			addNode(node);
 		}
 	}
 	
 	public void addNode(Node node) {
-		for (int i = 0; i < numberOfReplicas; i++) {
 			circle.put(hashFunction.hash(node.toString().getBytes()), node); // Need to discuss
-		}
 	}
 
 	public void removeNode(Node node) {
-		for (int i = 0; i < numberOfReplicas; i++) {
 			circle.remove(hashFunction.hash(node.toString().getBytes()));
-		}
 	}
 
 	public Node getNode(Object key) {

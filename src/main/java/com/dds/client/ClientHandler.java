@@ -3,9 +3,6 @@
  */
 package com.dds.client;
 
-import com.dds.client.bio.DDSClientBIO;
-import com.dds.client.interfaces.DDSClientInterface;
-import com.dds.client.nio.DDSClientNIO;
 import com.dds.exception.UnsupportedException;
 import com.dds.interfaces.APIInterface;
 

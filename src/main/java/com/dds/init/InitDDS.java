@@ -4,11 +4,13 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
 
-import com.dds.cluster.Cluster;
-import com.dds.interfaces.ServerInterface;
+import com.dds.core.GlobalVariables;
+import com.dds.core.HashingContext;
+import com.dds.core.MembershipContext;
+import com.dds.core.RoutingContext;
+import com.dds.core.ServerContext;
 import com.dds.properties.Property;
-import com.dds.server.bio.DDSServerBIO;
-import com.dds.server.nio.DDSServerNIO;
+import com.dds.utils.XMLConfigParser;
 
 public class InitDDS {
 	
@@ -32,21 +34,29 @@ public class InitDDS {
 	}
 
 	public static void main(String[] args) throws UnknownHostException {
-	
 		InitDDS initDDS = new InitDDS();
-		ServerInterface ddsIO;
 		
-		if (initDDS.serverType.contains("NIO")) {
-			ddsIO = new DDSServerNIO();	
-		} else  {  
-			ddsIO = new DDSServerBIO();
-		}
-		System.out.println("Vyuudha " + initDDS.serverType + " Server Started at " + initDDS.serverIp);
-		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("dbToInstantiate"));
-
+		//Create nodes collection
+		GlobalVariables.INSTANCE.nodes = XMLConfigParser.readNodes();
+		
+		//Get the hashing technique
+		GlobalVariables.INSTANCE.hash = new HashingContext();
+		
+		//Setup the routing strategy
+		RoutingContext routing = new RoutingContext(GlobalVariables.INSTANCE.hash);
+		routing.setupRoutingCluster(GlobalVariables.INSTANCE.nodes);
+		
+		//Setup the membership
+		GlobalVariables.INSTANCE.membership = new MembershipContext();
+		GlobalVariables.INSTANCE.membership.start();
+		
+		//Setup the server and start listening to request
+		GlobalVariables.INSTANCE.server = new ServerContext();
 		InetAddress address = InetAddress.getByName(initDDS.serverIp);
 		
-		ddsIO.start(address, initDDS.serverPort);
-		Cluster.setupCluster();		
+		System.out.println("Vyuudha " + initDDS.serverType + " Server Started at " + initDDS.serverIp);
+		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("dbToInstantiate"));
+		
+		GlobalVariables.INSTANCE.server.start(address, initDDS.serverPort);
 	}
 }

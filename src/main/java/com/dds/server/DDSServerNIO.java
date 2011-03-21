@@ -1,4 +1,4 @@
-package com.dds.server.nio;
+package com.dds.server;
 
 //Read more: www.cs.brown.edu/courses/cs161/papers/j-nio-ltr.pdf+java+nio+tutorial , pg 30
 //NIO: http://rox-xmlrpc.sourceforge.net/niotut/index.html
@@ -6,7 +6,6 @@ package com.dds.server.nio;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
-//import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -15,8 +14,9 @@ import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.*;
 
-import com.dds.client.nio.ChangeRequest;
 import com.dds.interfaces.ServerInterface;
+import com.dds.storage.StorageHandler;
+import com.dds.utils.Helper;
 
 public class DDSServerNIO implements Runnable, ServerInterface {
 	// The host:port combination to listen on
@@ -222,5 +222,92 @@ public class DDSServerNIO implements Runnable, ServerInterface {
 	public void stop(InetAddress hostAddress, int port) {
 		// TODO Auto-generated method stub
 
+	}
+}
+
+
+class DDSWorker implements Runnable {
+	private List<ServerDataEvent> queue = new LinkedList<ServerDataEvent>();
+
+	public void processData(DDSServerNIO server, SocketChannel socket,
+			byte[] data, int count) {
+		byte[] dataCopy = new byte[count];
+		System.arraycopy(data, 0, dataCopy, 0, count);
+
+		dataCopy = Helper.getBytes(storageCall(dataCopy));
+		synchronized (queue) {
+			queue.add(new ServerDataEvent(server, socket, dataCopy));
+			queue.notify();
+		}
+	}
+
+	/**
+	 * Makes a call to the DBRoot, Vyuudha storage abstraction engine
+	 * 
+	 * @param dataCopy
+	 * @return object from the core storage layer
+	 */
+	private Object storageCall(byte[] dataCopy) {
+		StorageHandler dbRoot = new StorageHandler();
+		Object objectReturned = null;
+		try {
+			objectReturned = dbRoot.invoke(dataCopy);
+			if (objectReturned != null) {
+				return objectReturned;
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return objectReturned;
+	}
+
+	public void run() {
+		ServerDataEvent dataEvent;
+
+		while (true) {
+			// Wait for data to become available
+			synchronized (queue) {
+				while (queue.isEmpty()) {
+					try {
+						queue.wait();
+					} catch (InterruptedException e) {
+					}
+				}
+				dataEvent = (ServerDataEvent) queue.remove(0);
+			}
+			String out = (String) Helper.getObject(dataEvent.data);
+			if (out != null) {
+				// Return to sender
+				dataEvent.server.send(dataEvent.socket, dataEvent.data);
+			}
+		}
+	}
+}
+
+class ServerDataEvent {
+	public DDSServerNIO server;
+	public SocketChannel socket;
+	public byte[] data;
+
+	public ServerDataEvent(DDSServerNIO server, SocketChannel socket, byte[] data) {
+		this.server = server;
+		this.socket = socket;
+		this.data = data;
+	}
+}
+
+class ChangeRequest {
+	public static final int REGISTER = 1;
+	public static final int CHANGEOPS = 2;
+
+	public SocketChannel socket;
+	public int type;
+	public int ops;
+
+	public ChangeRequest(SocketChannel socket, int type, int ops) {
+		this.socket = socket;
+		this.type = type;
+		this.ops = ops;
 	}
 }

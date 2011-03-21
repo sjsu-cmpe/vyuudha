@@ -16,13 +16,25 @@ public class RoutingContext implements RoutingInterface{
 	
 	private RoutingInterface routingObjectState;
 
-	public RoutingContext(
-			HashingInterface hashFunction, 
-			int numberOfReplicas, 
-			Collection<Node> nodes) {
+	public RoutingContext(HashingContext hash) {
+		/*
+		 * Routing goes hand in hand with Hashing algo
+		 * So, when ever an object is created for Routing, Context will also create an object
+		 * for hashing.
+		 * Both of these object creation should be done in this manner:
+		 * TO BE DONE in InitDDS.java
+		 * 1. Read the server-config.properties
+		 * 2. Instantiate the classes (Routing, Hashing, Membership) once using Reflection API
+		 * 3. Keep the objects in memory
+		 * 
+		 * TO BE DONE HERE:
+		 * 4. Get the objects here
+		 */
+		RoutingInterface ch = new ConsistentHashing();
+		ch.setHashingTechnique(hash);
 		
 		//Make it read from config file
-		setState(new ConsistentHashing(hashFunction, numberOfReplicas, nodes));
+		setState(ch);
 	}
 
 	public void setState(RoutingInterface newRoutingObjectState) {
@@ -45,7 +57,12 @@ public class RoutingContext implements RoutingInterface{
 	}
 
 	@Override
-	public void setupRoutingCluster() {
-		this.routingObjectState.setupRoutingCluster();		
+	public void setupRoutingCluster(Collection<Node> nodes) {
+		this.routingObjectState.setupRoutingCluster(nodes);		
+	}
+
+	@Override
+	public void setHashingTechnique(HashingInterface hashFunction) {
+		this.routingObjectState.setHashingTechnique(hashFunction);		
 	}
 }

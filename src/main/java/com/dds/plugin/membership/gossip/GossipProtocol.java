@@ -27,5 +27,11 @@ public class GossipProtocol implements MembershipInterface{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
