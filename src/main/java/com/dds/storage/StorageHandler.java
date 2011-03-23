@@ -9,11 +9,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.dds.core.GlobalVariables;
 import com.dds.exception.StorageException;
 import com.dds.interfaces.APIInterface;
-import com.dds.plugin.storage.bdb.BDB;
-import com.dds.plugin.storage.mongodb.MongoDB;
-import com.dds.plugin.storage.mysqldb.MySQLDB;
 import com.dds.properties.Property;
 import com.dds.replication.ReplicationHandler;
 import com.dds.utils.Helper;
@@ -75,15 +73,9 @@ public class StorageHandler {
 
 	private APIInterface getInstance() throws UnknownHostException {
 		setConfigurations();
-
-		if (dbToInstantiate.equalsIgnoreCase("BDB")) {
-			return new BDB();
-		} else if (dbToInstantiate.equalsIgnoreCase("MySQLDB")) {
-			return new MySQLDB();
-		} else if (dbToInstantiate.equalsIgnoreCase("MongoDB")) {
-			return new MongoDB();
-		}
-		return null;
+		
+		APIInterface retVal = (APIInterface)GlobalVariables.INSTANCE.map.get("API");
+		return retVal;
 	}
 	
 	public Object invoke(String buffer) throws Exception {
@@ -93,7 +85,7 @@ public class StorageHandler {
 	public Object invoke(byte[] buffer) throws Exception {
 		
 		ReplicationHandler replicationHandler = new ReplicationHandler();
-		replicationHandler.invoke(buffer);
+		replicationHandler.invoke(buffer, Integer.parseInt(props.get("writes")));
 		
 		String buf = (String) Helper.getObject(buffer);
 		String[] bufArray = buf.split(",");

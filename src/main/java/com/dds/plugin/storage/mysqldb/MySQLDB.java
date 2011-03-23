@@ -195,6 +195,8 @@ public class MySQLDB implements APIInterface {
 	}
 	
 	public Object nativeAPI(String... args) throws Exception {
-		throw new UnsupportedException("Unsupported method");
+		System.out.println("Unsupported");
+		return null;
+		//throw new UnsupportedException("Unsupported method");
 	}
 }

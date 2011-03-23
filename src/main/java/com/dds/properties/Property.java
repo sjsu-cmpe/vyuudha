@@ -25,16 +25,20 @@ public class Property {
 	Properties props = new Properties();
 	
 	private String databasePropertyFile;
+	private String replicationPropertyFile;
 	private String serverConfigPropertyFile;
 	
 	private Map<String, String> databaseProperties = new HashMap<String, String>();
+	private Map<String, String> replicationProperties = new HashMap<String, String>();
 	private Map<String, String> serverConfigProperties = new HashMap<String, String>();
 	
 	private Property() {
 		setDatabasePropertyFile();
+		setReplicationPropertyFile();
 		setServerConfigPropertyFile();
 			
 		setDatabaseProperties();
+		setReplicationProperties();
 		setServerConfigProperties();
 	}
 	
@@ -70,6 +74,20 @@ public class Property {
 		} catch (IOException e) {
 			logger.error("Exception : " + e.getMessage());
 		}
+	}
+	
+	/**
+	 * 
+	 */
+	private void setReplicationPropertyFile() {
+		StringBuilder path;
+		try {
+			path = new StringBuilder(new java.io.File(".").getCanonicalPath());
+			path.append("/config/replication.properties");
+			this.replicationPropertyFile = path.toString();
+		} catch (IOException e) {
+			logger.error("Exception : " + e.getMessage());
+		}		
 	}
 
 	/**
@@ -127,7 +145,25 @@ public class Property {
 		}
 	}
 	
+	private void setReplicationProperties() {
+		try {
+			props.load(new FileInputStream(this.replicationPropertyFile));
+			if (this.databaseProperties.isEmpty() || 
+					Boolean.parseBoolean(props.getProperty("update"))) {
+				this.replicationProperties = generateMap(this.replicationPropertyFile);
+			}
+		} catch (FileNotFoundException e) {
+			logger.error("Exception : " + e.getMessage());
+		} catch (IOException e) {
+			logger.error("Exception : " + e.getMessage());
+		}		
+	}
 	
+	public Map<String, String> getReplicationProperties() {
+		setReplicationProperties();
+		return replicationProperties;
+	}
+		
 	private Map<String, String> generateMap(String file) throws FileNotFoundException, IOException {
 		//props.load(new FileInputStream(file));
 		Map<String, String> map = new HashMap<String, String>();
