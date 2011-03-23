@@ -8,7 +8,7 @@ import com.dds.core.GlobalVariables;
 import com.dds.core.HashingContext;
 import com.dds.core.MembershipContext;
 import com.dds.core.RoutingContext;
-import com.dds.core.ServerContext;
+import com.dds.interfaces.ServerInterface;
 import com.dds.properties.Property;
 import com.dds.utils.XMLConfigParser;
 
@@ -50,13 +50,12 @@ public class InitDDS {
 		GlobalVariables.INSTANCE.membership = new MembershipContext();
 		GlobalVariables.INSTANCE.membership.start();
 		
-		//Setup the server and start listening to request
-		GlobalVariables.INSTANCE.server = new ServerContext();
-		InetAddress address = InetAddress.getByName(initDDS.serverIp);
-		
 		System.out.println("Vyuudha " + initDDS.serverType + " Server Started at " + initDDS.serverIp);
 		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("dbToInstantiate"));
-		
-		GlobalVariables.INSTANCE.server.start(address, initDDS.serverPort);
+
+		//Setup the server and start listening to request
+		InetAddress address = InetAddress.getByName(initDDS.serverIp);
+		ServerInterface serverIO = GlobalVariables.INSTANCE.getServer();
+		serverIO.start(address, initDDS.serverPort);
 	}
 }

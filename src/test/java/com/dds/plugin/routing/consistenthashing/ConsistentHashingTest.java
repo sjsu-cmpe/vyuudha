@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import com.dds.cluster.Node;
 import com.dds.core.HashingContext;
+import com.dds.plugin.routing.ConsistentHashing;
 
 public class ConsistentHashingTest {
 	public static void main(String[] args) {

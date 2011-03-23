@@ -5,7 +5,7 @@ import java.util.Collection;
 import com.dds.cluster.Node;
 import com.dds.interfaces.HashingInterface;
 import com.dds.interfaces.RoutingInterface;
-import com.dds.plugin.routing.consistenthashing.ConsistentHashing;
+import com.dds.plugin.routing.ConsistentHashing;
 
 /**
  * @author utkarsh

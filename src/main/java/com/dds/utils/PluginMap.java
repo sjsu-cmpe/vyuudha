@@ -20,62 +20,59 @@ import org.apache.log4j.Logger;
  */
 public class PluginMap<S, T> {
 
-	Logger logger = Logger.getLogger(PluginMap.class);
-	/**
-	 * @param key
-	 * @param api
-	 * @param hashing
-	 * @param routing
-	 * @param membership
-	 * @param server
-	 */
-	public PluginMap() {
-		super();
-		initialize();
+	private static Logger logger = Logger.getLogger(PluginMap.class);
 
-	}
+	private static APIInterface api;
+	private static HashingInterface hashing;
+	private static RoutingInterface routing;
+	private static MembershipInterface membership;
+	private static ServerInterface server;
 
-	private APIInterface api;
-	private HashingInterface hashing;
-	private RoutingInterface routing;
-	private MembershipInterface membership;
-	private ServerInterface server;
-
-	private void initialize() {
-		String db = Property.getProperty().getDatabaseProperties().get("db");
+	static {
+		String storage_type = Property.getProperty().getServerConfigProperties().get("storage_type");
 		String routing_type = Property.getProperty().getServerConfigProperties().get("routing_type");
 		String server_type = Property.getProperty().getServerConfigProperties().get("server_type");
 		String membership_type = Property.getProperty().getServerConfigProperties().get("membership");
 		String hashing_type = Property.getProperty().getServerConfigProperties().get("hash_function");
 
 		try {
-			add(PluginEnum.API.toString(), instanceOf(db));
-			add(PluginEnum.ROUTING.toString(), instanceOf(routing_type));
-			add(PluginEnum.SERVER.toString(), instanceOf(server_type));
-			add(PluginEnum.MEMBERSHIP.toString(), instanceOf(membership_type));
-			add(PluginEnum.HASHING.toString(), instanceOf(hashing_type));
+			if (api == null) {
+				add(PluginEnum.API.toString(), instanceOf(storage_type));
+			}
+			if (routing == null) {
+				add(PluginEnum.ROUTING.toString(), instanceOf(routing_type));
+			}
+			if (server == null) {
+				add(PluginEnum.SERVER.toString(), instanceOf(server_type));
+			}
+			if (membership == null) {
+				add(PluginEnum.MEMBERSHIP.toString(), instanceOf(membership_type));
+			}
+			if (hashing == null) {
+				add(PluginEnum.HASHING.toString(), instanceOf(hashing_type));
+			}
 		} catch (Exception e) {
 			logger.error("Exception " + e.getMessage());
 		}
 	}	
 
-	public void add(String key, T t) {
+	private static void add(String key, Object t) {
 		key = key.toUpperCase();
 		switch (PluginEnum.valueOf(key.toString()))	{
 		case API:
-			this.api = (APIInterface)t;
+			api = (APIInterface)t;
 			break;
 		case HASHING:
-			this.hashing = (HashingInterface)t;
+			hashing = (HashingInterface)t;
 			break;
 		case ROUTING:
-			this.routing = (RoutingInterface)t;
+			routing = (RoutingInterface)t;
 			break;
 		case MEMBERSHIP:
-			this.membership = (MembershipInterface)t;
+			membership = (MembershipInterface)t;
 			break;
 		case SERVER:
-			this.server = (ServerInterface)t;
+			server = (ServerInterface)t;
 			break;	
 		}
 	}
@@ -85,25 +82,24 @@ public class PluginMap<S, T> {
 		key = key.toUpperCase();
 		switch (PluginEnum.valueOf(key.toString()))	{
 		case API:
-			return (T)this.api;
+			return (T)api;
 		case HASHING:
-			return (T)this.hashing;
+			return (T)hashing;
 		case ROUTING:
-			return (T)this.routing;
+			return (T)routing;
 		case MEMBERSHIP:
-			return (T)this.membership;
+			return (T)membership;
 		case SERVER:
-			return (T)this.server;
+			return (T)server;
 		}
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
-	private T instanceOf(String plugin) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	private static Object instanceOf(String plugin) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 		Class<?> cls = classLoader.loadClass(plugin);
 
 		Object instance = cls.newInstance();
-		return (T)instance;
+		return instance;
 	}
 }

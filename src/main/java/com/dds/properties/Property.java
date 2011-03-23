@@ -105,11 +105,13 @@ public class Property {
 	 */
 	private void setServerConfigProperties() {	
 		try {
-			props.load(new FileInputStream(this.serverConfigPropertyFile));
+			FileInputStream fis = new FileInputStream(this.serverConfigPropertyFile);
+			props.load(fis);
 			if (this.serverConfigProperties.isEmpty() || 
 					Boolean.parseBoolean(props.getProperty("update"))) {
 				this.serverConfigProperties = generateMap(this.serverConfigPropertyFile);
 			}
+			fis.close();
 		} catch (FileNotFoundException e) {
 			logger.error("Exception : " + e.getMessage());
 		} catch (IOException e) {
@@ -133,11 +135,13 @@ public class Property {
 	 */
 	private void setDatabaseProperties() {
 		try {
-			props.load(new FileInputStream(this.databasePropertyFile));
+			FileInputStream fis = new FileInputStream(this.databasePropertyFile);
+			props.load(fis);
 			if (this.databaseProperties.isEmpty() || 
 					Boolean.parseBoolean(props.getProperty("update"))) {
 				this.databaseProperties = generateMap(this.databasePropertyFile);
 			}
+			fis.close();
 		} catch (FileNotFoundException e) {
 			logger.error("Exception : " + e.getMessage());
 		} catch (IOException e) {
@@ -147,11 +151,13 @@ public class Property {
 	
 	private void setReplicationProperties() {
 		try {
-			props.load(new FileInputStream(this.replicationPropertyFile));
+			FileInputStream fis = new FileInputStream(this.replicationPropertyFile);
+			props.load(fis);
 			if (this.databaseProperties.isEmpty() || 
 					Boolean.parseBoolean(props.getProperty("update"))) {
 				this.replicationProperties = generateMap(this.replicationPropertyFile);
 			}
+			fis.close();
 		} catch (FileNotFoundException e) {
 			logger.error("Exception : " + e.getMessage());
 		} catch (IOException e) {

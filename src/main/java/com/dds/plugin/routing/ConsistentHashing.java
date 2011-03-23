@@ -1,4 +1,4 @@
-package com.dds.plugin.routing.consistenthashing;
+package com.dds.plugin.routing;
 
 import java.util.Collection;
 import java.util.SortedMap;

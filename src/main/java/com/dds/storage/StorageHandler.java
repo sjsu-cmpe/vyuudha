@@ -73,9 +73,7 @@ public class StorageHandler {
 
 	private APIInterface getInstance() throws UnknownHostException {
 		setConfigurations();
-		
-		APIInterface retVal = (APIInterface)GlobalVariables.INSTANCE.map.get("API");
-		return retVal;
+		return GlobalVariables.INSTANCE.getAPI();
 	}
 	
 	public Object invoke(String buffer) throws Exception {

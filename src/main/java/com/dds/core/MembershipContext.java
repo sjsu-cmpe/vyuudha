@@ -1,7 +1,7 @@
 package com.dds.core;
 
 import com.dds.interfaces.MembershipInterface;
-import com.dds.plugin.membership.gossip.GossipProtocol;
+import com.dds.plugin.membership.GossipProtocol;
 
 public class MembershipContext implements MembershipInterface {
 

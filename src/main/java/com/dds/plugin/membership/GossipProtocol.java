@@ -1,4 +1,4 @@
-package com.dds.plugin.membership.gossip;
+package com.dds.plugin.membership;
 
 import com.dds.interfaces.MembershipInterface;
 

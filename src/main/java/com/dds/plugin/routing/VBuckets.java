@@ -1,4 +1,4 @@
-package com.dds.plugin.routing.vbuckets;
+package com.dds.plugin.routing;
 
 import java.util.Collection;
 
