@@ -37,19 +37,19 @@ public class PluginMap<S, T> {
 
 		try {
 			if (api == null) {
-				add(PluginEnum.API.toString(), instanceOf(storage_type));
+				add(PluginEnum.API.toString(), getInstance(storage_type));
 			}
 			if (routing == null) {
-				add(PluginEnum.ROUTING.toString(), instanceOf(routing_type));
+				add(PluginEnum.ROUTING.toString(), getInstance(routing_type));
 			}
 			if (server == null) {
-				add(PluginEnum.SERVER.toString(), instanceOf(server_type));
+				add(PluginEnum.SERVER.toString(), getInstance(server_type));
 			}
 			if (membership == null) {
-				add(PluginEnum.MEMBERSHIP.toString(), instanceOf(membership_type));
+				add(PluginEnum.MEMBERSHIP.toString(), getInstance(membership_type));
 			}
 			if (hashing == null) {
-				add(PluginEnum.HASHING.toString(), instanceOf(hashing_type));
+				add(PluginEnum.HASHING.toString(), getInstance(hashing_type));
 			}
 		} catch (Exception e) {
 			logger.error("Exception " + e.getMessage());
@@ -95,7 +95,7 @@ public class PluginMap<S, T> {
 		return null;
 	}
 
-	private static Object instanceOf(String plugin) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	private static Object getInstance(String plugin) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		ClassLoader classLoader = ClassLoader.getSystemClassLoader();
 		Class<?> cls = classLoader.loadClass(plugin);
 
