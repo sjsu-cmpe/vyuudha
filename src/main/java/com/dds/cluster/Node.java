@@ -26,7 +26,7 @@ public class Node implements Serializable{
 		this.nodeExternalPort = nodeExternalPort;
 		this.nodeInternalPort = nodeInternalPort;
 		this.heartbeat = 10;
-		this.timeoutTimer = new TimeoutTimer(100000, new GossipProtocol(), this);
+		this.timeoutTimer = new TimeoutTimer(1000, new GossipProtocol(), this);
 	}
 
 	public void setNodeId(Integer nodeId) {
