@@ -5,9 +5,9 @@ import java.net.UnknownHostException;
 import java.util.Map;
 
 import com.dds.core.GlobalVariables;
-import com.dds.core.HashingContext;
-import com.dds.core.MembershipContext;
-import com.dds.core.RoutingContext;
+import com.dds.interfaces.HashingInterface;
+import com.dds.interfaces.MembershipInterface;
+import com.dds.interfaces.RoutingInterface;
 import com.dds.interfaces.ServerInterface;
 import com.dds.properties.Property;
 import com.dds.utils.XMLConfigParser;
@@ -35,20 +35,25 @@ public class InitDDS {
 
 	public static void main(String[] args) throws UnknownHostException {
 		InitDDS initDDS = new InitDDS();
-		
+
 		//Create nodes collection
 		GlobalVariables.INSTANCE.nodeList = XMLConfigParser.readNodes();
-		
+
 		//Get the hashing technique
-		GlobalVariables.INSTANCE.hash = new HashingContext();
-		
+		//GlobalVariables.INSTANCE.hash = new HashingContext();
+
+		HashingInterface hash = GlobalVariables.INSTANCE.getHash();
 		//Setup the routing strategy
-		RoutingContext routing = new RoutingContext(GlobalVariables.INSTANCE.hash);
+		//RoutingContext routing1 = new RoutingContext(GlobalVariables.INSTANCE.hash);
+		RoutingInterface routing = GlobalVariables.INSTANCE.getRouting();
+		routing.setHashingTechnique(hash);
 		routing.setupRoutingCluster(GlobalVariables.INSTANCE.nodeList);
-		
+
 		//Setup the membership
-		GlobalVariables.INSTANCE.membership = new MembershipContext();
-		GlobalVariables.INSTANCE.membership.start();
+		//GlobalVariables.INSTANCE.membership = new MembershipContext();
+		//GlobalVariables.INSTANCE.membership.start();
+		MembershipInterface membership = GlobalVariables.INSTANCE.getMembership();
+		membership.start();
 		
 		System.out.println("Vyuudha " + initDDS.serverType + " Server Started at " + initDDS.serverIp);
 		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("dbToInstantiate"));
