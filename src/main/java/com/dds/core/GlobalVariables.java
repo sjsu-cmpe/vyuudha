@@ -15,8 +15,6 @@ public enum GlobalVariables {
 	INSTANCE;
 	
 	public Collection<Node> nodes;
-	public HashingContext hash;
-	public MembershipContext membership;
 	
 	private PluginMap<String, Object> map = new PluginMap<String, Object>();
 	

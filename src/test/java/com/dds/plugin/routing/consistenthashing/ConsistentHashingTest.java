@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.dds.cluster.Node;
-import com.dds.core.HashingContext;
+import com.dds.core.GlobalVariables;
+import com.dds.interfaces.HashingInterface;
 import com.dds.plugin.routing.ConsistentHashing;
 
 public class ConsistentHashingTest {
 	public static void main(String[] args) {
-		HashingContext mhf = new HashingContext();
+		//HashingContext mhf = new HashingContext();
+		HashingInterface mhf = GlobalVariables.INSTANCE.getHash();
 		Collection<Node> nodes = new ArrayList<Node>();
 		Node n;
 		for (int i = 0; i < 5; i++) {
