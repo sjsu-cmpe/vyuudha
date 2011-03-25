@@ -1,14 +1,14 @@
 package com.dds.core;
 
 import com.dds.interfaces.MembershipInterface;
-import com.dds.plugin.membership.GossipProtocol;
+import com.dds.plugin.membership.AtomicBroadcast;
 
 public class MembershipContext implements MembershipInterface {
 
 	private MembershipInterface membershipObjectState;
 
 	public MembershipContext() {
-		MembershipInterface ch = new GossipProtocol();
+		MembershipInterface ch = new AtomicBroadcast();
 		setState(ch);
 	}
 

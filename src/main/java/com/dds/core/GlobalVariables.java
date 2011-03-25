@@ -1,6 +1,6 @@
 package com.dds.core;
 
-import java.util.Collection;
+import java.util.ArrayList;
 
 import com.dds.cluster.Node;
 import com.dds.interfaces.APIInterface;
@@ -14,7 +14,8 @@ import com.dds.utils.PluginMap;
 public enum GlobalVariables {
 	INSTANCE;
 	
-	public Collection<Node> nodes;
+	public ArrayList<Node> nodeList;
+	public ArrayList<Node> deadNodeList;
 	public HashingContext hash;
 	public MembershipContext membership;
 	

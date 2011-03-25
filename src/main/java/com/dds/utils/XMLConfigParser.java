@@ -2,7 +2,6 @@ package com.dds.utils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.w3c.dom.*;
 
@@ -10,12 +9,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 
 public class XMLConfigParser {
-	private static Collection<com.dds.cluster.Node> nodes = new ArrayList<com.dds.cluster.Node>();
+	private static ArrayList<com.dds.cluster.Node> nodes = new ArrayList<com.dds.cluster.Node>();
 	
-	public static Collection<com.dds.cluster.Node> readNodes() {
+	public static ArrayList<com.dds.cluster.Node> readNodes() {
 		try {
 			final String pathToFile = "config/nodes.xml";
-			
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 			Document doc = docBuilder.parse(new File(pathToFile));

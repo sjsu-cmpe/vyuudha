@@ -37,14 +37,14 @@ public class InitDDS {
 		InitDDS initDDS = new InitDDS();
 		
 		//Create nodes collection
-		GlobalVariables.INSTANCE.nodes = XMLConfigParser.readNodes();
+		GlobalVariables.INSTANCE.nodeList = XMLConfigParser.readNodes();
 		
 		//Get the hashing technique
 		GlobalVariables.INSTANCE.hash = new HashingContext();
 		
 		//Setup the routing strategy
 		RoutingContext routing = new RoutingContext(GlobalVariables.INSTANCE.hash);
-		routing.setupRoutingCluster(GlobalVariables.INSTANCE.nodes);
+		routing.setupRoutingCluster(GlobalVariables.INSTANCE.nodeList);
 		
 		//Setup the membership
 		GlobalVariables.INSTANCE.membership = new MembershipContext();
