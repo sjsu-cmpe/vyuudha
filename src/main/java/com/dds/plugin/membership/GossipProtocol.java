@@ -263,19 +263,14 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 
 		random = new Random();
 
-		int port = 9090;
-
-		String myIpAddress;
-		try {
-			myIpAddress = InetAddress.getLocalHost().getHostAddress();
-			this.myAddress = myIpAddress + ":" + port;
-		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
-		}
+		int port = GlobalVariables.INSTANCE.serverPortInternal;
+		
+		this.myAddress = GlobalVariables.INSTANCE.serverIp;
 
 		// loop over the initial hosts, and find ourselves
 		for (Node host : GlobalVariables.INSTANCE.nodeList) {
-			if(host.getNodeId().equals(1)) { //If same as its own
+			//Checks for local Node ID
+			if(host.getNodeId().equals(GlobalVariables.INSTANCE.nodeId)) {
 				me = host;
 				System.out.println("I am " + me.getNodeId());
 			}
@@ -295,7 +290,7 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 			}
 		}
 		else {
-			System.err.println("Could not find myself in startup list");
+			System.err.println("Could not find myself in startup lis. Fatal!!");
 			System.exit(-1);
 		}
 		

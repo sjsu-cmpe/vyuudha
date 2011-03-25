@@ -2,7 +2,7 @@ package com.dds.cluster;
 
 import java.io.Serializable;
 
-
+import com.dds.plugin.membership.GossipProtocol;
 
 
 /*
@@ -26,6 +26,7 @@ public class Node implements Serializable{
 		this.nodeExternalPort = nodeExternalPort;
 		this.nodeInternalPort = nodeInternalPort;
 		this.heartbeat = 10;
+		this.timeoutTimer = new TimeoutTimer(100000, new GossipProtocol(), this);
 	}
 
 	public void setNodeId(Integer nodeId) {
