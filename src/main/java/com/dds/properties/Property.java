@@ -69,7 +69,7 @@ public class Property {
 		StringBuilder path;
 		try {
 			path = new StringBuilder(new java.io.File(".").getCanonicalPath());
-			path.append("/config/server-config.properties");
+			path.append("/config/server.properties");
 			this.serverConfigPropertyFile = path.toString();
 		} catch (IOException e) {
 			logger.error("Exception : " + e.getMessage());
