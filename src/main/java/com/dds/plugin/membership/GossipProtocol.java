@@ -22,8 +22,9 @@ import javax.management.NotificationListener;
 
 import com.dds.cluster.Node;
 import com.dds.core.GlobalVariables;
+import com.dds.interfaces.MembershipInterface;
 
-public class GossipProtocol implements NotificationListener{
+public class GossipProtocol implements NotificationListener, MembershipInterface{
 
 	private int t_gossip; //in ms
 
@@ -38,64 +39,16 @@ public class GossipProtocol implements NotificationListener{
 	private Node me;
 
 	/**
-	 * Setup the client's lists, gossiping parameters, and parse the startup config file.
-	 * @throws SocketException
-	 * @throws InterruptedException
-	 * @throws UnknownHostException
-	 */
-	public GossipProtocol() throws SocketException, InterruptedException, UnknownHostException {
-
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			public void run() {
-				System.out.println("Goodbye my friends...");
-			}
-		}));
-		
-		t_gossip = 100; // 1 second TODO: make configurable
-
-		t_cleanup = 10000; // 10 seconds TODO: make configurable
-
-		random = new Random();
-
-		int port = 8080;
-
-		String myIpAddress = InetAddress.getLocalHost().getHostAddress();
-		this.myAddress = myIpAddress + ":" + port;
-
-		// loop over the initial hosts, and find ourselves
-		for (Node host : GlobalVariables.INSTANCE.nodeList) {
-			if(host.getNodeId().equals(1)) { //If same as its own
-				me = host;
-				System.out.println("I am " + me.getNodeId());
-			}
-		}
-
-		System.out.println("Original Member List");
-		System.out.println("---------------------");
-		for (Node member : GlobalVariables.INSTANCE.nodeList) {
-			System.out.println(member.getNodeId());
-		}
-
-		if(port != 0) {
-			server = new DatagramSocket(port);
-		}
-		else {
-			System.err.println("Could not find myself in startup list");
-			System.exit(-1);
-		}
-	}
-
-	/**
 	 * Performs the sending of the membership list, after we have
 	 * incremented our own heartbeat.
 	 */
-	private void sendMembershipList() {
+	public void sendMembershipList() {
 
 		this.me.setHeartbeat(me.getHeartbeat() + 1);
 
 		synchronized (GlobalVariables.INSTANCE.nodeList) {
 			try {
-				Node member = getRandomMember();
+				Node member = getMemberToNotify();
 
 				if(member != null) {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -132,7 +85,7 @@ public class GossipProtocol implements NotificationListener{
 	 * this method will return null
 	 * @return Member random member if list is greater than 1, null otherwise
 	 */
-	private Node getRandomMember() {
+	public Node getMemberToNotify() {
 		Node member = null;
 
 		if(GlobalVariables.INSTANCE.nodeList.size() > 1) {
@@ -292,12 +245,60 @@ public class GossipProtocol implements NotificationListener{
 	}
 
 	/**
+	 * Setup the client's lists, gossiping parameters, and parse the startup config file.
 	 * Starts the client.  Specifically, start the various cycles for this protocol.
 	 * Start the gossip thread and start the receiver thread.
-	 * @throws InterruptedException
 	 */
 	public void start() {
 
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			public void run() {
+				System.out.println("Goodbye my friends...");
+			}
+		}));
+		
+		t_gossip = 100; // 1 second TODO: make configurable
+
+		t_cleanup = 10000; // 10 seconds TODO: make configurable
+
+		random = new Random();
+
+		int port = 9090;
+
+		String myIpAddress;
+		try {
+			myIpAddress = InetAddress.getLocalHost().getHostAddress();
+			this.myAddress = myIpAddress + ":" + port;
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
+
+		// loop over the initial hosts, and find ourselves
+		for (Node host : GlobalVariables.INSTANCE.nodeList) {
+			if(host.getNodeId().equals(1)) { //If same as its own
+				me = host;
+				System.out.println("I am " + me.getNodeId());
+			}
+		}
+
+		System.out.println("Original Member List");
+		System.out.println("---------------------");
+		for (Node member : GlobalVariables.INSTANCE.nodeList) {
+			System.out.println(member.getNodeId());
+		}
+
+		if(port != 0) {
+			try {
+				server = new DatagramSocket(port);
+			} catch (SocketException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			System.err.println("Could not find myself in startup list");
+			System.exit(-1);
+		}
+		
 		// Start all timers except for me
 		for (Node member : GlobalVariables.INSTANCE.nodeList) {
 			if(member != me) {
@@ -325,12 +326,6 @@ public class GossipProtocol implements NotificationListener{
 				e.printStackTrace();
 			}
 		}
-	}
-
-	public static void main(String[] args) throws InterruptedException, SocketException, UnknownHostException {
-
-		GossipProtocol client = new GossipProtocol();
-		client.start();
 	}
 
 	/**

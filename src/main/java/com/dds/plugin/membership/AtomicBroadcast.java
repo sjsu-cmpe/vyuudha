@@ -1,5 +1,8 @@
 package com.dds.plugin.membership;
 
+import javax.management.Notification;
+
+import com.dds.cluster.Node;
 import com.dds.interfaces.MembershipInterface;
 
 public class AtomicBroadcast implements MembershipInterface{
@@ -11,27 +14,22 @@ public class AtomicBroadcast implements MembershipInterface{
 	}
 
 	@Override
-	public void sendNodeList() {
+	public void sendMembershipList() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void receiveNodeList() {
+	public Node getMemberToNotify() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 	@Override
-	public void getLocalNodeList() {
+	public void handleNotification(Notification notification, Object handback) {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void setLocalNodeList() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 }

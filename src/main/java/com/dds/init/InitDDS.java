@@ -40,18 +40,14 @@ public class InitDDS {
 		GlobalVariables.INSTANCE.nodeList = XMLConfigParser.readNodes();
 
 		//Get the hashing technique
-		//GlobalVariables.INSTANCE.hash = new HashingContext();
-
 		HashingInterface hash = GlobalVariables.INSTANCE.getHash();
+		
 		//Setup the routing strategy
-		//RoutingContext routing1 = new RoutingContext(GlobalVariables.INSTANCE.hash);
 		RoutingInterface routing = GlobalVariables.INSTANCE.getRouting();
 		routing.setHashingTechnique(hash);
 		routing.setupRoutingCluster(GlobalVariables.INSTANCE.nodeList);
 
 		//Setup the membership
-		//GlobalVariables.INSTANCE.membership = new MembershipContext();
-		//GlobalVariables.INSTANCE.membership.start();
 		MembershipInterface membership = GlobalVariables.INSTANCE.getMembership();
 		membership.start();
 		
