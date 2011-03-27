@@ -1,1 +1,1 @@
-java -jar target/DynamicDistributedStorage-1.0-SNAPSHOT-jar-with-dependencies.jar
+java -Dfile.encoding=MacRoman -classpath $VYUUDHA_HOME/target/classes/
