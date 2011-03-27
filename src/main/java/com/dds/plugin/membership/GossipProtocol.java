@@ -9,7 +9,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
@@ -34,8 +33,6 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 
 	private DatagramSocket server;
 
-	private String myAddress;
-
 	private Node me;
 
 	/**
@@ -49,16 +46,15 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 		synchronized (GlobalVariables.INSTANCE.nodeList) {
 			try {
 				Node member = getMemberToNotify();
-
+				
 				if(member != null) {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					ObjectOutputStream oos = new ObjectOutputStream(baos);
 					oos.writeObject(GlobalVariables.INSTANCE.nodeList);
 					byte[] buf = baos.toByteArray();
-
-					String address = member.getNodeIpAddress();
-					String host = address.split(":")[0];
-					int port = Integer.parseInt(address.split(":")[1]);
+					
+					String host = member.getNodeIpAddress();
+					int port = member.getInternalPort();
 
 					InetAddress dest;
 					dest = InetAddress.getByName(host);
@@ -66,13 +62,19 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 					System.out.println("Sending to " + dest);
 					System.out.println("---------------------");
 					for (Node m : GlobalVariables.INSTANCE.nodeList) {
-						System.out.println(m);
+						System.out.println("Node ID: "+ m.getNodeId());
 					}
 					System.out.println("---------------------");
+					
+					DatagramSocket socket = new DatagramSocket();
+					DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length, dest, port);
+					socket.send(datagramPacket);
+					socket.close();
+					
 				}
 
-			} catch (IOException e1) {
-				e1.printStackTrace();
+			} catch (Exception e1) {
+				System.out.println(e1);
 			}
 		}
 	}
@@ -87,7 +89,7 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 	 */
 	public Node getMemberToNotify() {
 		Node member = null;
-
+		
 		if(GlobalVariables.INSTANCE.nodeList.size() > 1) {
 			int tries = 10;
 			do {
@@ -97,7 +99,7 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 					member = null;
 					break;
 				}
-			} while(member.getNodeIpAddress().equals(this.myAddress));
+			} while(member.getNodeId().equals(me.getNodeId()));
 		}
 		else {
 			System.out.println("I am alone in this world.");
@@ -160,15 +162,14 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 			while(keepRunning.get()) {
 				try {
 					//XXX: be mindful of this array size for later
-					byte[] buf = new byte[256];
+					byte[] buf = new byte[2048];
 					DatagramPacket p = new DatagramPacket(buf, buf.length);
 					server.receive(p);
 
 					// extract the member arraylist out of the packet
-					// TODO: maybe abstract this out to pass just the bytes needed
 					ByteArrayInputStream bais = new ByteArrayInputStream(p.getData());
 					ObjectInputStream ois = new ObjectInputStream(bais);
-
+					
 					Object readObject = ois.readObject();
 					if(readObject instanceof ArrayList<?>) {
 						ArrayList<Node> list = (ArrayList<Node>) readObject;
@@ -257,15 +258,13 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 			}
 		}));
 		
-		t_gossip = 100; // 1 second TODO: make configurable
+		t_gossip = 400; // 1 second TODO: make configurable
 
 		t_cleanup = 10000; // 10 seconds TODO: make configurable
 
 		random = new Random();
 
 		int port = GlobalVariables.INSTANCE.serverPortInternal;
-		
-		this.myAddress = GlobalVariables.INSTANCE.serverIp;
 
 		// loop over the initial hosts, and find ourselves
 		for (Node host : GlobalVariables.INSTANCE.nodeList) {

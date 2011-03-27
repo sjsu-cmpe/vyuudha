@@ -17,7 +17,7 @@ public enum GlobalVariables {
 	INSTANCE;
 	
 	public ArrayList<Node> nodeList;
-	public ArrayList<Node> deadNodeList;
+	public ArrayList<Node> deadNodeList = new ArrayList<Node>();
 	
 	/**
 	 * server.properties data
