@@ -1,4 +1,4 @@
-pid=`ps -ax | grep vyuudha | awk '{print $1}'`
+pid=`ps -ax | grep InitDDS | awk '{print $1}'`
 
 if [ "$pid" != "" ]
 then
