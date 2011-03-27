@@ -1,3 +1,5 @@
+#Add the following in .bash_profile or .bashrc
+#export VYUUDHA_HOME=/PATH/TO/vyuudha
 
 #Add dependencies to classpath from target/lib
 for file in $VYUUDHA_HOME/target/lib/*.jar;
