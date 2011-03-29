@@ -17,18 +17,21 @@ public class InitDDS {
 		if(args.length == 1)
 		{
 			//Read config folder and pass it on to start(String configPath)
-			InitDDS.start();
+			InitDDS.start(args[1]);
 		}
 		else
 		{
 			//Use default config folder and pass it on to start(String configPath)
+			InitDDS.start("config/nodes.xml");
 		}
 	}
 	
-	public static void start() throws UnknownHostException
+	public static void start(String configPath) throws UnknownHostException
 	{
 		//Create nodes collection
-		GlobalVariables.INSTANCE.nodeList = XMLConfigParser.readNodes();
+		GlobalVariables.INSTANCE.nodeList = XMLConfigParser.readNodes(configPath);
+		
+		//Make property loading flexible here.
 
 		//Get the hashing technique
 		HashingInterface hash = GlobalVariables.INSTANCE.getHash();

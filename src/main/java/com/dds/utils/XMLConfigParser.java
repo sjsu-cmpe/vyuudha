@@ -11,9 +11,8 @@ import javax.xml.parsers.DocumentBuilder;
 public class XMLConfigParser {
 	private static ArrayList<com.dds.cluster.Node> nodes = new ArrayList<com.dds.cluster.Node>();
 	
-	public static ArrayList<com.dds.cluster.Node> readNodes() {
+	public static ArrayList<com.dds.cluster.Node> readNodes(String pathToFile) {
 		try {
-			final String pathToFile = "config/nodes.xml";
 			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 			Document doc = docBuilder.parse(new File(pathToFile));

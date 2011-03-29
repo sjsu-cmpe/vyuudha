@@ -15,7 +15,7 @@ class StartOneInstance implements Runnable {
 	@Override
 	public void run() {
 		try {
-			InitDDS.start();
+			InitDDS.start("");
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
@@ -28,7 +28,7 @@ class StartSecondInstance implements Runnable {
 	@Override
 	public void run() {
 		try {
-			InitDDS.start();
+			InitDDS.start("");
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
