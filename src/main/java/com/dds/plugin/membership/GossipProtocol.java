@@ -11,8 +11,6 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -299,27 +297,9 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 				member.startTimeoutTimer();
 			}
 		}
-
-		// Start the two worker threads
-		ExecutorService executor = Executors.newCachedThreadPool();
-		//  The receiver thread is a passive player that handles
-		//  merging incoming membership lists from other neighbors.
-		executor.execute(new AsychronousReceiver());
-		//  The gossiper thread is an active player that 
-		//  selects a neighbor to share its membership list
-		executor.execute(new MembershipGossiper());
-
-		// Potentially, you could kick off more threads here
-		//  that could perform additional data synching
-
-		// keep the main thread around
-		while(true) {
-			try {
-				TimeUnit.SECONDS.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
+		
+		(new Thread(new AsychronousReceiver())).start();
+		(new Thread(new MembershipGossiper())).start();
 	}
 
 	/**

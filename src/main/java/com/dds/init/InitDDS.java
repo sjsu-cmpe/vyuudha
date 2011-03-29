@@ -14,7 +14,11 @@ import com.dds.utils.XMLConfigParser;
 public class InitDDS {
 	
 	public static void main(String[] args) throws UnknownHostException {
-
+		InitDDS.start();
+	}
+	
+	public static void start() throws UnknownHostException
+	{
 		//Create nodes collection
 		GlobalVariables.INSTANCE.nodeList = XMLConfigParser.readNodes();
 
