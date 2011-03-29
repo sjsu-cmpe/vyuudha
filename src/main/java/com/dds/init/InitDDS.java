@@ -14,7 +14,15 @@ import com.dds.utils.XMLConfigParser;
 public class InitDDS {
 	
 	public static void main(String[] args) throws UnknownHostException {
-		InitDDS.start();
+		if(args.length == 1)
+		{
+			//Read config folder and pass it on to start(String configPath)
+			InitDDS.start();
+		}
+		else
+		{
+			//Use default config folder and pass it on to start(String configPath)
+		}
 	}
 	
 	public static void start() throws UnknownHostException
