@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 import com.dds.exception.UnsupportedException;
 import com.dds.interfaces.APIInterface;
-import com.dds.properties.Property;
+import com.dds.utils.Property;
 import com.dds.utils.Helper;
 
 /**

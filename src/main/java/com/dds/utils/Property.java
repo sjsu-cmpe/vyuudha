@@ -1,11 +1,12 @@
 /**
  * 
  */
-package com.dds.properties;
+package com.dds.utils;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -20,32 +21,63 @@ import org.apache.log4j.Logger;
 public class Property {
 
 	Logger logger = Logger.getLogger(Property.class);
-	
+
 	private static Property singleton = new Property();
 	Properties props = new Properties();
-	
+
+	private final String defaultConfigFolder = "/config/";
+	private String configFolder;
 	private String databasePropertyFile;
 	private String replicationPropertyFile;
 	private String serverConfigPropertyFile;
-	
+
 	private Map<String, String> databaseProperties = new HashMap<String, String>();
 	private Map<String, String> replicationProperties = new HashMap<String, String>();
 	private Map<String, String> serverConfigProperties = new HashMap<String, String>();
-	
+
 	private Property() {
-		setDatabasePropertyFile();
-		setReplicationPropertyFile();
-		setServerConfigPropertyFile();
-			
-		setDatabaseProperties();
-		setReplicationProperties();
-		setServerConfigProperties();
+		init();
 	}
-	
+
 	public static Property getProperty() {
 		return singleton;
 	}
 
+	private void init() {
+		configFolder = defaultConfigFolder;
+		setDatabasePropertyFile();
+		setReplicationPropertyFile();
+		setServerConfigPropertyFile();
+
+		setDatabaseProperties();
+		setReplicationProperties();
+		setServerConfigProperties();
+	}
+
+	public void setConfigFolder(String folderName) {
+
+		if (folderName == null) {
+			if (!configFolder.equals(defaultConfigFolder)){
+				databaseProperties.clear();
+				serverConfigProperties.clear();
+				replicationProperties.clear();
+				init();
+			}
+			return;
+		}
+		folderName = folderName.contains("\\") ? folderName.replace('\\', ' ').trim() : folderName;
+		folderName = folderName.contains("/") ? folderName.replace('/', ' ').trim() : folderName;
+
+		configFolder = "/" + folderName + "/";
+		
+		databaseProperties.clear();
+		serverConfigProperties.clear();
+		replicationProperties.clear();
+
+		setDatabasePropertyFile();
+		setReplicationPropertyFile();
+		setServerConfigPropertyFile();
+	}
 	/**
 	 * @param databasePropertyFile the databasePropertyFile to set
 	 * @throws IOException 
@@ -54,8 +86,8 @@ public class Property {
 		StringBuilder path;
 		try {
 			path = new StringBuilder(new java.io.File(".").getCanonicalPath());
-			path.append("/config/database.properties");
-			this.databasePropertyFile = path.toString();
+			path.append(configFolder + "database.properties");
+			databasePropertyFile = path.toString();
 		} catch (IOException e) {
 			logger.error("Exception : " + e.getMessage());
 		}
@@ -69,13 +101,13 @@ public class Property {
 		StringBuilder path;
 		try {
 			path = new StringBuilder(new java.io.File(".").getCanonicalPath());
-			path.append("/config/server.properties");
-			this.serverConfigPropertyFile = path.toString();
+			path.append(configFolder + "server.properties");
+			serverConfigPropertyFile = path.toString();
 		} catch (IOException e) {
 			logger.error("Exception : " + e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -83,8 +115,8 @@ public class Property {
 		StringBuilder path;
 		try {
 			path = new StringBuilder(new java.io.File(".").getCanonicalPath());
-			path.append("/config/replication.properties");
-			this.replicationPropertyFile = path.toString();
+			path.append(configFolder + "replication.properties");
+			replicationPropertyFile = path.toString();
 		} catch (IOException e) {
 			logger.error("Exception : " + e.getMessage());
 		}		
@@ -94,8 +126,48 @@ public class Property {
 	 * @return the serverConfigProperties
 	 */
 	public Map<String, String> getServerConfigProperties() {
+		return getServerConfigProperties(null);
+	}
+
+	/**
+	 * @return the serverConfigProperties
+	 */
+	public Map<String, String> getServerConfigProperties(String folderName) {
+		setConfigFolder(folderName);
 		setServerConfigProperties();
-		return serverConfigProperties;
+		return Collections.unmodifiableMap(serverConfigProperties);	
+	}
+
+	/**
+	 * @return the databaseProperties
+	 */
+	public Map<String, String> getDatabaseProperties() {
+		return getDatabaseProperties(null);		
+	}
+
+	/**
+	 * @return the databaseProperties
+	 */
+	public Map<String, String> getDatabaseProperties(String folderName) {
+		setConfigFolder(folderName);
+		setDatabaseProperties();
+		return Collections.unmodifiableMap(databaseProperties);	
+	}
+
+	/**
+	 * @return
+	 */
+	public Map<String, String> getReplicationProperties() {
+		return getReplicationProperties(null);
+	}
+
+	/**
+	 * @return
+	 */
+	public Map<String, String> getReplicationProperties(String folderName) {
+		setConfigFolder(folderName);
+		setReplicationProperties();
+		return Collections.unmodifiableMap(replicationProperties);		
 	}
 
 	/**
@@ -105,11 +177,11 @@ public class Property {
 	 */
 	private void setServerConfigProperties() {	
 		try {
-			FileInputStream fis = new FileInputStream(this.serverConfigPropertyFile);
+			FileInputStream fis = new FileInputStream(serverConfigPropertyFile);
 			props.load(fis);
-			if (this.serverConfigProperties.isEmpty() || 
+			if (serverConfigProperties.isEmpty() || 
 					Boolean.parseBoolean(props.getProperty("update"))) {
-				this.serverConfigProperties = generateMap(this.serverConfigPropertyFile);
+				serverConfigProperties = generateMap(serverConfigPropertyFile);
 			}
 			fis.close();
 		} catch (FileNotFoundException e) {
@@ -118,15 +190,6 @@ public class Property {
 			logger.error("Exception : " + e.getMessage());
 		}
 	}
-		
-	/**
-	 * @return the databaseProperties
-	 */
-	public Map<String, String> getDatabaseProperties() {
-		setDatabaseProperties();
-		return databaseProperties;
-	}
-
 
 	/**
 	 * @param databaseProperties the databaseProperties to set
@@ -135,11 +198,11 @@ public class Property {
 	 */
 	private void setDatabaseProperties() {
 		try {
-			FileInputStream fis = new FileInputStream(this.databasePropertyFile);
+			FileInputStream fis = new FileInputStream(databasePropertyFile);
 			props.load(fis);
-			if (this.databaseProperties.isEmpty() || 
+			if (databaseProperties.isEmpty() || 
 					Boolean.parseBoolean(props.getProperty("update"))) {
-				this.databaseProperties = generateMap(this.databasePropertyFile);
+				databaseProperties = generateMap(databasePropertyFile);
 			}
 			fis.close();
 		} catch (FileNotFoundException e) {
@@ -148,14 +211,14 @@ public class Property {
 			logger.error("Exception : " + e.getMessage());
 		}
 	}
-	
+
 	private void setReplicationProperties() {
 		try {
-			FileInputStream fis = new FileInputStream(this.replicationPropertyFile);
+			FileInputStream fis = new FileInputStream(replicationPropertyFile);
 			props.load(fis);
-			if (this.databaseProperties.isEmpty() || 
+			if (databaseProperties.isEmpty() || 
 					Boolean.parseBoolean(props.getProperty("update"))) {
-				this.replicationProperties = generateMap(this.replicationPropertyFile);
+				replicationProperties = generateMap(replicationPropertyFile);
 			}
 			fis.close();
 		} catch (FileNotFoundException e) {
@@ -164,12 +227,7 @@ public class Property {
 			logger.error("Exception : " + e.getMessage());
 		}		
 	}
-	
-	public Map<String, String> getReplicationProperties() {
-		setReplicationProperties();
-		return replicationProperties;
-	}
-		
+
 	private Map<String, String> generateMap(String file) throws FileNotFoundException, IOException {
 		//props.load(new FileInputStream(file));
 		Map<String, String> map = new HashMap<String, String>();
@@ -179,8 +237,8 @@ public class Property {
 		}
 		return map;
 	}	
-    
-    public boolean containsKey(Object k) {
-        return this.props.containsKey(k);
-    }
+
+	public boolean containsKey(Object k) {
+		return props.containsKey(k);
+	}
 }

@@ -262,12 +262,12 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 
 		random = new Random();
 
-		int port = GlobalVariables.INSTANCE.serverPortInternal;
+		int port = GlobalVariables.INSTANCE.getServerPortInternal();
 
 		// loop over the initial hosts, and find ourselves
 		for (Node host : GlobalVariables.INSTANCE.nodeList) {
 			//Checks for local Node ID
-			if(host.getNodeId().equals(GlobalVariables.INSTANCE.nodeId)) {
+			if(host.getNodeId().equals(GlobalVariables.INSTANCE.getNodeId())) {
 				me = host;
 				System.out.println("I am " + me.getNodeId());
 			}
