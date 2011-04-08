@@ -24,13 +24,9 @@ import com.dds.interfaces.MembershipInterface;
 public class GossipProtocol implements NotificationListener, MembershipInterface{
 
 	private int t_gossip; //in ms
-
 	public int t_cleanup; //in ms
-
 	private Random random;
-
 	private DatagramSocket server;
-
 	private Node me;
 
 	/**
@@ -68,7 +64,6 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 					DatagramPacket datagramPacket = new DatagramPacket(buf, buf.length, dest, port);
 					socket.send(datagramPacket);
 					socket.close();
-					
 				}
 
 			} catch (Exception e1) {
@@ -127,8 +122,6 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 					TimeUnit.MILLISECONDS.sleep(t_gossip);
 					sendMembershipList();
 				} catch (InterruptedException e) {
-					// TODO: handle exception
-					// This membership thread was interrupted externally, shutdown
 					e.printStackTrace();
 					keepRunning.set(false);
 				}
@@ -184,7 +177,6 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 					e.printStackTrace();
 					keepRunning.set(false);
 				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -217,7 +209,6 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 						}
 						else {
 							// the local list does not contain the remote member
-
 							// the remote member is either brand new, or a previously declared dead member
 							// if its dead, check the heartbeat because it may have come back from the dead
 							if(GlobalVariables.INSTANCE.deadNodeList.contains(remoteMember)) {
@@ -249,17 +240,14 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 	 * Start the gossip thread and start the receiver thread.
 	 */
 	public void start() {
-
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
 				System.out.println("Goodbye my friends...");
 			}
 		}));
 		
-		t_gossip = 400; // 1 second TODO: make configurable
-
-		t_cleanup = 10000; // 10 seconds TODO: make configurable
-
+		t_gossip = 400; // 1 second
+		t_cleanup = 10000; // 10 seconds
 		random = new Random();
 
 		int port = GlobalVariables.INSTANCE.getServerPortInternal();

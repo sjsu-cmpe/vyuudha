@@ -15,10 +15,8 @@ public class InitDDS {
 	
 	public static void main(String[] args) throws UnknownHostException {
 		if(args.length == 1) {
-			//Read config folder and pass it on to start(String configPath)
 			InitDDS.start(args[0]);
 		} else	{
-			//Use default config folder and pass it on to start(String configPath)
 			InitDDS.start("config");
 		}
 	}
