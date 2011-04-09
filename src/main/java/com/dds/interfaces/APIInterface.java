@@ -63,6 +63,8 @@ public interface APIInterface {
 	
 	public Object nativeAPI(String...args) throws Exception;
 	
+	public void replicate(String key, String value) throws Exception;
+	
 	public void replicate(String key, String value, int factor) throws Exception;
 	
 }

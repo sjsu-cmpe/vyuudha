@@ -165,22 +165,21 @@ public class StorageHandler {
 		} else if (methodName.equals("contains")) {
 			return Boolean.valueOf(dbInterface.contains(bufArray[1]));
 		} else if (methodName.equals("replicate")) {
-			//TODO : get replication factor
-			int factor = 0;
-			dbInterface.replicate(bufArray[1], bufArray[2], factor);
-			replicateData(bufArray, factor);
+			dbInterface.replicate(bufArray[0], bufArray[1], 0);
+			replicateData(bufArray);
 			return "replicate";
 		} else {
 			throw new StorageException("No matching method found");
 		} 
 	}
 
-	private void replicateData(String[] bufArray, int factor) throws Exception {
+	private void replicateData(String[] bufArray) throws Exception {
+		
 		//TODO Get next node info
 		ReplicationHandler replicationHandler = new ReplicationHandler();
 
 		replicationHandler.setNextNodeInfo("XXX", "XXX");
-		replicationHandler.replicate(bufArray[1].trim(), bufArray[2], factor);		
+		replicationHandler.replicate(bufArray[1].trim(), bufArray[2]);		
 	}
 
 	/**

@@ -99,4 +99,9 @@ public class ClientHandler implements APIInterface {
 	public void replicate(String key, String value, int factor) throws Exception {
 		throw new UnsupportedException("Unsupported Method");
 	}
+
+	@Override
+	public void replicate(String key, String value) throws Exception {
+		throw new UnsupportedException("Unsupported Method");
+	}
 }

@@ -203,6 +203,11 @@ public class MySQLDB implements APIInterface {
 	@Override
 	public void replicate(String key, String value, int factor)
 			throws Exception {
+		throw new UnsupportedException("Unsupported Method");		
+	}
+
+	@Override
+	public void replicate(String key, String value) throws Exception {
 		// TODO Auto-generated method stub
 		
 	}

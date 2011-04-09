@@ -8,6 +8,7 @@ import com.dds.interfaces.HashingInterface;
 import com.dds.interfaces.MembershipInterface;
 import com.dds.interfaces.RoutingInterface;
 import com.dds.interfaces.ServerInterface;
+import com.dds.replication.ReplicationHandler;
 import com.dds.utils.Property;
 import com.dds.utils.XMLConfigParser;
 
@@ -46,8 +47,8 @@ public class InitDDS {
 		System.out.println("Vyuudha " + GlobalVariables.INSTANCE.getServerType() + " Server Started at " + GlobalVariables.INSTANCE.getServerIp());
 		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("dbToInstantiate"));
 
-		//ReplicationHandler replicationHandler = new ReplicationHandler();
-		//replicationHandler.init();
+//		ReplicationHandler replicationHandler = new ReplicationHandler();
+//		replicationHandler.initReplicationServer();
 		
 		//Setup the server and start listening to request
 		InetAddress address = InetAddress.getByName(GlobalVariables.INSTANCE.getServerIp());
