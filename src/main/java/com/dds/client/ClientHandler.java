@@ -94,4 +94,9 @@ public class ClientHandler implements APIInterface {
 		}
 		return client.write(sb.toString());
 	}
+
+	@Override
+	public void replicate(String key, String value, int factor) throws Exception {
+		throw new UnsupportedException("Unsupported Method");
+	}
 }

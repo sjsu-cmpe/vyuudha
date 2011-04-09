@@ -62,4 +62,7 @@ public interface APIInterface {
 	public Boolean contains(String key) throws Exception;
 	
 	public Object nativeAPI(String...args) throws Exception;
+	
+	public void replicate(String key, String value, int factor) throws Exception;
+	
 }

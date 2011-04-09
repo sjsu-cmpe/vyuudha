@@ -161,4 +161,11 @@ public class BDB extends Database implements APIInterface{
 	public Object nativeAPI(String... args) throws Exception {
 		throw new UnsupportedException("Unsupported method");
 	}
+
+	@Override
+	public void replicate(String key, String value, int factor)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }
