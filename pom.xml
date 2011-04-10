@@ -51,6 +51,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.yammer</groupId>
+			<artifactId>metrics_2.8.1</artifactId>
+			<version>2.0.0-BETA10</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.mongodb</groupId>
 			<artifactId>mongo-java-driver</artifactId>
 			<version>1.3</version>
@@ -125,7 +131,12 @@
 			<id>oracleReleases</id>
 			<name>Oracle Released Java Packages</name>
 			<url>http://download.oracle.com/maven</url>
-			<layout>default</layout>
+		</repository>
+		
+		<repository>
+			<id>codaRepo</id>
+			<name>Coda Hale's Repository</name>
+			<url>http://repo.codahale.com</url>
 		</repository>
 	</repositories>
 
