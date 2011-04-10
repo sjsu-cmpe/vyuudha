@@ -82,9 +82,6 @@ public class StorageHandler {
 
 	public Object invoke(byte[] buffer) throws Exception {
 		
-		ReplicationHandler replicationHandler = new ReplicationHandler();
-		replicationHandler.invoke(buffer, Integer.parseInt(props.get("writes")));
-		
 		String buf = (String) Helper.getObject(buffer);
 		String[] bufArray = buf.split(",");
 		String methodName = bufArray[0].trim();
@@ -167,9 +164,22 @@ public class StorageHandler {
 			return "deleted";
 		} else if (methodName.equals("contains")) {
 			return Boolean.valueOf(dbInterface.contains(bufArray[1]));
+		} else if (methodName.equals("replicate")) {
+			dbInterface.replicate(bufArray[0], bufArray[1], 0);
+			replicateData(bufArray);
+			return "replicate";
 		} else {
 			throw new StorageException("No matching method found");
 		} 
+	}
+
+	private void replicateData(String[] bufArray) throws Exception {
+		
+		//TODO Get next node info
+		ReplicationHandler replicationHandler = new ReplicationHandler();
+
+		replicationHandler.setNextNodeInfo("XXX", "XXX");
+		replicationHandler.replicate(bufArray[1].trim(), bufArray[2]);		
 	}
 
 	/**

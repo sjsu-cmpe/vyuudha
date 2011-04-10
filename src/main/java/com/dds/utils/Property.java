@@ -36,15 +36,15 @@ public class Property {
 	private Map<String, String> serverConfigProperties = new HashMap<String, String>();
 
 	private Property() {
-		init();
+		init(defaultConfigFolder);
 	}
 
 	public static Property getProperty() {
 		return singleton;
 	}
 
-	private void init() {
-		configFolder = defaultConfigFolder;
+	private void init(String folder) {
+		configFolder = folder;
 		setDatabasePropertyFile();
 		setReplicationPropertyFile();
 		setServerConfigPropertyFile();
@@ -61,7 +61,7 @@ public class Property {
 				databaseProperties.clear();
 				serverConfigProperties.clear();
 				replicationProperties.clear();
-				init();
+				init(defaultConfigFolder);
 			}
 			return;
 		}
@@ -70,13 +70,7 @@ public class Property {
 
 		configFolder = "/" + folderName + "/";
 		
-		databaseProperties.clear();
-		serverConfigProperties.clear();
-		replicationProperties.clear();
-
-		setDatabasePropertyFile();
-		setReplicationPropertyFile();
-		setServerConfigPropertyFile();
+		init(configFolder);
 	}
 	/**
 	 * @param databasePropertyFile the databasePropertyFile to set
