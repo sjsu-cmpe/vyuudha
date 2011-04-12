@@ -14,7 +14,7 @@ public class ClientTest {
 		
 		try {
 			handle.createConnection("nio:127.0.0.1:9092");
-			handle.put("ebay","san jose3");
+			handle.put("ebay1","san jose4");
 			System.out.println(handle.get("ebay"));
 			
 			handle.closeConnection();

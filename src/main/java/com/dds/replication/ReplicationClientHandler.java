@@ -44,8 +44,8 @@ public class ReplicationClientHandler implements APIInterface {
 		}
 	}
 
-	private Object sendMessage(String stream) throws Exception {
-		return client.write(stream);
+	private void sendMessage(String stream) throws Exception {
+		client.write(stream);
 	}
 	
 	@Override

@@ -78,13 +78,27 @@ public class MySQLDB implements APIInterface {
 	}
 
 	public MySQLDB() {
-		Map<String, String> props = Property.getProperty().getDatabaseProperties();
-		setDriver(props.get("mysql_driver"));
-		setJdbcURL(props.get("mysql_jdbcUrl"));
-		setDatabase(props.get("mysql_database"));
-		setTable(props.get("mysql_store"));
-		setUser(props.get("mysql_user"));
-		setPassword(props.get("mysql_password"));	
+		this(false);
+	
+	}
+	
+	public MySQLDB(boolean replicate) {
+		Map<String, String> properties;
+		if (!replicate) {
+			properties = Property.getProperty().getDatabaseProperties();
+		} else {
+			properties = Property.getProperty().getReplicationProperties();
+		}
+		setup(properties);
+	}
+	
+	private void setup(Map<String, String> properties) {	
+		setDriver(properties.get("mysql_driver"));
+		setJdbcURL(properties.get("mysql_jdbcUrl"));
+		setDatabase(properties.get("mysql_database"));
+		setTable(properties.get("mysql_store"));
+		setUser(properties.get("mysql_user"));
+		setPassword(properties.get("mysql_password"));
 	}
 	
 	/**
@@ -93,11 +107,13 @@ public class MySQLDB implements APIInterface {
 	 */
 	private void initialSetup() throws SQLException {
 		String createDBQuery = "CREATE DATABASE IF NOT EXISTS " + this.database;
-		String createTableQuery = "CREATE TABLE IF NOT EXISTS  " + this.database + "."+ this.table +"(`KEY` varchar(100) NOT NULL, `VALUE` varchar(500) NOT NULL, `TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`KEY`))"; 
+		String createTableQuery = "CREATE TABLE IF NOT EXISTS  " + this.database + "."+ this.table 
+		+"(`KEY` varchar(100) NOT NULL, `VALUE` varchar(500) NOT NULL, `TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`KEY`))"; 
         statement.executeUpdate(createDBQuery);
         statement.executeUpdate(createTableQuery);
 	}
 
+	@Override
 	public void createConnection() {
 		try {
 			Class.forName(this.driver);
@@ -112,10 +128,13 @@ public class MySQLDB implements APIInterface {
 		logger.info("MySQL connection opened");
 	}
 
+	@Override
 	public String get(String key) {
 		try {
 			resultSet = statement
-			.executeQuery("select VYUUDHA.STORE.VALUE from VYUUDHA.STORE where VYUUDHA.STORE.KEY = \"" + key + "\"");
+			.executeQuery("select " + this.database + "."+ this.table +".VALUE from " + this.database 
+					+ "."+ this.table +" where " + this.database + "."+ this.table +".KEY = \"" + key 
+					+ "\"");
 
 			resultSet.next();
 
@@ -127,18 +146,22 @@ public class MySQLDB implements APIInterface {
 		return null;
 	}
 
+	@Override
 	public void put(String key, String value) {
 		try {
 			if (!contains(key)) {
 				preparedStatement = connect
-				.prepareStatement("insert into VYUUDHA.STORE values (?, ?, ?)");
+				.prepareStatement("insert into " + this.database + "."+ this.table +" values (?, ?, ?)");
 
 				preparedStatement.setString(1, key);
 				preparedStatement.setString(2, value);
 				preparedStatement.setTimestamp(3, Helper.getCurrentTime());
 			} else {
 				preparedStatement = connect
-				.prepareStatement("update VYUUDHA.STORE set VYUUDHA.STORE.VALUE = ?, VYUUDHA.STORE.TIME = ? where VYUUDHA.STORE.KEY =  ? ");
+				.prepareStatement("update " + this.database + "."+ this.table +" set " 
+						+ this.database + "."+ this.table +".VALUE = ?, " + this.database 
+						+ "."+ this.table +".TIME = ? where " + this.database + "."+ this.table 
+						+".KEY =  ? ");
 
 				preparedStatement.setString(1, value);
 				preparedStatement.setTimestamp(2, Helper.getCurrentTime());
@@ -151,11 +174,13 @@ public class MySQLDB implements APIInterface {
 		}
 	}
 
+	@Override
 	public void delete(String key) {
 		try {
 			if (contains(key)) {
 				preparedStatement = connect
-				.prepareStatement("delete from  VYUUDHA.STORE where VYUUDHA.STORE.KEY = \'" + key + "\'");
+				.prepareStatement("delete from  " + this.database + "."+ this.table +" where " 
+						+ this.database + "."+ this.table +".KEY = \'" + key + "\'");
 				preparedStatement.executeUpdate();	
 			}
 		} catch (Exception e) {
@@ -163,6 +188,7 @@ public class MySQLDB implements APIInterface {
 		}
 	}
 
+	@Override
 	public void closeConnection() {
 		try {
 			if (resultSet != null) {
@@ -182,6 +208,7 @@ public class MySQLDB implements APIInterface {
 		}
 	}
 
+	@Override
 	public Boolean contains(String key) {
 		if (get(key) == null){
 			return false;
@@ -190,25 +217,29 @@ public class MySQLDB implements APIInterface {
 		}
 	}
 
+	@Override
 	public void createConnection(String bootstrapUrl) throws Exception {
 		throw new UnsupportedException("Unsupported method");
 	}
 	
+	@Override
 	public Object nativeAPI(String... args) throws Exception {
-		System.out.println("Unsupported");
-		return null;
-		//throw new UnsupportedException("Unsupported method");
+		throw new UnsupportedException("Unsupported method");
 	}
 
 	@Override
 	public void replicate(String key, String value, int factor)
 			throws Exception {
-		throw new UnsupportedException("Unsupported Method");		
+		throw new UnsupportedException("Unsupported method");
 	}
 
 	@Override
 	public void replicate(String key, String value) throws Exception {
-		// TODO Auto-generated method stub
-		
+		logger.info("Replicate function");
+		MySQLDB mySQL = new MySQLDB(true);
+		mySQL.createConnection();
+		mySQL.put(key + "new", value + "new");
+		mySQL.closeConnection();
+		mySQL = null;
 	}
 }

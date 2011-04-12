@@ -28,7 +28,7 @@ import com.dds.utils.Helper;
  * @author ravid
  *
  */
-public class ReplicationClientNIO implements ReplicationClientInterface, Runnable {
+public class ReplicationClientNIO implements Runnable {
 
 	Logger logger = Logger.getLogger(ReplicationClientNIO.class);
 	
@@ -44,25 +44,20 @@ public class ReplicationClientNIO implements ReplicationClientInterface, Runnabl
 	private Map<SocketChannel, List> pendingData = new HashMap<SocketChannel, List>();
 	private Map<SocketChannel, RspHandler> rspHandlers = Collections.synchronizedMap(new HashMap<SocketChannel, RspHandler>());
 
-	@Override
-	public Object write(String stream) throws Exception {
+	public void write(String stream) throws Exception {
 		t = new Thread(this);
 		t.setDaemon(true);
 		t.start();
 		handler = new RspHandler();
 		send(Helper.getBytes(stream), handler);
-		Object retObj = handler.waitForResponse();
 		exit();
-		return retObj;
 	}
 
-	@Override
 	public void exit() throws Exception {
 		handler = null;
 		t = null;
 	}
 
-	@Override
 	public void initialize(String[] serverInfo) throws Exception {
 		if (serverInfo.length != 2) {
 			throw new UnsupportedException("Insufficient parameters");

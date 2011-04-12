@@ -41,14 +41,15 @@ public class InitDDS {
 		routing.setupRoutingCluster(GlobalVariables.INSTANCE.nodeList);
 
 		//Setup the membership
-		MembershipInterface membership = GlobalVariables.INSTANCE.getMembership();
-		membership.start();
+//		MembershipInterface membership = GlobalVariables.INSTANCE.getMembership();
+//		membership.start();
 		
 		System.out.println("Vyuudha " + GlobalVariables.INSTANCE.getServerType() + " Server Started at " + GlobalVariables.INSTANCE.getServerIp());
 		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("dbToInstantiate"));
 
-//		ReplicationHandler replicationHandler = new ReplicationHandler();
-//		replicationHandler.initReplicationServer();
+		//Start Replication Server
+		ReplicationHandler replicationHandler = new ReplicationHandler();
+		replicationHandler.initReplicationServer();
 		
 		//Setup the server and start listening to request
 		InetAddress address = InetAddress.getByName(GlobalVariables.INSTANCE.getServerIp());

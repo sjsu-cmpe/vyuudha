@@ -19,14 +19,14 @@ public class ReplicationHandler implements APIInterface {
 
 	Logger logger = Logger.getLogger(ReplicationHandler.class);
 	
-	private static Map<String, String> replicationMap;
+	private Map<String, String> replicationMap;
 	private InetAddress replicationAddress;
 	private ServerInterface replicationIO;
 	private int replicationPort ;
 	
 	private String nextNodeAddress;
 	private String nextNodePort;
-		
+	
 	public ReplicationHandler() {
 		this(null);
 	}
@@ -42,6 +42,7 @@ public class ReplicationHandler implements APIInterface {
 	public void initReplicationServer(String folder) throws UnknownHostException {
 		
 		replicationMap = Property.getProperty().getReplicationProperties(folder);
+
 		//Setup replication server and start listening to requests
 		replicationAddress = InetAddress.getByName(replicationMap.get("server_ip"));
 		replicationIO = new ReplicationServerNIO();
@@ -50,6 +51,8 @@ public class ReplicationHandler implements APIInterface {
 		
 		ReplicationServerNIO replication = new ReplicationServerNIO();
 		replication.start(replicationAddress, replicationPort);
+		
+		System.out.println("Replication Server started at " + replicationAddress.toString() + " : " + replicationPort);
 	}
 	
 	public void setNextNodeInfo(String address, String port) {
@@ -57,13 +60,14 @@ public class ReplicationHandler implements APIInterface {
 		nextNodePort = port;
 		
 		nextNodeAddress = replicationMap.get("server_ip");
-		nextNodePort = replicationMap.get("server_port_internal");
+		// nextNodePort = replicationMap.get("server_port_internal");
+		nextNodePort = "9094";
 	}
 	
 	public void replicate(String...keyValue) throws Exception {
 		int factor = Integer.parseInt(keyValue.length == 2 ? replicationMap.get("writes") : keyValue[2]);
 		
-		if (keyValue.length != 2 || keyValue.length != 3) {
+		if (keyValue.length < 2 || keyValue.length > 3) {
 			logger.error("Insufficient parameters");
 			throw new UnsupportedException("Insufficient parameters");
 		}
@@ -123,7 +127,7 @@ public class ReplicationHandler implements APIInterface {
 
 	@Override
 	public void replicate(String key, String value) throws Exception {
-		throw new UnsupportedException("Unsupported Method");
+		replicate(new String[]{key, value});
 	}
 
 }

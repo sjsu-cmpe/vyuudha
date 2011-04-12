@@ -156,30 +156,37 @@ public class StorageHandler {
 	private Object invokeMethod(String methodName, String[] bufArray) throws Exception {
 		if (methodName.equals("put")) {
 			dbInterface.put(bufArray[1].trim(), bufArray[2].trim());
+			
+			replicateData(bufArray);
 			return "put";
 		} else if (methodName.equals("get")) {
 			return dbInterface.get(bufArray[1]);
 		} else if (methodName.equals("delete")) {
 			dbInterface.delete(bufArray[1]);
 			return "deleted";
-		} else if (methodName.equals("contains")) {
-			return Boolean.valueOf(dbInterface.contains(bufArray[1]));
 		} else if (methodName.equals("replicate")) {
-			dbInterface.replicate(bufArray[0], bufArray[1], 0);
+
 			replicateData(bufArray);
 			return "replicate";
+		} else if (methodName.equals("contains")) {
+			return Boolean.valueOf(dbInterface.contains(bufArray[1]));
 		} else {
 			throw new StorageException("No matching method found");
 		} 
 	}
 
 	private void replicateData(String[] bufArray) throws Exception {
-		
-		//TODO Get next node info
 		ReplicationHandler replicationHandler = new ReplicationHandler();
-
 		replicationHandler.setNextNodeInfo("XXX", "XXX");
-		replicationHandler.replicate(bufArray[1].trim(), bufArray[2]);		
+		//TODO
+		String[] params = null;
+		if (bufArray.length == 3) {
+			params = new String[]{bufArray[1].trim(), bufArray[2].trim()};	
+		} else {
+			params = new String[]{bufArray[1].trim(), bufArray[2].trim(), bufArray[3].trim()};
+		}
+		dbInterface.replicate(bufArray[1].trim(), bufArray[2].trim());
+		replicationHandler.replicate(params);
 	}
 
 	/**

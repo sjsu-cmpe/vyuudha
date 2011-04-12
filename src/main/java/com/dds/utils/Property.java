@@ -210,7 +210,7 @@ public class Property {
 		try {
 			FileInputStream fis = new FileInputStream(replicationPropertyFile);
 			props.load(fis);
-			if (databaseProperties.isEmpty() || 
+			if (replicationProperties.isEmpty() || 
 					Boolean.parseBoolean(props.getProperty("update"))) {
 				replicationProperties = generateMap(replicationPropertyFile);
 			}
