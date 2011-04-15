@@ -26,6 +26,8 @@ public class ReplicationHandler implements APIInterface {
 	
 	private String nextNodeAddress;
 	private String nextNodePort;
+
+	private APIInterface dbInterface;
 	
 	public ReplicationHandler() {
 		this(null);
@@ -65,7 +67,13 @@ public class ReplicationHandler implements APIInterface {
 	}
 	
 	public void replicate(String...keyValue) throws Exception {
-		int factor = Integer.parseInt(keyValue.length == 2 ? replicationMap.get("writes") : keyValue[2]);
+		
+		int factor;
+		if (keyValue[2] == null) {
+			factor = 0;
+		} else {
+			factor = Integer.parseInt(keyValue.length == 2 ? replicationMap.get("writes") : keyValue[2]);
+		}
 		
 		if (keyValue.length < 2 || keyValue.length > 3) {
 			logger.error("Insufficient parameters");
@@ -79,6 +87,8 @@ public class ReplicationHandler implements APIInterface {
 	}
 	
 	public void replicate(String key, String value, int factor) throws Exception {
+		dbInterface.replicate(key, value);
+		
 		ReplicationClientHandler clientHandler = new ReplicationClientHandler();
 
 		clientHandler.createConnection(nextNodeAddress + ":" + nextNodePort);
@@ -127,7 +137,12 @@ public class ReplicationHandler implements APIInterface {
 
 	@Override
 	public void replicate(String key, String value) throws Exception {
-		replicate(new String[]{key, value});
+		replicate(new String[]{key, value, null});
+	}
+
+	public void setDBObject(APIInterface dbInterface) {
+		this.dbInterface = dbInterface;
+		
 	}
 
 }
