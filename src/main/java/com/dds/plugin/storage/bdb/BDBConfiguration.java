@@ -32,17 +32,33 @@ public class BDBConfiguration {
 	private EnvironmentConfig envConfig;
 	private DatabaseConfig dbConfig;
 
+	@SuppressWarnings("unused")
 	private void setConfiguration() {
-		Map<String, String> props = Property.getProperty().getDatabaseProperties();
-		setStore(props.get("bdb_store"));
-		setBdbPath(props.get("bdb_path"));
-		setEnvHome(this.bdbPath);
-		setReadOnly(Boolean.parseBoolean(props.get("bdb_readOnly")));
+		setConfiguration(false);
 	}
 	
+	private void setConfiguration(boolean replicate) {
+		Map<String, String> properties;
+		if (!replicate) {
+			properties = Property.getProperty().getDatabaseProperties();
+		} else {
+			properties = Property.getProperty().getReplicationProperties();
+		}
+		
+		setStore(properties.get("bdb_store"));
+		setBdbPath(properties.get("bdb_path"));
+		setEnvHome(this.bdbPath);
+		setReadOnly(Boolean.parseBoolean(properties.get("bdb_readOnly")));
+	}
+	
+	
 	public Environment getConfiguration() {
+		return getConfiguration(false);
+	}
+	
+	public Environment getConfiguration(boolean replicate) {
 		try {
-			setConfiguration();
+			setConfiguration(replicate);
 			setEnvConfig();
 			setDbConfig();
 			setEnvironment();
