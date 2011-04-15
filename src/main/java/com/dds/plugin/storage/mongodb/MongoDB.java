@@ -34,7 +34,16 @@ public class MongoDB extends Mongo implements APIInterface {
 	private String collection = null;
 
 	public MongoDB() throws UnknownHostException {
-		Map<String, String> props = Property.getProperty().getDatabaseProperties();
+		this(false);
+	}
+	
+	public MongoDB(boolean replicate) throws UnknownHostException {
+		Map<String, String> props;
+		if (replicate){
+			props = Property.getProperty().getDatabaseProperties();
+		} else {
+			props = Property.getProperty().getReplicationProperties();
+		}
 		setDbName(props.get("mongo_dbName"));
 		setCollection(props.get("mongo_collection"));
 	}
@@ -189,7 +198,11 @@ public class MongoDB extends Mongo implements APIInterface {
 
 	@Override
 	public void replicate(String key, String value) throws Exception {
-		// TODO Auto-generated method stub
-		
+		logger.info("Replicate function");
+		MongoDB mongo = new MongoDB(true);
+		mongo.createConnection();
+		mongo.put(key + "new", value + "new");
+		mongo.closeConnection();
+		mongo = null;
 	}
 }
