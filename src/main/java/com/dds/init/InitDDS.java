@@ -45,7 +45,7 @@ public class InitDDS {
 //		membership.start();
 		
 		System.out.println("Vyuudha " + GlobalVariables.INSTANCE.getServerType() + " Server Started at " + GlobalVariables.INSTANCE.getServerIp());
-		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("dbToInstantiate"));
+		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("db"));
 
 		//Start Replication Server
 		ReplicationHandler replicationHandler = new ReplicationHandler();

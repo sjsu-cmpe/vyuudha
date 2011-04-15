@@ -14,7 +14,11 @@ public class AccessBDB {
 
 			dbdEnv.put("key1", "value4");
 			dbdEnv.put("key2", "value2");
-			System.out.println(dbdEnv.contains("key4"));
+			
+			dbdEnv = null;
+			dbdEnv = new BDB();
+			dbdEnv.createConnection();
+			System.out.println(dbdEnv.contains("key1"));
 			System.out.println(dbdEnv.get("key1"));
 					    
 		} catch(Exception dbe) {

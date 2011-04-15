@@ -43,8 +43,8 @@ public class StorageHandler {
 		}
 	}
 
-	private void setDbToInstantiate(String dbToInstantiate) {
-		this.dbToInstantiate = dbToInstantiate;
+	private void setDbToInstantiate(String dbInstantiate) {
+		dbToInstantiate = dbInstantiate;
 	}
 
 	/**
@@ -68,7 +68,7 @@ public class StorageHandler {
 	private void setConfigurations() {
 		setPluginsPath(props.get("pluginsPath"));
 		setCoreStorageInterface(props.get("coreStorageInterface"));
-		setDbToInstantiate(props.get("dbToInstantiate"));
+		setDbToInstantiate(props.get("db"));
 	}
 
 	private APIInterface getInstance() throws UnknownHostException {
@@ -86,7 +86,7 @@ public class StorageHandler {
 		String[] bufArray = buf.split(",");
 		String methodName = bufArray[0].trim();
 		
-		if (this.coreStorageInterface == null || this.dbToInstantiate == null 
+		if (this.coreStorageInterface == null || dbToInstantiate == null 
 				|| this.pluginsPath == null) {
 			setConfigurations();
 		}
@@ -116,9 +116,9 @@ public class StorageHandler {
 	private Object invokeNativeMethod(String methodName, String[] bufArray) {
 		try {
 			int bufArrayLength = bufArray.length;
-			StringBuilder builder = new StringBuilder(pluginsPath);
-			builder.append(".storage." +  dbToInstantiate.toLowerCase() + "." + dbToInstantiate);
-			String className = builder.toString();
+//			StringBuilder builder = new StringBuilder(pluginsPath);
+//			builder.append(".storage." +  dbToInstantiate.toLowerCase() + "." + dbToInstantiate);
+			String className = dbToInstantiate;
 			
 			Class cls = Class.forName(className);
 			Class parameterTypes[] = new Class[bufArrayLength - 1];
@@ -157,7 +157,7 @@ public class StorageHandler {
 		if (methodName.equals("put")) {
 			dbInterface.put(bufArray[1].trim(), bufArray[2].trim());
 			
-			replicateData(bufArray);
+			//replicateData(bufArray);
 			return "put";
 		} else if (methodName.equals("get")) {
 			return dbInterface.get(bufArray[1]);
@@ -185,7 +185,8 @@ public class StorageHandler {
 		} else {
 			params = new String[]{bufArray[1].trim(), bufArray[2].trim(), bufArray[3].trim()};
 		}
-		dbInterface.replicate(bufArray[1].trim(), bufArray[2].trim());
+		//dbInterface.replicate(bufArray[1].trim(), bufArray[2].trim());
+		replicationHandler.setDBObject(dbInterface);
 		replicationHandler.replicate(params);
 	}
 
