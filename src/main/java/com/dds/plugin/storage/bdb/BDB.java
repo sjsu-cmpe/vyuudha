@@ -184,7 +184,6 @@ public class BDB extends Database implements APIInterface{
 
 	@Override
 	public void replicate(String key, String value) throws Exception {
-		System.out.println("Replicated!");
 		logger.info("Replicate function");
 		BDB bdb = new BDB(true);
 		bdb.createConnection();
@@ -194,7 +193,6 @@ public class BDB extends Database implements APIInterface{
 	}
 	
 	public Object getFromReplicate(String key) {
-		System.out.println("Getting from replicate store");
 		logger.info("Getting from replicate store");
 		BDB bdb = new BDB(true);
 		bdb.createConnection();

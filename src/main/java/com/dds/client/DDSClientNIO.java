@@ -213,7 +213,7 @@ public class DDSClientNIO implements DDSClientInterface, Runnable {
 		try {
 			socketChannel.finishConnect();
 		} catch (IOException e) {
-			System.out.println(e);
+			logger.error(e.getLocalizedMessage());
 			key.cancel();
 			return;
 		}

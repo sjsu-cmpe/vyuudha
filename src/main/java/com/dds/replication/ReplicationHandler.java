@@ -71,7 +71,6 @@ public class ReplicationHandler implements APIInterface {
 			logger.error("Insufficient parameters");
 			throw new UnsupportedException("Insufficient parameters");
 		}
-		System.out.println("Factor : " + factor);	
 		factor = factor - 1;
 		if (factor >= 0) {
 			replicate(keyValue[0], keyValue[1], factor);

@@ -21,8 +21,6 @@ public class XMLConfigParser {
 			doc.getDocumentElement().normalize();
 
 			NodeList listOfNodes = doc.getElementsByTagName("node");
-			int nodeCount = listOfNodes.getLength();
-			System.out.println("Total no of nodes : " + nodeCount);
 
 			for (int s = 0; s < listOfNodes.getLength(); s++) {
 				org.w3c.dom.Node firstNode = listOfNodes.item(s);
