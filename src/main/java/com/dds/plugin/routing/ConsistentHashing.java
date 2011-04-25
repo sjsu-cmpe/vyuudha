@@ -4,10 +4,11 @@ import java.util.Collection;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import com.dds.cluster.Node;
+import com.dds.core.GlobalVariables;
 import com.dds.interfaces.HashingInterface;
 import com.dds.interfaces.RoutingInterface;
 import com.dds.utils.Helper;
-import com.dds.cluster.Node;
 
 public class ConsistentHashing implements RoutingInterface {
 
@@ -43,5 +44,39 @@ public class ConsistentHashing implements RoutingInterface {
 			hash = tailMap.isEmpty() ? circle.firstKey() : tailMap.firstKey();
 		}
 		return circle.get(hash);
+	}
+	 
+	public Node getNextNode() {
+		int nodeId = GlobalVariables.INSTANCE.getNodeId();
+		
+		boolean keyFound = false;
+		for (Integer key : circle.keySet()) {
+			if (keyFound) {
+				return circle.get(key);
+			}
+			Node node = circle.get(key);
+			if (node.getNodeId() == nodeId) {
+				keyFound = true;
+			}
+			if (key == circle.lastKey() && keyFound) {
+				return circle.get(circle.firstKey());
+			}
+		}
+		return null;
+	}
+	
+	public boolean isNodePresent(int nodeId) {
+		
+		for (Integer key : circle.keySet()) {
+			Node n1 = circle.get(key);
+			if (n1.getNodeId() == nodeId) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public TreeMap<Integer, Node> getMap() {
+		return circle;
 	}
 }

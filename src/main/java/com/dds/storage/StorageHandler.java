@@ -9,12 +9,14 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.dds.cluster.Node;
 import com.dds.core.GlobalVariables;
 import com.dds.exception.StorageException;
 import com.dds.interfaces.APIInterface;
+import com.dds.interfaces.RoutingInterface;
 import com.dds.replication.ReplicationHandler;
-import com.dds.utils.Property;
 import com.dds.utils.Helper;
+import com.dds.utils.Property;
 
 /**
  * This class provides the abstraction layer over the Storage calls.
@@ -156,12 +158,14 @@ public class StorageHandler {
 	private Object invokeMethod(String methodName, String[] bufArray) throws Exception {
 		if (methodName.equals("put")) {
 			dbInterface.put(bufArray[1].trim(), bufArray[2].trim());
+			replicateData(bufArray);
 			
-			//replicateData(bufArray);
 			return "put";
 		} else if (methodName.equals("get")) {
+			
 			return dbInterface.get(bufArray[1]);
 		} else if (methodName.equals("delete")) {
+			
 			dbInterface.delete(bufArray[1]);
 			return "deleted";
 		} else if (methodName.equals("replicate")) {
@@ -169,6 +173,7 @@ public class StorageHandler {
 			replicateData(bufArray);
 			return "replicate";
 		} else if (methodName.equals("contains")) {
+			
 			return Boolean.valueOf(dbInterface.contains(bufArray[1]));
 		} else {
 			throw new StorageException("No matching method found");
@@ -177,8 +182,11 @@ public class StorageHandler {
 
 	private void replicateData(String[] bufArray) throws Exception {
 		ReplicationHandler replicationHandler = new ReplicationHandler();
-		replicationHandler.setNextNodeInfo("XXX", "XXX");
-		//TODO
+		RoutingInterface routing = GlobalVariables.INSTANCE.getRouting();
+		Node nextNode = routing.getNextNode();
+		
+		replicationHandler.setNextNodeInfo(nextNode.getNodeIpAddress(), Integer.toString(nextNode.getReplicationPort()));
+
 		String[] params = null;
 		if (bufArray.length == 3) {
 			params = new String[]{bufArray[1].trim(), bufArray[2].trim()};	

@@ -17,14 +17,16 @@ public class Node implements Serializable{
 	private String nodeIpAddress;
 	private int nodeExternalPort;
 	private int nodeInternalPort;
+	private int nodeReplicationPort;
 	private int heartbeat;
 	private transient TimeoutTimer timeoutTimer;
 
-	public Node(int nodeId, String nodeIpAddress, int nodeExternalPort, int nodeInternalPort) {
+	public Node(int nodeId, String nodeIpAddress, int nodeExternalPort, int nodeInternalPort, int nodeReplication) {
 		this.nodeId = nodeId;
 		this.nodeIpAddress = nodeIpAddress;
 		this.nodeExternalPort = nodeExternalPort;
 		this.nodeInternalPort = nodeInternalPort;
+		this.nodeReplicationPort = nodeReplication;
 		this.heartbeat = 10;
 		this.timeoutTimer = new TimeoutTimer(1000, new GossipProtocol(), this);
 	}
@@ -44,6 +46,10 @@ public class Node implements Serializable{
 	public void setNodeIpAddress(String nodeName) {
 		this.nodeIpAddress = nodeName;
 	}
+	
+	public void setReplication(Integer nodeReplication) {
+		this.nodeReplicationPort = nodeReplication;
+	}
 
 	public Integer getNodeId() {
 		return this.nodeId;
@@ -59,6 +65,10 @@ public class Node implements Serializable{
 
 	public int getInternalPort() {
 		return this.nodeInternalPort;
+	}
+	
+	public int getReplicationPort() {
+		return this.nodeReplicationPort;
 	}
 	public void startTimeoutTimer() {
 		this.timeoutTimer.start();
@@ -78,7 +88,7 @@ public class Node implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Member [address=" + nodeIpAddress + ", heartbeat=" + heartbeat + "]";
+		return "Member [nodeId =" + nodeId + ", address=" + nodeIpAddress + ", heartbeat=" + heartbeat + "]";
 	}
 
 	/* (non-Javadoc)

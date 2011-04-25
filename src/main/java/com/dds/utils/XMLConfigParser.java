@@ -49,8 +49,13 @@ public class XMLConfigParser {
 					Element nodeInternalPortElement = (Element) nodeInternalPortList.item(0);
 					NodeList textnodeInternalPortList = nodeInternalPortElement.getChildNodes();
 					Integer nodeInternalPort = Integer.parseInt(((org.w3c.dom.Node) textnodeInternalPortList.item(0)).getNodeValue().trim());
-					
-					com.dds.cluster.Node node = new com.dds.cluster.Node(nodeId, nodeIpAddress, nodeExternalPort, nodeInternalPort);
+
+					NodeList nodeReplicationList = firstNodeElement.getElementsByTagName("nodeReplication");
+					Element nodeReplicationElement = (Element) nodeReplicationList.item(0);
+					NodeList textnodeReplicationList = nodeReplicationElement.getChildNodes();
+					Integer nodeReplication = Integer.parseInt(((org.w3c.dom.Node) textnodeReplicationList.item(0)).getNodeValue().trim());
+
+					com.dds.cluster.Node node = new com.dds.cluster.Node(nodeId, nodeIpAddress, nodeExternalPort, nodeInternalPort, nodeReplication);
 					
 					nodes.add(node);
 				}

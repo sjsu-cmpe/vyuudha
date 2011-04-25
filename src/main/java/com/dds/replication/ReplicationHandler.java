@@ -60,10 +60,9 @@ public class ReplicationHandler implements APIInterface {
 	public void setNextNodeInfo(String address, String port) {
 		nextNodeAddress = address;
 		nextNodePort = port;
-		
-		nextNodeAddress = replicationMap.get("server_ip");
-		// nextNodePort = replicationMap.get("server_port_internal");
-		nextNodePort = "9094";
+//		nextNodeAddress = replicationMap.get("server_ip");
+//		nextNodePort = replicationMap.get("server_port_internal");
+//		nextNodePort = "9094";
 	}
 	
 	public void replicate(String...keyValue) throws Exception {
@@ -142,7 +141,6 @@ public class ReplicationHandler implements APIInterface {
 
 	public void setDBObject(APIInterface dbInterface) {
 		this.dbInterface = dbInterface;
-		
 	}
 
 }

@@ -40,4 +40,10 @@ public class VBuckets implements RoutingInterface{
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public Node getNextNode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

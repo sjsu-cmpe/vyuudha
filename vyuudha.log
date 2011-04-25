@@ -1,0 +1,5 @@
+0    [Thread-4] INFO  com.dds.plugin.storage.bdb.BDB  - Connection to BDB database established
+8    [Thread-4] INFO  com.dds.plugin.storage.bdb.BDB  - BDB connection created
+23   [Thread-4] INFO  com.dds.plugin.storage.bdb.BDB  - ebay1 : san jose4 inserted into DB
+24   [Thread-4] ERROR com.dds.storage.StorageHandler  - Exception : 2
+24   [Thread-4] INFO  com.dds.plugin.storage.bdb.BDB  - BDB connection closed

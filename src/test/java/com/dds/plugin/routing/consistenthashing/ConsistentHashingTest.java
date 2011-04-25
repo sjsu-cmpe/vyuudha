@@ -14,16 +14,22 @@ public class ConsistentHashingTest {
 		HashingInterface mhf = GlobalVariables.INSTANCE.getHash();
 		Collection<Node> nodes = new ArrayList<Node>();
 		Node n;
-		for (int i = 0; i < 5; i++) {
-			n = new Node(i, null, i, i);
-			n.setNodeId(i);
+		for (int i = 1; i < 5; i++) {
+			n = new Node(i, "ip" + i, i, i, i);
 			nodes.add(n);
 		}
 
 		ConsistentHashing ch = new ConsistentHashing();
-
-		int hashedKeyOfValue = mhf.hash("Hello".getBytes());
-		n = ch.getNode(hashedKeyOfValue);
+		ch.setHashingTechnique(mhf);
+		ch.setupRoutingCluster(nodes);
+		
+		Node n1 = ch.getNextNode();
+		System.out.println(n1.toString());
+		System.out.println(n1.getNodeIpAddress());
+		System.out.println(n1.getReplicationPort());
+		
+//		int hashedKeyOfValue = mhf.hash("Hello".getBytes());
+//		n = ch.getNode(hashedKeyOfValue);
 
 		/*
 		 * When you get the Node object, persist the value in that given node.

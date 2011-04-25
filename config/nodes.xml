@@ -2,19 +2,29 @@
 	<node>
 		<nodeId>1</nodeId>
 		<nodeIpAddress>127.0.0.1</nodeIpAddress>
-		<nodeExternalPort>8081</nodeExternalPort>
-		<nodeInternalPort>9091</nodeInternalPort>
+		<nodeExternalPort>8001</nodeExternalPort>
+		<nodeInternalPort>9001</nodeInternalPort>
+		<nodeReplication>9002</nodeReplication>
 	</node>
 	<node>
 		<nodeId>2</nodeId>
 		<nodeIpAddress>127.0.0.1</nodeIpAddress>
-		<nodeExternalPort>8082</nodeExternalPort>
-		<nodeInternalPort>9092</nodeInternalPort>
+		<nodeExternalPort>8005</nodeExternalPort>
+		<nodeInternalPort>9005</nodeInternalPort>
+		<nodeReplication>9006</nodeReplication>
 	</node>
-	<node>
+		<node>
 		<nodeId>3</nodeId>
 		<nodeIpAddress>127.0.0.1</nodeIpAddress>
-		<nodeExternalPort>8083</nodeExternalPort>
-		<nodeInternalPort>9093</nodeInternalPort>
+		<nodeExternalPort>8011</nodeExternalPort>
+		<nodeInternalPort>9011</nodeInternalPort>
+		<nodeReplication>9012</nodeReplication>
+	</node>
+		<node>
+		<nodeId>4</nodeId>
+		<nodeIpAddress>127.0.0.1</nodeIpAddress>
+		<nodeExternalPort>8015</nodeExternalPort>
+		<nodeInternalPort>9015</nodeInternalPort>
+		<nodeReplication>9016</nodeReplication>
 	</node>
 </nodes>
