@@ -189,7 +189,7 @@ public class StorageHandler {
 
 		String[] params = null;
 		if (bufArray.length == 3) {
-			params = new String[]{bufArray[1].trim(), bufArray[2].trim()};	
+			params = new String[]{bufArray[1].trim(), bufArray[2].trim(), null};	
 		} else {
 			params = new String[]{bufArray[1].trim(), bufArray[2].trim(), bufArray[3].trim()};
 		}

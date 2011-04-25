@@ -61,6 +61,11 @@ public class BDB extends Database implements APIInterface{
 	 */
 	public String get(String key) {
 		
+		if (!contains(key)) {
+			Object retObj = getFromReplicate(key);
+			return (String)retObj;
+		}
+		
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		
 		Cursor cursor = null;
@@ -176,11 +181,23 @@ public class BDB extends Database implements APIInterface{
 
 	@Override
 	public void replicate(String key, String value) throws Exception {
+		System.out.println("Replicated!");
 		logger.info("Replicate function");
 		BDB bdb = new BDB(true);
 		bdb.createConnection();
-		bdb.put(key + "new", value + "new");
+		bdb.put(key, value + "node4");
 		bdb.closeConnection();
 		bdb = null;
+	}
+	
+	public Object getFromReplicate(String key) {
+		System.out.println("Getting from replicate store");
+		logger.info("Getting from replicate store");
+		BDB bdb = new BDB(true);
+		bdb.createConnection();
+		
+		Object retObj = bdb.get(key);	
+		bdb.closeConnection();
+		return (String) retObj;
 	}
 }

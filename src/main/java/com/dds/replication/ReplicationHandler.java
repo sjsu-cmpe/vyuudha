@@ -60,19 +60,12 @@ public class ReplicationHandler implements APIInterface {
 	public void setNextNodeInfo(String address, String port) {
 		nextNodeAddress = address;
 		nextNodePort = port;
-//		nextNodeAddress = replicationMap.get("server_ip");
-//		nextNodePort = replicationMap.get("server_port_internal");
-//		nextNodePort = "9094";
 	}
 	
 	public void replicate(String...keyValue) throws Exception {
 		
 		int factor;
-		if (keyValue[2] == null) {
-			factor = 0;
-		} else {
-			factor = Integer.parseInt(keyValue.length == 2 ? replicationMap.get("writes") : keyValue[2]);
-		}
+		factor = Integer.parseInt(keyValue[2] == null ? replicationMap.get("writes") : keyValue[2]);
 		
 		if (keyValue.length < 2 || keyValue.length > 3) {
 			logger.error("Insufficient parameters");
@@ -80,13 +73,15 @@ public class ReplicationHandler implements APIInterface {
 		}
 			
 		factor = factor - 1;
-		if (factor != 0) {
+		if (factor > 0) {
 			replicate(keyValue[0], keyValue[1], factor);
 		}
 	}
 	
 	public void replicate(String key, String value, int factor) throws Exception {
-		dbInterface.replicate(key, value);
+		if ((factor + 1) != Integer.parseInt(replicationMap.get("writes"))) {
+			dbInterface.replicate(key, value);
+		}
 		
 		ReplicationClientHandler clientHandler = new ReplicationClientHandler();
 
