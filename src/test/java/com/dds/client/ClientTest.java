@@ -13,8 +13,8 @@ public class ClientTest {
 		ClientHandler handle = new ClientHandler();
 		
 		try {
-			handle.createConnection("nio:127.0.0.1:8005");
-			//handle.put("ebay1","san jose4");
+			handle.createConnection("nio:127.0.0.1:8011");
+			handle.put("ebay1","san jose4");
 			System.out.println(handle.get("ebay1"));
 			
 			handle.closeConnection();

@@ -1,5 +1,10 @@
-0    [Thread-4] INFO  com.dds.plugin.storage.bdb.BDB  - Connection to BDB database established
-8    [Thread-4] INFO  com.dds.plugin.storage.bdb.BDB  - BDB connection created
-23   [Thread-4] INFO  com.dds.plugin.storage.bdb.BDB  - ebay1 : san jose4 inserted into DB
-24   [Thread-4] ERROR com.dds.storage.StorageHandler  - Exception : 2
-24   [Thread-4] INFO  com.dds.plugin.storage.bdb.BDB  - BDB connection closed
+0    [Thread-2] INFO  com.dds.plugin.storage.bdb.BDB  - Connection to BDB database established
+18   [Thread-2] INFO  com.dds.plugin.storage.bdb.BDB  - BDB connection created
+18   [Thread-2] INFO  com.dds.plugin.storage.bdb.BDB  - Replicate function
+65   [Thread-2] INFO  com.dds.plugin.storage.bdb.BDB  - Connection to BDB database established
+65   [Thread-2] INFO  com.dds.plugin.storage.bdb.BDB  - BDB connection created
+80   [Thread-2] INFO  com.dds.plugin.storage.bdb.BDB  - ebay1 : san jose4node4 inserted into DB
+81   [Thread-2] INFO  com.dds.plugin.storage.bdb.BDB  - BDB connection closed
+83   [Thread-2] INFO  com.dds.replication.ReplicationClientNIO  - initialized
+86   [Thread-2] INFO  com.dds.plugin.storage.bdb.BDB  - Error in closing database: com.sleepycat.je.DatabaseException: (JE 3.3.75) Can't close Database: Database state must not be DbState.CLOSED
+86   [Thread-2] INFO  com.dds.plugin.storage.bdb.BDB  - BDB connection closed
