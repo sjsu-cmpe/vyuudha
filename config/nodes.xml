@@ -5,6 +5,7 @@
 		<nodeExternalPort>8001</nodeExternalPort>
 		<nodeInternalPort>9001</nodeInternalPort>
 		<nodeReplication>9002</nodeReplication>
+		<nodeRoutingPort>9003</nodeRoutingPort>
 	</node>
 	<node>
 		<nodeId>2</nodeId>
@@ -12,6 +13,7 @@
 		<nodeExternalPort>8005</nodeExternalPort>
 		<nodeInternalPort>9005</nodeInternalPort>
 		<nodeReplication>9006</nodeReplication>
+		<nodeRoutingPort>9007</nodeRoutingPort>
 	</node>
 		<node>
 		<nodeId>3</nodeId>
@@ -19,6 +21,7 @@
 		<nodeExternalPort>8011</nodeExternalPort>
 		<nodeInternalPort>9011</nodeInternalPort>
 		<nodeReplication>9012</nodeReplication>
+		<nodeRoutingPort>9013</nodeRoutingPort>
 	</node>
 		<node>
 		<nodeId>4</nodeId>
@@ -26,5 +29,6 @@
 		<nodeExternalPort>8015</nodeExternalPort>
 		<nodeInternalPort>9015</nodeInternalPort>
 		<nodeReplication>9016</nodeReplication>
+		<nodeRoutingPort>9017</nodeRoutingPort>
 	</node>
 </nodes>
