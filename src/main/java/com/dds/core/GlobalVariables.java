@@ -15,10 +15,10 @@ import com.dds.utils.PluginMap;
 
 public enum GlobalVariables {
 	INSTANCE;
-	
+
 	public ArrayList<Node> nodeList;
 	public ArrayList<Node> deadNodeList = new ArrayList<Node>();
-	
+
 	/**
 	 * server.properties data
 	 */
@@ -29,9 +29,10 @@ public enum GlobalVariables {
 	private int serverPortInternal;
 	private int routingPort;
 	private String serverIp;
-	
+	private Node currentNode;
+
 	private PluginMap<String, Object> map = new PluginMap<String, Object>();
-	
+
 	/**
 	 * @return the nodeId
 	 */
@@ -101,7 +102,7 @@ public enum GlobalVariables {
 		routingPort = Integer.parseInt(props.get("routing_port"));
 		serverIp = props.get("server_ip");
 	}
-	
+
 	/**
 	 * setProperties by default picks up properties files from the default
 	 * config folder from project root. User need not specify it explicitly
@@ -109,31 +110,43 @@ public enum GlobalVariables {
 	public void setProperties() {
 		setProperties(null);
 	}
-		
+
 	public APIInterface getAPI() {
 		return (APIInterface)map.get(PluginEnum.API.toString());
 	}
-	
+
 	public ServerInterface getServer() {
 		return (ServerInterface)map.get(PluginEnum.SERVER.toString());
 	}
-	
+
 	public HashingInterface getHash() {
 		return (HashingInterface)map.get(PluginEnum.HASHING.toString());
 	}
-	
+
 	public MembershipInterface getMembership() {
 		return (MembershipInterface)map.get(PluginEnum.MEMBERSHIP.toString());
 	}
-	
+
 	public RoutingInterface getRouting() {
 		return (RoutingInterface)map.get(PluginEnum.ROUTING.toString());
 	}
 
-    public int getRoutingPort() {
+	public int getRoutingPort() {
 		if (props == null || props.isEmpty()) {
 			setProperties();
 		}
 		return routingPort;
+	}
+
+	public Node getCurrentNode() {
+		if (currentNode == null) {
+			for (Node n : nodeList) {
+				if (n.getNodeId() == nodeId) {
+					currentNode = n;
+					break;
+				}
+			}
+		}
+		return currentNode;
 	}
 }
