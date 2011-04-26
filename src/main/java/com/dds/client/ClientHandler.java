@@ -5,6 +5,7 @@ package com.dds.client;
 
 import com.dds.exception.UnsupportedException;
 import com.dds.interfaces.APIInterface;
+import com.dds.utils.Helper;
 
 /**
  * @author ravid
@@ -81,6 +82,10 @@ public class ClientHandler implements APIInterface {
 	 */
 	public Boolean contains(String key) throws Exception {
 		return (Boolean)sendMessage("contains," + key);
+	}
+	 
+	public Object sendMessage(byte[] buffer) throws Exception {
+		return sendMessage((String)Helper.getObject(buffer));
 	}
 	
 	private Object sendMessage(String stream) throws Exception {

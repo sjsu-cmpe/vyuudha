@@ -15,7 +15,7 @@ public class ConsistentHashingTest {
 		Collection<Node> nodes = new ArrayList<Node>();
 		Node n;
 		for (int i = 1; i < 5; i++) {
-			n = new Node(i, "ip" + i, i, i, i);
+			n = new Node(i, "ip" + i, i, i, i, i);
 			nodes.add(n);
 		}
 

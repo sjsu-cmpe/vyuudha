@@ -185,8 +185,6 @@ public class StorageHandler {
 		RoutingInterface routing = GlobalVariables.INSTANCE.getRouting();
 		Node nextNode = routing.getNextNode();
 		
-		replicationHandler.setNextNodeInfo(nextNode.getNodeIpAddress(), Integer.toString(nextNode.getReplicationPort()));
-
 		String[] params = null;
 		if (bufArray.length == 3) {
 			params = new String[]{bufArray[1].trim(), bufArray[2].trim(), null};	
@@ -194,6 +192,7 @@ public class StorageHandler {
 			params = new String[]{bufArray[1].trim(), bufArray[2].trim(), bufArray[3].trim()};
 		}
 		//dbInterface.replicate(bufArray[1].trim(), bufArray[2].trim());
+		replicationHandler.setNextNodeInfo(nextNode);
 		replicationHandler.setDBObject(dbInterface);
 		replicationHandler.replicate(params);
 	}

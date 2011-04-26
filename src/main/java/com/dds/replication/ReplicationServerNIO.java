@@ -12,10 +12,15 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
+import com.dds.core.RequestHandler;
 import com.dds.interfaces.ServerInterface;
-import com.dds.storage.StorageHandler;
 import com.dds.utils.Helper;
 
 public class ReplicationServerNIO implements Runnable, ServerInterface {
@@ -233,34 +238,36 @@ class DDSWorker implements Runnable {
 			byte[] data, int count) {
 		byte[] dataCopy = new byte[count];
 		System.arraycopy(data, 0, dataCopy, 0, count);
-
-		dataCopy = Helper.getBytes(storageCall(dataCopy));
+		RequestHandler requestHandler = new RequestHandler();
+		
+		dataCopy = Helper.getBytes(requestHandler.storageCall(dataCopy, true));
+		
 		synchronized (queue) {
 			queue.add(new ServerDataEvent(server, socket, dataCopy));
 			queue.notify();
 		}
 	}
 
-	/**
-	 * Makes a call to the DBRoot, Vyuudha storage abstraction engine
-	 * 
-	 * @param dataCopy
-	 * @return object from the core storage layer
-	 */
-	private Object storageCall(byte[] dataCopy) {
-		StorageHandler dbRoot = new StorageHandler();
-		Object objectReturned = null;
-		try {
-			objectReturned = dbRoot.invoke(dataCopy);
-			if (objectReturned != null) {
-				return objectReturned;
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return objectReturned;
-	}
+//	/**
+//	 * Makes a call to the DBRoot, Vyuudha storage abstraction engine
+//	 * 
+//	 * @param dataCopy
+//	 * @return object from the core storage layer
+//	 */
+//	private Object storageCall(byte[] dataCopy) {
+//		StorageHandler dbRoot = new StorageHandler();
+//		Object objectReturned = null;
+//		try {
+//			objectReturned = dbRoot.invoke(dataCopy);
+//			if (objectReturned != null) {
+//				return objectReturned;
+//			}
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return objectReturned;
+//	}
 
 	public void run() {
 		ServerDataEvent dataEvent;

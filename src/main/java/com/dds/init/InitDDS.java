@@ -5,10 +5,10 @@ import java.net.UnknownHostException;
 
 import com.dds.core.GlobalVariables;
 import com.dds.interfaces.HashingInterface;
-import com.dds.interfaces.MembershipInterface;
 import com.dds.interfaces.RoutingInterface;
 import com.dds.interfaces.ServerInterface;
 import com.dds.replication.ReplicationHandler;
+import com.dds.routing.RoutingServerNIO;
 import com.dds.utils.Property;
 import com.dds.utils.XMLConfigParser;
 
@@ -44,15 +44,20 @@ public class InitDDS {
 //		MembershipInterface membership = GlobalVariables.INSTANCE.getMembership();
 //		membership.start();
 		
-		System.out.println("Vyuudha " + GlobalVariables.INSTANCE.getServerType() + " Server Started at " + GlobalVariables.INSTANCE.getServerIp());
+		System.out.println("Vyuudha " + GlobalVariables.INSTANCE.getServerType() + " Server started at " + GlobalVariables.INSTANCE.getServerIp());
 		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("db"));
 
 		//Start Replication Server
 		ReplicationHandler replicationHandler = new ReplicationHandler();
 		replicationHandler.initReplicationServer();
 		
-		//Setup the server and start listening to request
 		InetAddress address = InetAddress.getByName(GlobalVariables.INSTANCE.getServerIp());
+		
+		RoutingServerNIO routingServerNIO = new RoutingServerNIO();
+		routingServerNIO.start(address, GlobalVariables.INSTANCE.getRoutingPort());
+		
+		//Setup the server and start listening to request
+		
 		ServerInterface serverIO = GlobalVariables.INSTANCE.getServer();
 		serverIO.start(address, GlobalVariables.INSTANCE.getServerPortExternal());
 	}

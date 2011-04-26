@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.dds.cluster.Node;
 import com.dds.exception.UnsupportedException;
 import com.dds.interfaces.APIInterface;
 import com.dds.interfaces.ServerInterface;
@@ -28,6 +29,7 @@ public class ReplicationHandler implements APIInterface {
 	private String nextNodePort;
 
 	private APIInterface dbInterface;
+	private ReplicationClientHandler clientHandler = new ReplicationClientHandler();
 	
 	public ReplicationHandler() {
 		this(null);
@@ -57,9 +59,14 @@ public class ReplicationHandler implements APIInterface {
 		System.out.println("Replication Server started at " + replicationAddress.toString() + " : " + replicationPort);
 	}
 	
+	public void setNextNodeInfo(Node nextNode) {
+		setNextNodeInfo(nextNode.getNodeIpAddress(), Integer.toString(nextNode.getReplicationPort()));
+	}
+	
 	public void setNextNodeInfo(String address, String port) {
 		nextNodeAddress = address;
 		nextNodePort = port;
+		System.out.println("Next Node Address : " + nextNodeAddress + "; Port : " + nextNodePort);
 	}
 	
 	public void replicate(String...keyValue) throws Exception {
@@ -71,6 +78,7 @@ public class ReplicationHandler implements APIInterface {
 			logger.error("Insufficient parameters");
 			throw new UnsupportedException("Insufficient parameters");
 		}
+		System.out.println("Factor : " + factor);
 		factor = factor - 1;
 		if (factor >= 0) {
 			replicate(keyValue[0], keyValue[1], factor);
@@ -82,10 +90,10 @@ public class ReplicationHandler implements APIInterface {
 			dbInterface.replicate(key, value);
 		}
 		
-		ReplicationClientHandler clientHandler = new ReplicationClientHandler();
-
-		clientHandler.createConnection(nextNodeAddress + ":" + nextNodePort);
-		clientHandler.replicate(key, value, factor);
+		if (factor > 0 ) {
+			clientHandler.createConnection(nextNodeAddress + ":" + nextNodePort);
+			clientHandler.replicate(key, value, factor);
+		}
 	}
 
 	@Override

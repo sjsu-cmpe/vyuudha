@@ -27,6 +27,7 @@ public enum GlobalVariables {
 	private String serverType;
 	private int serverPortExternal;
 	private int serverPortInternal;
+	private int routingPort;
 	private String serverIp;
 	
 	private PluginMap<String, Object> map = new PluginMap<String, Object>();
@@ -97,6 +98,7 @@ public enum GlobalVariables {
 		serverType = props.get("server_type");
 		serverPortExternal = Integer.parseInt(props.get("server_port_external"));
 		serverPortInternal = Integer.parseInt(props.get("server_port_internal"));
+		routingPort = Integer.parseInt(props.get("routing_port"));
 		serverIp = props.get("server_ip");
 	}
 	
@@ -126,5 +128,12 @@ public enum GlobalVariables {
 	
 	public RoutingInterface getRouting() {
 		return (RoutingInterface)map.get(PluginEnum.ROUTING.toString());
+	}
+
+    public int getRoutingPort() {
+		if (props == null || props.isEmpty()) {
+			setProperties();
+		}
+		return routingPort;
 	}
 }

@@ -53,7 +53,12 @@ public class XMLConfigParser {
 					NodeList textnodeReplicationList = nodeReplicationElement.getChildNodes();
 					Integer nodeReplication = Integer.parseInt(((org.w3c.dom.Node) textnodeReplicationList.item(0)).getNodeValue().trim());
 
-					com.dds.cluster.Node node = new com.dds.cluster.Node(nodeId, nodeIpAddress, nodeExternalPort, nodeInternalPort, nodeReplication);
+					NodeList nodeRoutingList = firstNodeElement.getElementsByTagName("nodeRoutingPort");
+					Element nodeRoutingElement = (Element) nodeRoutingList.item(0);
+					NodeList textnodeRoutingList = nodeRoutingElement.getChildNodes();
+					Integer nodeRouting = Integer.parseInt(((org.w3c.dom.Node) textnodeRoutingList.item(0)).getNodeValue().trim());
+
+					com.dds.cluster.Node node = new com.dds.cluster.Node(nodeId, nodeIpAddress, nodeExternalPort, nodeInternalPort, nodeReplication, nodeRouting);
 					
 					nodes.add(node);
 				}

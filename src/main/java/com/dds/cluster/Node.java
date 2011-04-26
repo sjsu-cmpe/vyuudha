@@ -18,15 +18,18 @@ public class Node implements Serializable{
 	private int nodeExternalPort;
 	private int nodeInternalPort;
 	private int nodeReplicationPort;
+	private int nodeRoutingPort;
 	private int heartbeat;
 	private transient TimeoutTimer timeoutTimer;
 
-	public Node(int nodeId, String nodeIpAddress, int nodeExternalPort, int nodeInternalPort, int nodeReplication) {
+	public Node(int nodeId, String nodeIpAddress, int nodeExternalPort, 
+			int nodeInternalPort, int nodeReplication, int nodeRouting) {
 		this.nodeId = nodeId;
 		this.nodeIpAddress = nodeIpAddress;
 		this.nodeExternalPort = nodeExternalPort;
 		this.nodeInternalPort = nodeInternalPort;
 		this.nodeReplicationPort = nodeReplication;
+		this.nodeRoutingPort = nodeRouting;
 		this.heartbeat = 10;
 		this.timeoutTimer = new TimeoutTimer(1000, new GossipProtocol(), this);
 	}
@@ -47,8 +50,12 @@ public class Node implements Serializable{
 		this.nodeIpAddress = nodeName;
 	}
 	
-	public void setReplication(Integer nodeReplication) {
+	public void setReplicationPort(Integer nodeReplication) {
 		this.nodeReplicationPort = nodeReplication;
+	}
+	
+	public void setRoutingPort(Integer nodeRouting) {
+		this.nodeRoutingPort = nodeRouting;
 	}
 
 	public Integer getNodeId() {
@@ -70,6 +77,11 @@ public class Node implements Serializable{
 	public int getReplicationPort() {
 		return this.nodeReplicationPort;
 	}
+
+	public int getRoutingPort() {
+		return this.nodeRoutingPort;
+	}
+	
 	public void startTimeoutTimer() {
 		this.timeoutTimer.start();
 	}
