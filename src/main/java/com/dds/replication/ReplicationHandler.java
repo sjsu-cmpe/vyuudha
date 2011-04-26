@@ -66,7 +66,6 @@ public class ReplicationHandler implements APIInterface {
 	public void setNextNodeInfo(String address, String port) {
 		nextNodeAddress = address;
 		nextNodePort = port;
-		System.out.println("Next Node Address : " + nextNodeAddress + "; Port : " + nextNodePort);
 	}
 	
 	public void replicate(String...keyValue) throws Exception {
@@ -78,7 +77,7 @@ public class ReplicationHandler implements APIInterface {
 			logger.error("Insufficient parameters");
 			throw new UnsupportedException("Insufficient parameters");
 		}
-		System.out.println("Factor : " + factor);
+		System.out.println("Replication factor : " + factor);
 		factor = factor - 1;
 		if (factor >= 0) {
 			replicate(keyValue[0], keyValue[1], factor);

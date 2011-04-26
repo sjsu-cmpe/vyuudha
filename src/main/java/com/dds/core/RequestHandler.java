@@ -36,15 +36,12 @@ public class RequestHandler {
 		String key = bufArray[1].trim();
 
 		Node node = routing.getNode(key);
-		System.out.println("Node to persist " + node.toString());
 
 		if (node.getNodeId() == nodeId || persist) {
-			System.out.println("Store In Me Please!");
 			return persistData(dataCopy);
 		} else {
 			try {
 				String bootstrapUrl  = "nio:" +  node.getNodeIpAddress() + ":" + node.getRoutingPort();
-				System.out.println("Bootstrap URL : " + bootstrapUrl);
 				ClientHandler clientHandle = new ClientHandler();
 				clientHandle.createConnection(bootstrapUrl);
 				return clientHandle.sendMessage(dataCopy);
