@@ -98,13 +98,11 @@ Project Details:
  a. Using the start script provided under scripts folder present in the project directory.
  
  b. Run InitDDS using an IDE
- 
  - To stop the server.
  
  a. Use the stop script inside the scripts folder present in the project directory.
  
  b. If server has been started using an IDE, then simply end the execution.
- 
  - To start a single instance server (Only one node is up and running)
  
  a. Open server.properties.
