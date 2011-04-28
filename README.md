@@ -93,6 +93,7 @@ Project Details:
  unless if it is a single instance node. (For single instance details check Starting and Stopping Vyuudha)
 
 5. Starting and Stopping the Vyuudha
+ 
  - There are two ways of starting the server.
  
  a. Using the start script provided under scripts folder present in the project directory.
