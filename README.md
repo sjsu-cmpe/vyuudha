@@ -15,6 +15,7 @@ The application has a pluggable architecture where the following functionalities
 4. Hashing function: `com.dds.plugin.hashing.*`
 5. Serialization format (Client side and node-to-node communication): `com.dds.plugin.serialization.*`  
 6. Membership: `com.dds.plugin.membership.*`
+7. Replication: `com.dds.replication.*`
 
 Q: What does `Vyuudha` mean?  
 A: Vyuudha in sanskrit means `Distributed`. Prounounced "vy-uudh".  
