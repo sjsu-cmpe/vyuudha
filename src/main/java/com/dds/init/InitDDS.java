@@ -25,16 +25,13 @@ public class InitDDS {
 	
 	public static void start(String configPath) throws UnknownHostException
 	{
-		System.out.println("Vyuudha " + GlobalVariables.INSTANCE.getServerType() + " Server starting at " + GlobalVariables.INSTANCE.getServerIp());
-		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("db"));
-		
+		//Create nodes collection
+		GlobalVariables.INSTANCE.nodeList = XMLConfigParser.readNodes(configPath + "/nodes.xml");
 		//The new config folder has to be in the project root folder
 		//eg. If the config file is here: /home/ravid/Documents/git/vyuudha/newConfigFolder 
 		// Write: newConfigFolder
 		GlobalVariables.INSTANCE.setProperties(configPath);
 				
-		//Create nodes collection
-		GlobalVariables.INSTANCE.nodeList = XMLConfigParser.readNodes(configPath + "/nodes.xml");
 		InetAddress address = InetAddress.getByName(GlobalVariables.INSTANCE.getServerIp());
 		boolean singleInstance = GlobalVariables.INSTANCE.isSingleInstance();
 		
@@ -53,6 +50,8 @@ public class InitDDS {
 		if (!singleInstance) {
 			startServices(address);
 		}
+		System.out.println("Vyuudha " + GlobalVariables.INSTANCE.getServerType() + " Server starting at " + GlobalVariables.INSTANCE.getServerIp());
+		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("db"));
 		
 		//Setup the server and start listening to request
 		ServerInterface serverIO = GlobalVariables.INSTANCE.getServer();

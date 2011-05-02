@@ -98,12 +98,15 @@ public enum GlobalVariables {
 			props = Property.getProperty().getServerConfigProperties();
 		}
 		nodeId = Integer.parseInt(props.get("node_id"));
+		if (currentNode == null) {
+			currentNode = getCurrentNode();
+		}		
 		singleInstance = Boolean.parseBoolean(props.get("single_instance"));
 		serverType = props.get("server_type");
-		serverPortExternal = Integer.parseInt(props.get("server_port_external"));
-		serverPortInternal = Integer.parseInt(props.get("server_port_internal"));
-		routingPort = Integer.parseInt(props.get("routing_port"));
-		serverIp = props.get("server_ip");
+		serverPortExternal = currentNode.getExternalPort();
+		serverPortInternal = currentNode.getInternalPort();
+		routingPort = currentNode.getRoutingPort();
+		serverIp = currentNode.getNodeIpAddress();
 	}
 
 	/**
@@ -140,49 +143,30 @@ public enum GlobalVariables {
 		}
 		return routingPort;
 	}
-
-	public Node getLiveNode(int nodeId){
-		
-		for(int i=0; i<GlobalVariables.INSTANCE.nodeList.size(); i++){
-			if(GlobalVariables.INSTANCE.nodeList.get(i).getNodeId().equals(nodeId)){
-				return GlobalVariables.INSTANCE.nodeList.get(i);
+	
+	private Node getNode(List<Node> list, int nodeId) {
+		for (Node node : list) {
+			if (node.getNodeId().equals(nodeId)) {
+				return node;
 			}
 		}
-		
 		return null;
+	}
+
+	public Node getLiveNode(int nodeId){
+		return getNode(nodeList, nodeId);
 	}
 	
 	public Node getDeadNode(int nodeId){
-		
-		for(int i=0; i<GlobalVariables.INSTANCE.deadNodeList.size(); i++){
-			if(GlobalVariables.INSTANCE.deadNodeList.get(i).getNodeId().equals(nodeId)){
-				return GlobalVariables.INSTANCE.deadNodeList.get(i);
-			}
-		}
-		
-		return null;
+		return getNode(deadNodeList, nodeId);
 	}
 	
 	public boolean containsLiveNode(int nodeId){
-		
-		for(int i=0; i<GlobalVariables.INSTANCE.nodeList.size(); i++){
-			if(GlobalVariables.INSTANCE.nodeList.get(i).getNodeId().equals(nodeId)){
-				return true;
-			}
-		}
-		
-		return false;
+		return getLiveNode(nodeId) == null ? false: true;
 	}
 	
 	public boolean containsDeadNode(int nodeId){
-		
-		for(int i=0; i<GlobalVariables.INSTANCE.deadNodeList.size(); i++){
-			if(GlobalVariables.INSTANCE.deadNodeList.get(i).getNodeId().equals(nodeId)){
-				return true;
-			}
-		}
-		
-		return false;
+		return getDeadNode(nodeId) == null ? false: true;
 	}
 	
 	public void removeDeadList(int nodeId){
@@ -203,16 +187,11 @@ public enum GlobalVariables {
 	
 	public Node getCurrentNode() {
 		if (currentNode == null) {
-			for (Node n : nodeList) {
-				if (n.getNodeId() == nodeId) {
-					currentNode = n;
-					break;
-				}
-			}
+			return getLiveNode(nodeId);
 		}
 		return currentNode;
 	}
-
+	
 	/**
 	 * @return the singleInstance
 	 */

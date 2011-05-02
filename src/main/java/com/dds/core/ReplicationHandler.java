@@ -52,7 +52,7 @@ public class ReplicationHandler implements APIInterface {
 		//Setup replication server and start listening to requests
 		replicationAddress = InetAddress.getByName(replicationMap.get("server_ip"));
 		replicationIO = new ReplicationServerNIO();
-		replicationPort = Integer.parseInt(replicationMap.get("server_port_internal"));
+		replicationPort = GlobalVariables.INSTANCE.getCurrentNode().getReplicationPort();
 		replicationIO.start(replicationAddress, replicationPort);
 		
 		ReplicationServerNIO replication = new ReplicationServerNIO();
