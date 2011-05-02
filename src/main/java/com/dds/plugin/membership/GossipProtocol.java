@@ -25,7 +25,6 @@ import com.dds.interfaces.MembershipInterface;
 public class GossipProtocol implements NotificationListener, MembershipInterface{
 
 	private int t_gossip; //in ms
-	public int t_cleanup; //in ms
 	private Random random;
 	private DatagramSocket server;
 	private Node me;
@@ -42,8 +41,7 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 			}
 		}));
 		
-		t_gossip = 800; // 1 second
-		t_cleanup = 800; // 10 seconds
+		t_gossip = 500; // 5 seconds
 		random = new Random();
 
 		int port = GlobalVariables.INSTANCE.getServerPortInternal();
@@ -53,15 +51,15 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 			//Checks for local Node ID
 			if(host.getNodeId().equals(GlobalVariables.INSTANCE.getNodeId())) {
 				me = host;
-				System.out.println("I am " + me.getNodeId());
 			}
 		}
 
-		System.out.println("Original Member List");
-		System.out.println("---------------------");
-		for (Node member : GlobalVariables.INSTANCE.nodeList) {
-			System.out.println(member.getNodeId());
-		}
+//		Sending member list.		
+//		System.out.println("Original Member List");
+//		System.out.println("---------------------");
+//		for (Node member : GlobalVariables.INSTANCE.nodeList) {
+//			System.out.println(member.getNodeId());
+//		}
 
 		if(port != 0) {
 			try {
@@ -96,6 +94,7 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 
 		synchronized (Collections.synchronizedList(GlobalVariables.INSTANCE.nodeList)) {
 			try {
+				GlobalVariables.INSTANCE.getLiveNode(me.getNodeId()).setHeartbeat(me.getHeartbeat());
 				Node member = getMemberToNotify();
 				
 				if(member != null) {
@@ -109,8 +108,8 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 
 					InetAddress dest;
 					dest = InetAddress.getByName(host);
-
-					System.out.println("Sending to " + member.getNodeId());
+					
+					System.out.println("Sending to Node " + member.getNodeId());
 					System.out.println("---------------------");
 					for (Node m : GlobalVariables.INSTANCE.nodeList) {
 						System.out.println("Node ID: "+ m.getNodeId());
@@ -153,7 +152,6 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 		}
 		else {
 			System.out.println("I am alone in this world.");
-			System.out.println(GlobalVariables.INSTANCE.nodeList.size());
 		}
 
 		return member;
@@ -223,10 +221,10 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 					if(readObject instanceof ArrayList<?>) {
 						ArrayList<Node> list = (ArrayList<Node>) readObject;
 
-						System.out.println("Received member list:");
-						for (Node member : list) {
-							System.out.println(member);
-						}
+//						System.out.println("Received member list:");
+//						for (Node member : list) {
+//							System.out.println(member.getNodeId());
+//						}
 						// Merge our list with the one we just received
 						mergeLists(list);
 					}
@@ -278,7 +276,7 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 									Node newLocalMember = new Node(remoteMember.getNodeId(), remoteMember.getNodeIpAddress(), remoteMember.getExternalPort(), remoteMember.getInternalPort(), remoteMember.getReplicationPort(), remoteMember.getRoutingPort());
 									GlobalVariables.INSTANCE.nodeList.add(newLocalMember);
 									newLocalMember.startTimeoutTimer();
-								} // else ignore
+								}
 							}
 							else {
 								// brand spanking new member - welcome
@@ -304,7 +302,7 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 
 		Node deadMember = (Node) notification.getUserData();
 
-		System.out.println("Dead member detected: " + deadMember);
+//		System.out.println("Dead member detected: " + deadMember);
 
 		synchronized (Collections.synchronizedList(GlobalVariables.INSTANCE.nodeList)) {
 			GlobalVariables.INSTANCE.removeLiveList(deadMember.getNodeId());
