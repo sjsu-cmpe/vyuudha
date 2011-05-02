@@ -6,7 +6,7 @@ import com.dds.plugin.membership.GossipProtocol;
 
 
 /*
- * The note attributed go in here. The values of the values will be fetched from the config file.
+ * The values of the values will be fetched from the config file.
  */
 public class Node implements Serializable{
 	/**
@@ -31,7 +31,8 @@ public class Node implements Serializable{
 		this.nodeReplicationPort = nodeReplication;
 		this.nodeRoutingPort = nodeRouting;
 		this.heartbeat = 10;
-		this.timeoutTimer = new TimeoutTimer(1000, new GossipProtocol(), this);
+		//2000 is the t_cleanup for gossiping
+		this.timeoutTimer = new TimeoutTimer(2000, new GossipProtocol(), this);
 	}
 
 	public void setNodeId(Integer nodeId) {
