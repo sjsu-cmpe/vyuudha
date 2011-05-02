@@ -1,4 +1,4 @@
-package com.dds.replication;
+package com.dds.server.routing;
 
 //Read more: www.cs.brown.edu/courses/cs161/papers/j-nio-ltr.pdf+java+nio+tutorial , pg 30
 //NIO: http://rox-xmlrpc.sourceforge.net/niotut/index.html
@@ -12,18 +12,13 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.dds.core.RequestHandler;
 import com.dds.interfaces.ServerInterface;
 import com.dds.utils.Helper;
 
-public class ReplicationServerNIO implements Runnable, ServerInterface {
+public class RoutingServerNIO implements Runnable, ServerInterface {
 	// The host:port combination to listen on
 	private InetAddress hostAddress;
 	private int port;
@@ -209,6 +204,7 @@ public class ReplicationServerNIO implements Runnable, ServerInterface {
 	}
 
 	public void start(InetAddress hostAddress, int port) {
+		System.out.println("Routing Server started at " + hostAddress.toString() + ":" + port);
 		try {
 			this.hostAddress = hostAddress;
 			this.port = port;
@@ -234,40 +230,18 @@ public class ReplicationServerNIO implements Runnable, ServerInterface {
 class DDSWorker implements Runnable {
 	private List<ServerDataEvent> queue = new LinkedList<ServerDataEvent>();
 
-	public void processData(ReplicationServerNIO server, SocketChannel socket,
+	public void processData(RoutingServerNIO server, SocketChannel socket,
 			byte[] data, int count) {
 		byte[] dataCopy = new byte[count];
 		System.arraycopy(data, 0, dataCopy, 0, count);
 		RequestHandler requestHandler = new RequestHandler();
 		
-		dataCopy = Helper.getBytes(requestHandler.storageCall(dataCopy, true));
-		
+		dataCopy = Helper.getBytes(requestHandler.storageCall(dataCopy));
 		synchronized (queue) {
 			queue.add(new ServerDataEvent(server, socket, dataCopy));
 			queue.notify();
 		}
 	}
-
-//	/**
-//	 * Makes a call to the DBRoot, Vyuudha storage abstraction engine
-//	 * 
-//	 * @param dataCopy
-//	 * @return object from the core storage layer
-//	 */
-//	private Object storageCall(byte[] dataCopy) {
-//		StorageHandler dbRoot = new StorageHandler();
-//		Object objectReturned = null;
-//		try {
-//			objectReturned = dbRoot.invoke(dataCopy);
-//			if (objectReturned != null) {
-//				return objectReturned;
-//			}
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return objectReturned;
-//	}
 
 	public void run() {
 		ServerDataEvent dataEvent;
@@ -293,11 +267,11 @@ class DDSWorker implements Runnable {
 }
 
 class ServerDataEvent {
-	public ReplicationServerNIO server;
+	public RoutingServerNIO server;
 	public SocketChannel socket;
 	public byte[] data;
 
-	public ServerDataEvent(ReplicationServerNIO server, SocketChannel socket, byte[] data) {
+	public ServerDataEvent(RoutingServerNIO server, SocketChannel socket, byte[] data) {
 		this.server = server;
 		this.socket = socket;
 		this.data = data;

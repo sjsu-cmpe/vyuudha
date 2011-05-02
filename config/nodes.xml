@@ -15,20 +15,20 @@
 		<nodeReplication>9006</nodeReplication>
 		<nodeRoutingPort>9007</nodeRoutingPort>
 	</node>
-		<node>
-		<nodeId>3</nodeId>
-		<nodeIpAddress>127.0.0.1</nodeIpAddress>
-		<nodeExternalPort>8011</nodeExternalPort>
-		<nodeInternalPort>9011</nodeInternalPort>
-		<nodeReplication>9012</nodeReplication>
-		<nodeRoutingPort>9013</nodeRoutingPort>
-	</node>
-		<node>
-		<nodeId>4</nodeId>
-		<nodeIpAddress>127.0.0.1</nodeIpAddress>
-		<nodeExternalPort>8015</nodeExternalPort>
-		<nodeInternalPort>9015</nodeInternalPort>
-		<nodeReplication>9016</nodeReplication>
-		<nodeRoutingPort>9017</nodeRoutingPort>
-	</node>
+<!-- 		<node> -->
+<!-- 		<nodeId>3</nodeId> -->
+<!-- 		<nodeIpAddress>127.0.0.1</nodeIpAddress> -->
+<!-- 		<nodeExternalPort>8011</nodeExternalPort> -->
+<!-- 		<nodeInternalPort>9011</nodeInternalPort> -->
+<!-- 		<nodeReplication>9012</nodeReplication> -->
+<!-- 		<nodeRoutingPort>9013</nodeRoutingPort> -->
+<!-- 	</node> -->
+<!-- 		<node> -->
+<!-- 		<nodeId>4</nodeId> -->
+<!-- 		<nodeIpAddress>127.0.0.1</nodeIpAddress> -->
+<!-- 		<nodeExternalPort>8015</nodeExternalPort> -->
+<!-- 		<nodeInternalPort>9015</nodeInternalPort> -->
+<!-- 		<nodeReplication>9016</nodeReplication> -->
+<!-- 		<nodeRoutingPort>9017</nodeRoutingPort> -->
+<!-- 	</node> -->
 </nodes>

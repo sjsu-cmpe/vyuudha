@@ -242,27 +242,6 @@ class DDSWorker implements Runnable {
 		}
 	}
 
-//	/**
-//	 * Makes a call to the DBRoot, Vyuudha storage abstraction engine
-//	 * 
-//	 * @param dataCopy
-//	 * @return object from the core storage layer
-//	 */
-//	private Object storageCall(byte[] dataCopy) {
-//		StorageHandler dbRoot = new StorageHandler();
-//		Object objectReturned = null;
-//		try {
-//			objectReturned = dbRoot.invoke(dataCopy);
-//			if (objectReturned != null) {
-//				return objectReturned;
-//			}
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return objectReturned;
-//	}
-
 	public void run() {
 		ServerDataEvent dataEvent;
 

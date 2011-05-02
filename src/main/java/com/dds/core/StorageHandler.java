@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dds.storage;
+package com.dds.core;
 
 import java.lang.reflect.Method;
 import java.net.UnknownHostException;
@@ -10,11 +10,9 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.dds.cluster.Node;
-import com.dds.core.GlobalVariables;
 import com.dds.exception.StorageException;
 import com.dds.interfaces.APIInterface;
 import com.dds.interfaces.RoutingInterface;
-import com.dds.replication.ReplicationHandler;
 import com.dds.utils.Helper;
 import com.dds.utils.Property;
 
@@ -34,11 +32,13 @@ public class StorageHandler {
 	private String coreStorageInterface;
 	private String pluginsPath;
 	private static Map<String, String> props = Property.getProperty().getDatabaseProperties();
-
+	private boolean singleInstance = GlobalVariables.INSTANCE.isSingleInstance();
+	
 	public StorageHandler() {
 		if (dbInterface == null) {
 			try {
 				dbInterface = this.getInstance();
+				//dbInterface.createConnection();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -104,7 +104,7 @@ public class StorageHandler {
 		} finally {
 			dbInterface.closeConnection();
 		}
-		return null;
+		return "Error";
 	}
 
 	/**
@@ -144,7 +144,7 @@ public class StorageHandler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		return null;
+		return "Error";
 	}
 
 	/**
@@ -158,8 +158,10 @@ public class StorageHandler {
 	private Object invokeMethod(String methodName, String[] bufArray) throws Exception {
 		if (methodName.equals("put")) {
 			dbInterface.put(bufArray[1].trim(), bufArray[2].trim());
-			replicateData(bufArray);
 			
+			if (!singleInstance) {
+				replicateData(bufArray);
+			}			
 			return "put";
 		} else if (methodName.equals("get")) {
 			

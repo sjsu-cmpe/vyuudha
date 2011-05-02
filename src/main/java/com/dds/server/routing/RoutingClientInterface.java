@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dds.routing;
+package com.dds.server.routing;
 
 /**
  * @author ravid

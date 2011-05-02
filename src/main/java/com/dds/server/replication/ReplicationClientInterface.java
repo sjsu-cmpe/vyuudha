@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dds.replication;
+package com.dds.server.replication;
 
 /**
  * @author ravid

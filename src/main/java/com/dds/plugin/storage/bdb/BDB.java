@@ -18,16 +18,17 @@ import com.sleepycat.je.OperationStatus;
 
 public class BDB extends Database implements APIInterface{
 
-	private Environment myEnv;
+	private static boolean openConnection = false;
+	private static Environment myEnv;
 	private static Database vendorDb;
-	
+
 	Logger logger = Logger.getLogger(BDB.class);
 	static BDBConfiguration bdbConfiguration = new BDBConfiguration();
-	
+
 	public BDB() {
 		super(bdbConfiguration.getConfiguration());
 	}
-	
+
 	public BDB(boolean replicate) {
 		super(bdbConfiguration.getConfiguration(true));
 	}
@@ -35,16 +36,19 @@ public class BDB extends Database implements APIInterface{
 	public void createConnection() {
 
 		try {
-			myEnv = bdbConfiguration.getConfiguration();
-			// Now create and open our databases.
-			logger.info("Connection to BDB database established");
-			vendorDb = myEnv.openDatabase(null, "VyuudhaDB", bdbConfiguration.getDbConfig());
-			
+			if (!openConnection) {
+				myEnv = bdbConfiguration.getConfiguration();
+				// Now create and open our databases.
+				logger.info("Connection to BDB database established");
+				vendorDb = myEnv.openDatabase(null, bdbConfiguration.getDbName(), bdbConfiguration.getDbConfig());
+				openConnection = true;
+				logger.info("BDB connection created");
+			}
+
 		} catch (Exception ex) {
 			logger.info("Error in setup: " + ex.toString());
 		}
-		
-		logger.info("BDB connection created");
+		logger.info("BDB connection created111");
 	}
 
 	// Getter methods
@@ -63,25 +67,25 @@ public class BDB extends Database implements APIInterface{
 	 * @see com.dds.interfaces.storage.DBInterface#get(java.lang.String)
 	 */
 	public String get(String key, boolean replicate) {
-		
+
 		if (!contains(key) && !replicate) {
 			Object retObj = getFromReplicate(key);
 			return (String)retObj;
 		}
-		
+
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
-		
+
 		Cursor cursor = null;
-        DatabaseEntry entryValue = new DatabaseEntry();
-        List<Object> results = new ArrayList<Object>();
-        LockMode lockMode = LockMode.DEFAULT;
+		DatabaseEntry entryValue = new DatabaseEntry();
+		List<Object> results = new ArrayList<Object>();
+		LockMode lockMode = LockMode.DEFAULT;
 		try {
 			cursor = vendorDb.openCursor(null, null);
-	        for(OperationStatus status = cursor.getSearchKey(entryKey, entryValue, lockMode); 
-	        status == OperationStatus.SUCCESS; status = cursor.getNextDup(entryKey, entryValue, lockMode)) {
-	        	results.add(Helper.getObject(entryValue.getData()));
-	        }
-	        cursor.close();
+			for(OperationStatus status = cursor.getSearchKey(entryKey, entryValue, lockMode); 
+			status == OperationStatus.SUCCESS; status = cursor.getNextDup(entryKey, entryValue, lockMode)) {
+				results.add(Helper.getObject(entryValue.getData()));
+			}
+			cursor.close();
 		} catch (DatabaseException e) {
 			logger.error("Exception : " + e.getMessage());
 		} 
@@ -92,7 +96,7 @@ public class BDB extends Database implements APIInterface{
 		String value = (String) retObj;
 		logger.info(key + " : " + value + " retrieved from DB");
 		retObj = retObj == null ? "Not Found" : retObj;
-		
+
 		return (String) retObj;
 	}
 
@@ -102,7 +106,7 @@ public class BDB extends Database implements APIInterface{
 	public void put(String key, String value) {
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		DatabaseEntry entryValue = new DatabaseEntry(Helper.getBytes(value));
-		
+
 		try {
 			vendorDb.put(null, entryKey, entryValue);
 		} catch (DatabaseException e) {
@@ -116,7 +120,7 @@ public class BDB extends Database implements APIInterface{
 	 */
 	public void delete(String key) {
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
-		
+
 		try {
 			OperationStatus status = vendorDb.delete(null, entryKey);
 			if (status == OperationStatus.SUCCESS) {
@@ -134,15 +138,17 @@ public class BDB extends Database implements APIInterface{
 	 * @see com.dds.interfaces.storage.DBInterface#closeConnection()
 	 */
 	public void closeConnection() {
-		if (myEnv != null) {
-			try {		
-				vendorDb.close();
-				myEnv.close();
-			} catch (DatabaseException dbe) {
-				logger.info("Error in closing database: " + dbe.toString());
-			}
-		}
-		logger.info("BDB connection closed");
+//		if (myEnv != null || vendorDb != null) {
+//			try {		
+//				vendorDb.close();
+//				myEnv.close();
+//			} catch (DatabaseException dbe) {
+//				logger.info("Error in closing database: " + dbe.toString());
+//			}
+//			vendorDb = null;
+//			myEnv = null;
+//		}
+//		logger.info("BDB connection closed");
 	}
 
 	/* (non-Javadoc)
@@ -150,24 +156,24 @@ public class BDB extends Database implements APIInterface{
 	 */
 	public Boolean contains(String key) {
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
-		
+
 		boolean keyFound = false;
 		Cursor cursor = null;
-        DatabaseEntry entryValue = new DatabaseEntry();
+		DatabaseEntry entryValue = new DatabaseEntry();
 
 		try {
 			cursor = vendorDb.openCursor(null, null);
-	        OperationStatus status = cursor.getSearchKey(entryKey, entryValue, LockMode.DEFAULT); 
-	        if (status == OperationStatus.SUCCESS) {
-	        	keyFound = true;
-	        }
-	        cursor.close();
+			OperationStatus status = cursor.getSearchKey(entryKey, entryValue, LockMode.DEFAULT); 
+			if (status == OperationStatus.SUCCESS) {
+				keyFound = true;
+			}
+			cursor.close();
 		} catch (DatabaseException e) {
 			logger.error("Exception : " + e.getMessage());
 		} 
 		return keyFound;
 	}
-	
+
 	public void createConnection(String bootstrapUrl) throws Exception {
 		throw new UnsupportedException("Unsupported method");
 	}
@@ -178,7 +184,7 @@ public class BDB extends Database implements APIInterface{
 
 	@Override
 	public void replicate(String key, String value, int factor)
-			throws Exception {
+	throws Exception {
 		throw new UnsupportedException("Unsupported Method");
 	}
 
@@ -187,16 +193,16 @@ public class BDB extends Database implements APIInterface{
 		logger.info("Replicate function");
 		BDB bdb = new BDB(true);
 		bdb.createConnection();
-		bdb.put(key, value + "node4");
+		bdb.put(key, value);
 		bdb.closeConnection();
 		bdb = null;
 	}
-	
+
 	public Object getFromReplicate(String key) {
 		logger.info("Getting from replicate store");
 		BDB bdb = new BDB(true);
 		bdb.createConnection();
-		
+
 		Object retObj = bdb.get(key, true);	
 		bdb.closeConnection();
 		return (String) retObj;

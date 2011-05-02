@@ -201,7 +201,7 @@ public class MongoDB extends Mongo implements APIInterface {
 		logger.info("Replicate function");
 		MongoDB mongo = new MongoDB(true);
 		mongo.createConnection();
-		mongo.put(key + "new", value + "new");
+		mongo.put(key, value);
 		mongo.closeConnection();
 		mongo = null;
 	}

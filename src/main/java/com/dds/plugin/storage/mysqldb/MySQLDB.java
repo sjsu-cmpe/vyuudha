@@ -23,10 +23,11 @@ public class MySQLDB implements APIInterface {
 
 	Logger logger = Logger.getLogger(MySQLDB.class);
 
-	private Connection connect = null;
-	private Statement statement = null;
-	private PreparedStatement preparedStatement = null;
-	private ResultSet resultSet = null;
+	private static boolean openConnection = false;
+	private Connection connect;
+	private Statement statement;
+	private PreparedStatement preparedStatement;
+	private ResultSet resultSet;
 
 	private String driver;
 	private String jdbcURL;
@@ -35,53 +36,53 @@ public class MySQLDB implements APIInterface {
 	private String database;
 	private String table;
 
-    /**
+	/**
 	 * @param driver the driver to set
 	 */
-	public void setDriver(String driver) {
-		this.driver = driver;
+	public void setDriver(String _driver) {
+		driver = _driver;
 	}
 
 	/**
 	 * @param jdbcURL the jdbcURL to set
 	 */
-	public void setJdbcURL(String jdbcURL) {
-		this.jdbcURL = jdbcURL;
+	public void setJdbcURL(String _jdbcURL) {
+		jdbcURL = _jdbcURL;
 	}
 
 	/**
 	 * @param user the user to set
 	 */
-	public void setUser(String user) {
-		this.user = user;
+	public void setUser(String _user) {
+		user = _user;
 	}
 
 	/**
 	 * @param password the password to set
 	 */
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPassword(String _password) {
+		password = _password;
 	}
 
 	/**
 	 * @param database the database to set
 	 */
-	public void setDatabase(String database) {
-		this.database = database;
+	public void setDatabase(String _database) {
+		database = _database;
 	}
 
 	/**
 	 * @param table the table to set
 	 */
-	public void setTable(String table) {
-		this.table = table;
+	public void setTable(String _table) {
+		table = _table;
 	}
 
 	public MySQLDB() {
 		this(false);
-	
+
 	}
-	
+
 	public MySQLDB(boolean replicate) {
 		Map<String, String> properties;
 		if (!replicate) {
@@ -91,7 +92,7 @@ public class MySQLDB implements APIInterface {
 		}
 		setup(properties);
 	}
-	
+
 	private void setup(Map<String, String> properties) {	
 		setDriver(properties.get("mysql_driver"));
 		setJdbcURL(properties.get("mysql_jdbcUrl"));
@@ -100,28 +101,35 @@ public class MySQLDB implements APIInterface {
 		setUser(properties.get("mysql_user"));
 		setPassword(properties.get("mysql_password"));
 	}
-	
+
 	/**
 	 * Create Database and Table if they don't exist
 	 * @throws SQLException 
 	 */
 	private void initialSetup() throws SQLException {
-		String createDBQuery = "CREATE DATABASE IF NOT EXISTS " + this.database;
-		String createTableQuery = "CREATE TABLE IF NOT EXISTS  " + this.database + "."+ this.table 
+		String createDBQuery = "CREATE DATABASE IF NOT EXISTS " + database;
+		String createTableQuery = "CREATE TABLE IF NOT EXISTS  " + database + "."+ table 
 		+"(`KEY` varchar(100) NOT NULL, `VALUE` varchar(500) NOT NULL, `TIME` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`KEY`))"; 
-        statement.executeUpdate(createDBQuery);
-        statement.executeUpdate(createTableQuery);
+		statement.executeUpdate(createDBQuery);
+		statement.executeUpdate(createTableQuery);
 	}
 
 	@Override
 	public void createConnection() {
+		createConnection(false);
+	}
+	
+	public void createConnection(boolean replicate) {
 		try {
-			Class.forName(this.driver);
-			// Need to read from settings file
-			connect = DriverManager
-			.getConnection(this.jdbcURL + "user=" + this.user + "&password=" + this.password);
-			statement = connect.createStatement();
-			initialSetup();
+			if (!openConnection || replicate) {
+				Class.forName(driver);
+				// Need to read from settings file
+				connect = DriverManager
+				.getConnection(jdbcURL + "user=" + user + "&password=" + password);
+				statement = connect.createStatement();
+				initialSetup();
+				openConnection = true;
+			}
 		} catch (Exception e) {
 			logger.error("Exception : " + e.getMessage());
 		}
@@ -132,8 +140,8 @@ public class MySQLDB implements APIInterface {
 	public String get(String key) {
 		try {
 			resultSet = statement
-			.executeQuery("select " + this.database + "."+ this.table +".VALUE from " + this.database 
-					+ "."+ this.table +" where " + this.database + "."+ this.table +".KEY = \"" + key 
+			.executeQuery("select " + database + "."+ table +".VALUE from " + database 
+					+ "."+ table +" where " + database + "."+ table +".KEY = \"" + key 
 					+ "\"");
 
 			resultSet.next();
@@ -143,7 +151,7 @@ public class MySQLDB implements APIInterface {
 		} catch (Exception e) {
 			logger.error("Exception : " + e.getMessage());			
 		}
-		return null;
+		return "Not Found";
 	}
 
 	@Override
@@ -151,16 +159,16 @@ public class MySQLDB implements APIInterface {
 		try {
 			if (!contains(key)) {
 				preparedStatement = connect
-				.prepareStatement("insert into " + this.database + "."+ this.table +" values (?, ?, ?)");
+				.prepareStatement("insert into " + database + "."+ table +" values (?, ?, ?)");
 
 				preparedStatement.setString(1, key);
 				preparedStatement.setString(2, value);
 				preparedStatement.setTimestamp(3, Helper.getCurrentTime());
 			} else {
 				preparedStatement = connect
-				.prepareStatement("update " + this.database + "."+ this.table +" set " 
-						+ this.database + "."+ this.table +".VALUE = ?, " + this.database 
-						+ "."+ this.table +".TIME = ? where " + this.database + "."+ this.table 
+				.prepareStatement("update " + database + "."+ table +" set " 
+						+ database + "."+ table +".VALUE = ?, " + database 
+						+ "."+ table +".TIME = ? where " + database + "."+ table 
 						+".KEY =  ? ");
 
 				preparedStatement.setString(1, value);
@@ -169,9 +177,11 @@ public class MySQLDB implements APIInterface {
 			}
 			preparedStatement.executeUpdate();	
 			logger.info(key + ", " + value + " inserted into MySQL");
+			return;
 		} catch (Exception e) {
 			logger.error("Exception : " + e.getMessage());
 		}
+		logger.info("Unable to insert");
 	}
 
 	@Override
@@ -179,8 +189,8 @@ public class MySQLDB implements APIInterface {
 		try {
 			if (contains(key)) {
 				preparedStatement = connect
-				.prepareStatement("delete from  " + this.database + "."+ this.table +" where " 
-						+ this.database + "."+ this.table +".KEY = \'" + key + "\'");
+				.prepareStatement("delete from  " + database + "."+ table +" where " 
+						+ database + "."+ table +".KEY = \'" + key + "\'");
 				preparedStatement.executeUpdate();	
 			}
 		} catch (Exception e) {
@@ -202,6 +212,7 @@ public class MySQLDB implements APIInterface {
 			if (connect != null) {
 				connect.close();
 			}
+			openConnection = false;
 			logger.info("MySQL connection closed");
 		} catch (Exception e) {
 			logger.error("Exception : " + e.getMessage());
@@ -210,7 +221,7 @@ public class MySQLDB implements APIInterface {
 
 	@Override
 	public Boolean contains(String key) {
-		if (get(key) == null){
+		if (get(key).equals("Not Found")){
 			return false;
 		} else {
 			return true;
@@ -221,7 +232,7 @@ public class MySQLDB implements APIInterface {
 	public void createConnection(String bootstrapUrl) throws Exception {
 		throw new UnsupportedException("Unsupported method");
 	}
-	
+
 	@Override
 	public Object nativeAPI(String... args) throws Exception {
 		throw new UnsupportedException("Unsupported method");
@@ -229,17 +240,21 @@ public class MySQLDB implements APIInterface {
 
 	@Override
 	public void replicate(String key, String value, int factor)
-			throws Exception {
+	throws Exception {
 		throw new UnsupportedException("Unsupported method");
 	}
 
 	@Override
 	public void replicate(String key, String value) throws Exception {
+		try {
 		logger.info("Replicate function");
 		MySQLDB mySQL = new MySQLDB(true);
-		mySQL.createConnection();
-		mySQL.put(key + "new", value + "new");
-		mySQL.closeConnection();
-		mySQL = null;
+		mySQL.createConnection(true);
+		mySQL.put(key, value);
+		//mySQL.closeConnection();
+		mySQL = null; 
+		} catch (Exception ex) {
+			System.out.println("Caught!");
+		}
 	}
 }

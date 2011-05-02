@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dds.replication;
+package com.dds.server.replication;
 
 import com.dds.exception.UnsupportedException;
 import com.dds.interfaces.APIInterface;

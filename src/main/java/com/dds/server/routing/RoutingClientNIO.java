@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dds.replication;
+package com.dds.server.routing;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -28,9 +28,9 @@ import com.dds.utils.Helper;
  * @author ravid
  *
  */
-public class ReplicationClientNIO implements Runnable {
+public class RoutingClientNIO implements RoutingClientInterface, Runnable {
 
-	Logger logger = Logger.getLogger(ReplicationClientNIO.class);
+	Logger logger = Logger.getLogger(RoutingClientNIO.class);
 	
 	private InetAddress host;
 	private int port;
@@ -39,25 +39,30 @@ public class ReplicationClientNIO implements Runnable {
 	private Thread t;
 	private RspHandler handler;
 
-	private List<ReplicationChangeRequest> pendingChanges = new LinkedList<ReplicationChangeRequest>();
+	private List<RoutingChangeRequest> pendingChanges = new LinkedList<RoutingChangeRequest>();
 	@SuppressWarnings("rawtypes")
 	private Map<SocketChannel, List> pendingData = new HashMap<SocketChannel, List>();
 	private Map<SocketChannel, RspHandler> rspHandlers = Collections.synchronizedMap(new HashMap<SocketChannel, RspHandler>());
 
-	public void write(String stream) throws Exception {
+	@Override
+	public Object write(String stream) throws Exception {
 		t = new Thread(this);
 		t.setDaemon(true);
 		t.start();
 		handler = new RspHandler();
 		send(Helper.getBytes(stream), handler);
+		Object retObj = handler.waitForResponse();
 		exit();
+		return retObj;
 	}
 
+	@Override
 	public void exit() throws Exception {
 		handler = null;
 		t = null;
 	}
 
+	@Override
 	public void initialize(String[] serverInfo) throws Exception {
 		if (serverInfo.length != 2) {
 			throw new UnsupportedException("Insufficient parameters");
@@ -80,16 +85,16 @@ public class ReplicationClientNIO implements Runnable {
 			try {
 				// Process any pending changes
 				synchronized (this.pendingChanges) {
-					Iterator<ReplicationChangeRequest> changes = this.pendingChanges.iterator();
+					Iterator<RoutingChangeRequest> changes = this.pendingChanges.iterator();
 					while (changes.hasNext()) {
-						ReplicationChangeRequest change = changes.next();
+						RoutingChangeRequest change = changes.next();
 						switch (change.type) {
-						case ReplicationChangeRequest.CHANGEOPS:
+						case RoutingChangeRequest.CHANGEOPS:
 							SelectionKey key = change.socket
 									.keyFor(this.selector);
 							key.interestOps(change.ops);
 							break;
-						case ReplicationChangeRequest.REGISTER:
+						case RoutingChangeRequest.REGISTER:
 							change.socket.register(this.selector, change.ops);
 							break;
 						}
@@ -229,14 +234,14 @@ public class ReplicationClientNIO implements Runnable {
 		// an interest in connection events. These are raised when a channel
 		// is ready to complete connection establishment.
 		synchronized (pendingChanges) {
-			pendingChanges.add(new ReplicationChangeRequest(socketChannel, ReplicationChangeRequest.REGISTER, SelectionKey.OP_CONNECT));
+			pendingChanges.add(new RoutingChangeRequest(socketChannel, RoutingChangeRequest.REGISTER, SelectionKey.OP_CONNECT));
 		}
 		return socketChannel;
 	}
 
 }
 
-class ReplicationChangeRequest {
+class RoutingChangeRequest {
 	public static final int REGISTER = 1;
 	public static final int CHANGEOPS = 2;
 
@@ -244,7 +249,7 @@ class ReplicationChangeRequest {
 	public int type;
 	public int ops;
 
-	public ReplicationChangeRequest(SocketChannel socket, int type, int ops) {
+	public RoutingChangeRequest(SocketChannel socket, int type, int ops) {
 		this.socket = socket;
 		this.type = type;
 		this.ops = ops;
