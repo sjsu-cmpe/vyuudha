@@ -15,6 +15,7 @@ The application has a pluggable architecture where the following functionalities
 4. Hashing function: `com.dds.plugin.hashing.*`
 5. Serialization format (Client side and node-to-node communication): `com.dds.plugin.serialization.*`  
 6. Membership: `com.dds.plugin.membership.*`
+7. Replication: `com.dds.replication.*`
 
 Q: What does `Vyuudha` mean?  
 A: Vyuudha in sanskrit means `Distributed`. Prounounced "vy-uudh".  
@@ -99,13 +100,11 @@ Project Details:
  a. Using the start script provided under scripts folder present in the project directory.
  
  b. Run InitDDS using an IDE
- 
  - To stop the server.
  
  a. Use the stop script inside the scripts folder present in the project directory.
  
  b. If server has been started using an IDE, then simply end the execution.
- 
  - To start a single instance server (Only one node is up and running)
  
  a. Open server.properties.
