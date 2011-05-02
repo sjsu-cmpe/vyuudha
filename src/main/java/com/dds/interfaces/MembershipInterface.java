@@ -22,8 +22,8 @@ public interface MembershipInterface {
 	 */
 	public Node getMemberToNotify();
 	
-	/**
-	 * A listener, which will keep listening to new membership messages
-	 */
-	public void handleNotification(Notification notification, Object handback);
+//	/**
+//	 * A listener, which will keep listening to new membership messages
+//	 */
+//	public void handleNotification(Notification notification, Object handback);
 }

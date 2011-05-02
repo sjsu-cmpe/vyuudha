@@ -1,6 +1,7 @@
 package com.dds.core;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import com.dds.cluster.Node;
@@ -16,8 +17,8 @@ import com.dds.utils.PluginMap;
 public enum GlobalVariables {
 	INSTANCE;
 
-	public ArrayList<Node> nodeList;
-	public ArrayList<Node> deadNodeList = new ArrayList<Node>();
+	public List<Node> nodeList;
+	public List<Node> deadNodeList = new ArrayList<Node>();
 
 	/**
 	 * server.properties data
@@ -138,6 +139,66 @@ public enum GlobalVariables {
 		return routingPort;
 	}
 
+	public Node getLiveNode(int nodeId){
+		
+		for(int i=0; i<GlobalVariables.INSTANCE.nodeList.size(); i++){
+			if(GlobalVariables.INSTANCE.nodeList.get(i).getNodeId().equals(nodeId)){
+				return GlobalVariables.INSTANCE.nodeList.get(i);
+			}
+		}
+		
+		return null;
+	}
+	
+	public Node getDeadNode(int nodeId){
+		
+		for(int i=0; i<GlobalVariables.INSTANCE.deadNodeList.size(); i++){
+			if(GlobalVariables.INSTANCE.deadNodeList.get(i).getNodeId().equals(nodeId)){
+				return GlobalVariables.INSTANCE.deadNodeList.get(i);
+			}
+		}
+		
+		return null;
+	}
+	
+	public boolean containsLiveNode(int nodeId){
+		
+		for(int i=0; i<GlobalVariables.INSTANCE.nodeList.size(); i++){
+			if(GlobalVariables.INSTANCE.nodeList.get(i).getNodeId().equals(nodeId)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public boolean containsDeadNode(int nodeId){
+		
+		for(int i=0; i<GlobalVariables.INSTANCE.deadNodeList.size(); i++){
+			if(GlobalVariables.INSTANCE.deadNodeList.get(i).getNodeId().equals(nodeId)){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public void removeDeadList(int nodeId){
+		for(int i=0; i<GlobalVariables.INSTANCE.deadNodeList.size(); i++){
+			if(GlobalVariables.INSTANCE.deadNodeList.get(i).getNodeId().equals(nodeId)){
+				GlobalVariables.INSTANCE.deadNodeList.remove(i);
+			}
+		}
+	}
+	
+	public void removeLiveList(int nodeId){
+		for(int i=0; i<GlobalVariables.INSTANCE.nodeList.size(); i++){
+			if(GlobalVariables.INSTANCE.nodeList.get(i).getNodeId().equals(nodeId)){
+				GlobalVariables.INSTANCE.nodeList.remove(i);
+			}
+		}
+	}
+	
 	public Node getCurrentNode() {
 		if (currentNode == null) {
 			for (Node n : nodeList) {

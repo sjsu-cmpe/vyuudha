@@ -10,6 +10,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,6 +31,62 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 	private Node me;
 
 	/**
+	 * Setup the client's lists, gossiping parameters, and parse the startup config file.
+	 * Starts the client.  Specifically, start the various cycles for this protocol.
+	 * Start the gossip thread and start the receiver thread.
+	 */
+	public void start() {
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			public void run() {
+				System.out.println("Goodbye my friends...");
+			}
+		}));
+		
+		t_gossip = 800; // 1 second
+		t_cleanup = 800; // 10 seconds
+		random = new Random();
+
+		int port = GlobalVariables.INSTANCE.getServerPortInternal();
+
+		// loop over the initial hosts, and find ourselves
+		for (Node host : GlobalVariables.INSTANCE.nodeList) {
+			//Checks for local Node ID
+			if(host.getNodeId().equals(GlobalVariables.INSTANCE.getNodeId())) {
+				me = host;
+				System.out.println("I am " + me.getNodeId());
+			}
+		}
+
+		System.out.println("Original Member List");
+		System.out.println("---------------------");
+		for (Node member : GlobalVariables.INSTANCE.nodeList) {
+			System.out.println(member.getNodeId());
+		}
+
+		if(port != 0) {
+			try {
+				server = new DatagramSocket(port);
+			} catch (SocketException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			System.err.println("Could not find myself in startup lis. Fatal!!");
+			System.exit(-1);
+		}
+		
+		// Start all timers except for me
+		for (Node member : GlobalVariables.INSTANCE.nodeList) {
+			if(member != me) {
+				member.startTimeoutTimer();
+			}
+		}
+		
+		(new Thread(new MembershipGossiper())).start();
+		(new Thread(new AsychronousReceiver())).start();
+	}
+	
+	/**
 	 * Performs the sending of the membership list, after we have
 	 * incremented our own heartbeat.
 	 */
@@ -37,7 +94,7 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 
 		this.me.setHeartbeat(me.getHeartbeat() + 1);
 
-		synchronized (GlobalVariables.INSTANCE.nodeList) {
+		synchronized (Collections.synchronizedList(GlobalVariables.INSTANCE.nodeList)) {
 			try {
 				Node member = getMemberToNotify();
 				
@@ -53,7 +110,7 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 					InetAddress dest;
 					dest = InetAddress.getByName(host);
 
-					System.out.println("Sending to " + dest);
+					System.out.println("Sending to " + member.getNodeId());
 					System.out.println("---------------------");
 					for (Node m : GlobalVariables.INSTANCE.nodeList) {
 						System.out.println("Node ID: "+ m.getNodeId());
@@ -96,6 +153,7 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 		}
 		else {
 			System.out.println("I am alone in this world.");
+			System.out.println(GlobalVariables.INSTANCE.nodeList.size());
 		}
 
 		return member;
@@ -157,7 +215,7 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 					DatagramPacket p = new DatagramPacket(buf, buf.length);
 					server.receive(p);
 
-					// extract the member arraylist out of the packet
+					// extract the member array list out of the packet
 					ByteArrayInputStream bais = new ByteArrayInputStream(p.getData());
 					ObjectInputStream ois = new ObjectInputStream(bais);
 					
@@ -191,14 +249,15 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 		 * @param remoteList
 		 */
 		private void mergeLists(ArrayList<Node> remoteList) {
+			
+			synchronized (Collections.synchronizedList(GlobalVariables.INSTANCE.deadNodeList)) {
 
-			synchronized (GlobalVariables.INSTANCE.deadNodeList) {
-
-				synchronized (GlobalVariables.INSTANCE.nodeList) {
+				synchronized (Collections.synchronizedList(GlobalVariables.INSTANCE.nodeList)) {
 
 					for (Node remoteMember : remoteList) {
-						if(GlobalVariables.INSTANCE.nodeList.contains(remoteMember)) {
-							Node localMember = GlobalVariables.INSTANCE.nodeList.get(GlobalVariables.INSTANCE.nodeList.indexOf(remoteMember));
+						
+						if(GlobalVariables.INSTANCE.containsLiveNode(remoteMember.getNodeId())) {
+							Node localMember = GlobalVariables.INSTANCE.getLiveNode(remoteMember.getNodeId());
 
 							if(remoteMember.getHeartbeat() > localMember.getHeartbeat()) {
 								// update local list with latest heartbeat
@@ -211,83 +270,28 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 							// the local list does not contain the remote member
 							// the remote member is either brand new, or a previously declared dead member
 							// if its dead, check the heartbeat because it may have come back from the dead
-							if(GlobalVariables.INSTANCE.deadNodeList.contains(remoteMember)) {
-								Node localDeadMember = GlobalVariables.INSTANCE.deadNodeList.get(GlobalVariables.INSTANCE.deadNodeList.indexOf(remoteMember));
+							if(GlobalVariables.INSTANCE.containsDeadNode(remoteMember.getNodeId())) {
+								Node localDeadMember = GlobalVariables.INSTANCE.getDeadNode(remoteMember.getNodeId());
 								if(remoteMember.getHeartbeat() > localDeadMember.getHeartbeat()) {
 									// it's baa-aack
-									GlobalVariables.INSTANCE.deadNodeList.remove(localDeadMember);
-									//Node newLocalMember = new Node(remoteMember.getNodeIpAddress(), remoteMember.getHeartbeat(), GossipProtocol.this, t_cleanup);
-									GlobalVariables.INSTANCE.nodeList.add(remoteMember);
-									remoteMember.startTimeoutTimer();
+									GlobalVariables.INSTANCE.removeDeadList(localDeadMember.getNodeId());
+									Node newLocalMember = new Node(remoteMember.getNodeId(), remoteMember.getNodeIpAddress(), remoteMember.getExternalPort(), remoteMember.getInternalPort(), remoteMember.getReplicationPort(), remoteMember.getRoutingPort());
+									GlobalVariables.INSTANCE.nodeList.add(newLocalMember);
+									newLocalMember.startTimeoutTimer();
 								} // else ignore
 							}
 							else {
 								// brand spanking new member - welcome
 								//Node newLocalMember = new Node(remoteMember.getNodeIpAddress(), remoteMember.getHeartbeat(), GossipProtocol.this, t_cleanup);
-								GlobalVariables.INSTANCE.nodeList.add(remoteMember);
-								remoteMember.startTimeoutTimer();
+								Node newLocalMember = new Node(remoteMember.getNodeId(), remoteMember.getNodeIpAddress(), remoteMember.getExternalPort(), remoteMember.getInternalPort(), remoteMember.getReplicationPort(), remoteMember.getRoutingPort());
+								GlobalVariables.INSTANCE.nodeList.add(newLocalMember);
+								newLocalMember.startTimeoutTimer();
 							}
 						}
 					}
 				}
 			}
 		}
-	}
-
-	/**
-	 * Setup the client's lists, gossiping parameters, and parse the startup config file.
-	 * Starts the client.  Specifically, start the various cycles for this protocol.
-	 * Start the gossip thread and start the receiver thread.
-	 */
-	public void start() {
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			public void run() {
-				System.out.println("Goodbye my friends...");
-			}
-		}));
-		
-		t_gossip = 400; // 1 second
-		t_cleanup = 10000; // 10 seconds
-		random = new Random();
-
-		int port = GlobalVariables.INSTANCE.getServerPortInternal();
-
-		// loop over the initial hosts, and find ourselves
-		for (Node host : GlobalVariables.INSTANCE.nodeList) {
-			//Checks for local Node ID
-			if(host.getNodeId().equals(GlobalVariables.INSTANCE.getNodeId())) {
-				me = host;
-				System.out.println("I am " + me.getNodeId());
-			}
-		}
-
-		System.out.println("Original Member List");
-		System.out.println("---------------------");
-		for (Node member : GlobalVariables.INSTANCE.nodeList) {
-			System.out.println(member.getNodeId());
-		}
-
-		if(port != 0) {
-			try {
-				server = new DatagramSocket(port);
-			} catch (SocketException e) {
-				e.printStackTrace();
-			}
-		}
-		else {
-			System.err.println("Could not find myself in startup lis. Fatal!!");
-			System.exit(-1);
-		}
-		
-		// Start all timers except for me
-		for (Node member : GlobalVariables.INSTANCE.nodeList) {
-			if(member != me) {
-				member.startTimeoutTimer();
-			}
-		}
-		
-		(new Thread(new AsychronousReceiver())).start();
-		(new Thread(new MembershipGossiper())).start();
 	}
 
 	/**
@@ -302,13 +306,12 @@ public class GossipProtocol implements NotificationListener, MembershipInterface
 
 		System.out.println("Dead member detected: " + deadMember);
 
-		synchronized (GlobalVariables.INSTANCE.nodeList) {
-			GlobalVariables.INSTANCE.nodeList.remove(deadMember);
+		synchronized (Collections.synchronizedList(GlobalVariables.INSTANCE.nodeList)) {
+			GlobalVariables.INSTANCE.removeLiveList(deadMember.getNodeId());
 		}
 
-		synchronized (GlobalVariables.INSTANCE.deadNodeList) {
+		synchronized (Collections.synchronizedList(GlobalVariables.INSTANCE.deadNodeList)) {
 			GlobalVariables.INSTANCE.deadNodeList.add(deadMember);
 		}
-
 	}
 }

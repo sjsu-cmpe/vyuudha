@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 
 import com.dds.core.GlobalVariables;
 import com.dds.interfaces.HashingInterface;
+import com.dds.interfaces.MembershipInterface;
 import com.dds.interfaces.RoutingInterface;
 import com.dds.interfaces.ServerInterface;
 import com.dds.replication.ReplicationHandler;
@@ -41,8 +42,8 @@ public class InitDDS {
 		routing.setupRoutingCluster(GlobalVariables.INSTANCE.nodeList);
 
 		//Setup the membership
-//		MembershipInterface membership = GlobalVariables.INSTANCE.getMembership();
-//		membership.start();
+		MembershipInterface membership = GlobalVariables.INSTANCE.getMembership();
+		membership.start();
 		
 		System.out.println("Vyuudha " + GlobalVariables.INSTANCE.getServerType() + " Server started at " + GlobalVariables.INSTANCE.getServerIp());
 		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("db"));

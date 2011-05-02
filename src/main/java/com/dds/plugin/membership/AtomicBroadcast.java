@@ -24,12 +24,10 @@ public class AtomicBroadcast implements MembershipInterface{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public void handleNotification(Notification notification, Object handback) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-
+//
+//	@Override
+//	public void handleNotification(Notification notification, Object handback) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 }
