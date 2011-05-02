@@ -93,7 +93,8 @@ Project Details:
  and routing server/ip information is also listed here. The initial nodes configuration SHOULD BE listed in this file
  unless if it is a single instance node. (For single instance details check Starting and Stopping Vyuudha)
 
-5. Starting and Stopping the Vyuudha
+5. Starting and Stopping the Vyuudha Server
+ 
  - There are two ways of starting the server.
  
  a. Using the start script provided under scripts folder present in the project directory.

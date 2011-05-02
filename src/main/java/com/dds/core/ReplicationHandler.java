@@ -1,4 +1,4 @@
-package com.dds.replication;
+package com.dds.core;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -10,6 +10,8 @@ import com.dds.cluster.Node;
 import com.dds.exception.UnsupportedException;
 import com.dds.interfaces.APIInterface;
 import com.dds.interfaces.ServerInterface;
+import com.dds.server.replication.ReplicationClientHandler;
+import com.dds.server.replication.ReplicationServerNIO;
 import com.dds.utils.Property;
 
 /**
@@ -77,7 +79,6 @@ public class ReplicationHandler implements APIInterface {
 			logger.error("Insufficient parameters");
 			throw new UnsupportedException("Insufficient parameters");
 		}
-		System.out.println("Replication factor : " + factor);
 		factor = factor - 1;
 		if (factor >= 0) {
 			replicate(keyValue[0], keyValue[1], factor);

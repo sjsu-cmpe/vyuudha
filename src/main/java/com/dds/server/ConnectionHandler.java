@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import com.dds.storage.StorageHandler;
+import com.dds.core.StorageHandler;
 import com.dds.utils.Helper;
 
 public class ConnectionHandler implements Runnable{

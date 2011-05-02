@@ -5,7 +5,6 @@ import org.apache.log4j.Logger;
 import com.dds.client.ClientHandler;
 import com.dds.cluster.Node;
 import com.dds.interfaces.RoutingInterface;
-import com.dds.storage.StorageHandler;
 import com.dds.utils.Helper;
 
 
@@ -19,6 +18,7 @@ public class RequestHandler {
 	Logger logger = Logger.getLogger(RequestHandler.class);
 
 	private RoutingInterface routing = GlobalVariables.INSTANCE.getRouting();
+	private boolean singleInstance = GlobalVariables.INSTANCE.isSingleInstance();
 	private int nodeId = GlobalVariables.INSTANCE.getNodeId();
 	/**
 	 * Makes a call to the DBRoot, Vyuudha storage abstraction engine
@@ -37,9 +37,11 @@ public class RequestHandler {
 
 		Node node = routing.getNode(key);
 
-		if (node.getNodeId() == nodeId || persist) {
+		if (node.getNodeId() == nodeId || persist ||
+				singleInstance) {
 			return persistData(dataCopy);
 		} else {
+			System.out.println("Request routed to " + node);
 			try {
 				String bootstrapUrl  = "nio:" +  node.getNodeIpAddress() + ":" + node.getRoutingPort();
 				ClientHandler clientHandle = new ClientHandler();
@@ -53,12 +55,15 @@ public class RequestHandler {
 	}
 
 	private Object persistData(byte[] dataCopy) {
+		System.out.println("Persisting");
 		StorageHandler dbRoot = new StorageHandler();
 		Object objectReturned = null;
 		try {
 			objectReturned = dbRoot.invoke(dataCopy);
 			if (objectReturned != null) {
 				return objectReturned;
+			} else {
+				return "Error";
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

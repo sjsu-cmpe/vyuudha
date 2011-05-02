@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.dds.routing;
+package com.dds.server.routing;
 
 import com.dds.exception.UnsupportedException;
 import com.dds.interfaces.APIInterface;

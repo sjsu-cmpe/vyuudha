@@ -25,6 +25,7 @@ public enum GlobalVariables {
 	 */
 	private Map<String, String> props;
 	private int nodeId;
+	private boolean singleInstance;
 	private String serverType;
 	private int serverPortExternal;
 	private int serverPortInternal;
@@ -97,6 +98,7 @@ public enum GlobalVariables {
 			props = Property.getProperty().getServerConfigProperties();
 		}
 		nodeId = Integer.parseInt(props.get("node_id"));
+		singleInstance = Boolean.parseBoolean(props.get("single_instance"));
 		serverType = props.get("server_type");
 		serverPortExternal = Integer.parseInt(props.get("server_port_external"));
 		serverPortInternal = Integer.parseInt(props.get("server_port_internal"));
@@ -209,5 +211,15 @@ public enum GlobalVariables {
 			}
 		}
 		return currentNode;
+	}
+
+	/**
+	 * @return the singleInstance
+	 */
+	public boolean isSingleInstance() {
+		if (props == null || props.isEmpty()) {
+			setProperties();
+		}
+		return singleInstance;
 	}
 }

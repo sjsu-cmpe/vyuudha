@@ -27,6 +27,7 @@ public class BDBConfiguration {
 	private boolean readOnly;
 	private String store;
 	private String bdbPath;
+	private String dbName;
 	private Environment myEnv;
 	private File envHome;
 	private EnvironmentConfig envConfig;
@@ -44,7 +45,7 @@ public class BDBConfiguration {
 		} else {
 			properties = Property.getProperty().getReplicationProperties();
 		}
-		
+		setDbName(properties.get("bdb_dbName"));
 		setStore(properties.get("bdb_store"));
 		setBdbPath(properties.get("bdb_path"));
 		setEnvHome(this.bdbPath);
@@ -146,5 +147,19 @@ public class BDBConfiguration {
 		dbConfig = new DatabaseConfig();
 		dbConfig.setReadOnly(this.readOnly);
 		dbConfig.setAllowCreate(!this.readOnly);
+	}
+
+	/**
+	 * @param dbName the dbName to set
+	 */
+	public void setDbName(String dbName) {
+		this.dbName = dbName;
+	}
+
+	/**
+	 * @return the dbName
+	 */
+	public String getDbName() {
+		return (dbName != null ? dbName : "default");
 	}
 }
