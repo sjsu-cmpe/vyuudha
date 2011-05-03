@@ -37,10 +37,12 @@ public class BDB extends Database implements APIInterface{
 
 		try {
 			if (!openConnection) {
-				myEnv = bdbConfiguration.getConfiguration();
-				// Now create and open our databases.
-				logger.info("Connection to BDB database established");
-				vendorDb = myEnv.openDatabase(null, bdbConfiguration.getDbName(), bdbConfiguration.getDbConfig());
+				if (myEnv == null || vendorDb == null) {
+					myEnv = bdbConfiguration.getConfiguration();
+					// Now create and open our databases.
+					logger.info("Connection to BDB database established");
+					vendorDb = myEnv.openDatabase(null, bdbConfiguration.getDbName(), bdbConfiguration.getDbConfig());
+				}
 				openConnection = true;
 				logger.info("BDB connection created");
 			}
@@ -67,7 +69,8 @@ public class BDB extends Database implements APIInterface{
 	 * @see com.dds.interfaces.storage.DBInterface#get(java.lang.String)
 	 */
 	public String get(String key, boolean replicate) {
-
+		checkVendorDB();
+		
 		if (!contains(key) && !replicate) {
 			Object retObj = getFromReplicate(key);
 			return (String)retObj;
@@ -104,6 +107,7 @@ public class BDB extends Database implements APIInterface{
 	 * @see com.dds.interfaces.storage.DBInterface#put(java.lang.String, java.lang.String)
 	 */
 	public void put(String key, String value) {
+		checkVendorDB();
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 		DatabaseEntry entryValue = new DatabaseEntry(Helper.getBytes(value));
 
@@ -115,10 +119,18 @@ public class BDB extends Database implements APIInterface{
 		logger.info(key + " : " + value + " inserted into DB");
 	}
 
+	private void checkVendorDB() {
+		if (vendorDb == null) {
+			openConnection = false;
+			this.createConnection();
+		}
+	}
+
 	/* (non-Javadoc)
 	 * @see com.dds.interfaces.storage.DBInterface#delete(java.lang.String)
 	 */
 	public void delete(String key) {
+		checkVendorDB();
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 
 		try {
@@ -138,6 +150,7 @@ public class BDB extends Database implements APIInterface{
 	 * @see com.dds.interfaces.storage.DBInterface#closeConnection()
 	 */
 	public void closeConnection() {
+		openConnection = false;
 //		if (myEnv != null || vendorDb != null) {
 //			try {		
 //				vendorDb.close();
@@ -155,6 +168,8 @@ public class BDB extends Database implements APIInterface{
 	 * @see com.dds.interfaces.storage.DBInterface#contains(java.lang.String)
 	 */
 	public Boolean contains(String key) {
+		checkVendorDB();
+
 		DatabaseEntry entryKey = new DatabaseEntry(Helper.getBytes(key));
 
 		boolean keyFound = false;

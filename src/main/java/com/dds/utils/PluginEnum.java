@@ -18,4 +18,8 @@ public enum PluginEnum {
 	private PluginEnum(String str) {
 		this.value = str;
 	}
+	
+	public String getValue() {
+		return this.value;
+	}
 }

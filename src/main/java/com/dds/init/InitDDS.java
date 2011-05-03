@@ -42,13 +42,12 @@ public class InitDDS {
 		RoutingInterface routing = GlobalVariables.INSTANCE.getRouting();
 		routing.setHashingTechnique(hash);
 		routing.setupRoutingCluster(GlobalVariables.INSTANCE.nodeList);
-
-		//Setup the membership
-		MembershipInterface membership = GlobalVariables.INSTANCE.getMembership();
-		membership.start();
 		
 		if (!singleInstance) {
 			startServices(address);
+			System.out.println("Starting cluster with " + GlobalVariables.INSTANCE.nodeList.size() + " instances of : ");
+		} else {
+			System.out.println("Running single instance of :");
 		}
 		System.out.println("Vyuudha " + GlobalVariables.INSTANCE.getServerType() + " Server starting at " + GlobalVariables.INSTANCE.getServerIp());
 		System.out.println("Using " + Property.getProperty().getDatabaseProperties().get("db"));
@@ -65,7 +64,9 @@ public class InitDDS {
 	 */
 	private static void startServices(InetAddress address) 
 	throws UnknownHostException {
-		
+		//Setup the membership
+		MembershipInterface membership = GlobalVariables.INSTANCE.getMembership();
+		membership.start();
 		
 		//Start Replication Server
 		ReplicationHandler replicationHandler = new ReplicationHandler();

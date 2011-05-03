@@ -169,23 +169,24 @@ public enum GlobalVariables {
 		return getDeadNode(nodeId) == null ? false: true;
 	}
 	
-	public void removeDeadList(int nodeId){
-		for(int i=0; i<GlobalVariables.INSTANCE.deadNodeList.size(); i++){
-			if(GlobalVariables.INSTANCE.deadNodeList.get(i).getNodeId().equals(nodeId)){
-				GlobalVariables.INSTANCE.deadNodeList.remove(i);
+	public synchronized void removeDeadList(int nodeId){
+		for(int i = 0; i < deadNodeList.size(); i++){
+			if(deadNodeList.get(i).getNodeId().equals(nodeId)){
+				deadNodeList.remove(i);
 			}
 		}
 	}
 	
-	public void removeLiveList(int nodeId){
-		for(int i=0; i<GlobalVariables.INSTANCE.nodeList.size(); i++){
-			if(GlobalVariables.INSTANCE.nodeList.get(i).getNodeId().equals(nodeId)){
-				GlobalVariables.INSTANCE.nodeList.remove(i);
+	public synchronized void removeLiveList(int nodeId){
+		for(int i = 0; i < nodeList.size(); i++){
+			if(nodeList.get(i).getNodeId().equals(nodeId)){
+				getRouting().removeNode(nodeList.get(i));
+				nodeList.remove(i);				
 			}
 		}
 	}
 	
-	public Node getCurrentNode() {
+	public synchronized Node getCurrentNode() {
 		if (currentNode == null) {
 			return getLiveNode(nodeId);
 		}
@@ -200,5 +201,10 @@ public enum GlobalVariables {
 			setProperties();
 		}
 		return singleInstance;
+	}
+
+	public synchronized void addToLiveNode(Node newLocalMember) {
+		nodeList.add(newLocalMember);
+		getRouting().addNode(newLocalMember);		
 	}
 }

@@ -26,7 +26,7 @@ public class ReplicationServerConnHandler implements Runnable{
 			//
 			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 			String message = (String) ois.readObject();
-			
+
 			Object retVal = storageCall(Helper.getBytes(message));
 
 			byte[] data = Helper.getBytes(retVal);
@@ -48,6 +48,8 @@ public class ReplicationServerConnHandler implements Runnable{
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -56,19 +58,16 @@ public class ReplicationServerConnHandler implements Runnable{
 	 * 
 	 * @param dataCopy
 	 * @return object from the core storage layer
+	 * @throws Exception 
 	 */
-	private Object storageCall(byte[] dataCopy) {
+	private Object storageCall(byte[] dataCopy) throws Exception {
 		StorageHandler dbRoot = new StorageHandler();
 		Object objectReturned = null;
-		try {
-			objectReturned = dbRoot.invoke(dataCopy);
-			if (objectReturned != null) {
-				return objectReturned;
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
+
+		objectReturned = dbRoot.invoke(dataCopy);
+		if (objectReturned != null) {
+			return objectReturned;
+		}
 		return objectReturned;
 	}
 }

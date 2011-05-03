@@ -126,7 +126,7 @@ public class RoutingServerNIO implements Runnable, ServerInterface {
 		socketChannel.register(this.selector, SelectionKey.OP_READ);
 	}
 
-	private void read(SelectionKey key) throws IOException {
+	private void read(SelectionKey key) throws Exception {
 		SocketChannel socketChannel = (SocketChannel) key.channel();
 
 		// Clear out our read buffer so it's ready for new data
@@ -231,7 +231,7 @@ class DDSWorker implements Runnable {
 	private List<ServerDataEvent> queue = new LinkedList<ServerDataEvent>();
 
 	public void processData(RoutingServerNIO server, SocketChannel socket,
-			byte[] data, int count) {
+			byte[] data, int count) throws Exception {
 		byte[] dataCopy = new byte[count];
 		System.arraycopy(data, 0, dataCopy, 0, count);
 		RequestHandler requestHandler = new RequestHandler();

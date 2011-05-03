@@ -14,16 +14,16 @@ public class ClientTest {
 		long time_start = System.currentTimeMillis();
 		try {
 			
-			for (int i = 0; i < 2; i++) {
-				handle.createConnection("nio:127.0.0.1:8001");
+			for (int i = 0; i < 5; i++) {
+				handle.createConnection("nio:127.0.0.1:8005");
 				handle.put("key_" + i,"value_" + i);
 				System.out.println("Inserted " + i);
 				handle.closeConnection();
 			}
 			
 			System.out.println("Done!");
-			handle.createConnection("nio:127.0.0.1:8001");
-			System.out.println(handle.get("key_1"));
+			handle.createConnection("nio:127.0.0.1:8005");
+			System.out.println(handle.get("key_4"));
 			handle.closeConnection();
 			
 			
