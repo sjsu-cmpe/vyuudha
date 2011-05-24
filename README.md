@@ -1,5 +1,6 @@
 Vyuudha - A Dynamic Distributed Store
 =====================================
+
 A clean room implementation of a distributed storage middleware for education and research. It's 
 primary objective is to implement a bare-metal distributed storage middleware for educational and 
 learning purpose. The middleware is intended to understand the dynamics and anatomy of a distributed
